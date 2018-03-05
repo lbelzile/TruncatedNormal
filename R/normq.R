@@ -5,7 +5,7 @@ normq <-
     # truncated to the interval [l,u];
     # normq assumes 0<l<u and 0<p<1
     x=rep(NaN,length(l));
-    I=(l>10^5); # if x is too big, no need for Newton iteration
+    I=(l>1e5); # if x is too big, no need for Newton iteration
     if (any(I)){
       x[I]=sqrt(l[I]^2-2*log(1+p[I]*expm1(l[I]^2/2-u[I]^2/2)))
     }

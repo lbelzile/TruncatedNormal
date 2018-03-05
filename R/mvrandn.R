@@ -73,7 +73,7 @@ mvrandn <-  function(l,u,Sig,n){
     # Cholesky decomposition of matrix
     out=cholperm(Sig,l,u);
     Lfull=out$L;l=out$l;u=out$u;D=diag(Lfull);perm=out$perm;
-    if (any(D<10^-10)){
+    if (any(D<1e-10)){
       warning('Method may fail as covariance matrix is singular!')
     }
     L=Lfull/D;u=u/D;l=l/D; # rescale
@@ -91,9 +91,9 @@ mvrandn <-  function(l,u,Sig,n){
       rv=cbind(rv,Z[,idx]);  # accumulate accepted
       accept=dim(rv)[2]; # keep track of # of accepted
       iter=iter+1;  # keep track of while loop iterations
-      if (iter==10^3){ # if iterations are getting large, give warning
+      if (iter==1e3){ # if iterations are getting large, give warning
         warning('Acceptance prob. smaller than 0.001')
-      } else if (iter>10^4){ # if iterations too large, seek approximation only
+      } else if (iter>1e4){ # if iterations too large, seek approximation only
         accept=n;rv=cbind(rv,Z); # add the approximate samples
         warning('Sample is only approximately distributed.')
       }

@@ -64,7 +64,7 @@ mvNqmc <-function(l,u,Sig,n){
   # * Example:
   #  d=25;l=rep(5,d);u=rep(Inf,d);
   #  Sig=0.5*diag(d)+.5*matrix(1,d,d);
-  #  est=mvNqmc(l,u,Sig,10^4) # output of our method
+  #  est=mvNqmc(l,u,Sig,1e4) # output of our method
   #
   # Reference: Z. I. Botev (2015),
   # "The Normal Law Under Linear Restrictions:
@@ -75,7 +75,7 @@ mvNqmc <-function(l,u,Sig,n){
   }
   # Cholesky decomposition of matrix
   out=cholperm( Sig, l, u ); L=out$L; l=out$l; u=out$u; D=diag(L);
-  if (any(D<10^-10)){
+  if (any(D<1e-10)){
     warning('Method may fail as covariance matrix is singular!')
   }
   L=L/D;u=u/D;l=l/D; # rescale

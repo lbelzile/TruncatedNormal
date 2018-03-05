@@ -1,7 +1,7 @@
 cases <-
   function(p,l,u){
     x=rep(NaN,length(l))
-    a=35; # treshold for switching between erfcinv and newton method
+    a=35; # threshold for switching between erfcinv and newton method
     # case 1: a<l<u
     I=l>a;
     if (any(I)){

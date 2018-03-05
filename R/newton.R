@@ -12,7 +12,7 @@ newton <-
     x=sqrt(l-2*log(1+p*expm1(l/2-u/2)))
     # initialize Newton method
     err=Inf;
-    while (err>10^-10){
+    while (err>1e-10){
       del=-qfun(x)+(1-p)*exp(.5*(x^2-l))*ql+p*exp(.5*(x^2-u))*qu
       x=x-del # Newton's step
       err=max(abs(del)) # find the maximum error
