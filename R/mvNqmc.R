@@ -91,4 +91,5 @@ mvNqmc <-function(l,u,Sig,n){
   relErr=sd(p)/sqrt(12)/prob; # relative error
   upbnd=exp(psy(x,L,l,u,mu)); # compute psi star
   est=list(prob=prob,relErr=relErr,upbnd=upbnd)
+  return(est)
 }
