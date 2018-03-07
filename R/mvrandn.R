@@ -106,4 +106,5 @@ mvrandn <-  function(l,u,Sig,n){
     rv=rv[,1:n]; # cut-down the array to desired n samples
     rv=Lfull%*%rv; # reverse scaling of L
     rv=rv[order,]; # reverse the Cholesky permutation
+    return(rv)
   }

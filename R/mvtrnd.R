@@ -18,8 +18,8 @@ mvtrnd <- function(n, L, l, u, nu, mu)
     # compute matrix multiplication L*Z
     col <- L[k,1:k] %*% Z[1:k,];
     # compute limits of truncation
-    tl <- R * l[k] - mu[k] - col;
-    tu <- R * u[k] - mu[k] - col;
+    tl <- R * l[k] / sqrt(nu) - mu[k] - col;
+    tu <- R * u[k] / sqrt(nu) - mu[k] - col;
     #simulate N(mu,1) conditional on [tl,tu]
     Z[k,] <- mu[k]+trandn(tl, tu);
     # update likelihood ratio
