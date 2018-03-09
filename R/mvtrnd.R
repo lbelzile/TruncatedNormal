@@ -11,6 +11,7 @@ mvtrnd <- function(n, L, l, u, nu, mu)
   Z <- matrix(0, nrow = d, ncol = n); # create array for variables
   # precompute constants
   const <- log(2*pi) / 2 - lgamma(nu/2) - (nu / 2 - 1) * log(2) + lnNpr(-eta, Inf) + 0.5 * eta^2;
+  R <- eta + trandn(rep(-eta, n), rep(Inf, n)); # simulate R~N(eta,1) with R>0
   p <- (nu - 1) * log(R) - eta * R + const; # compute Likelihood Ratio for R
   for(k in 1:d){
     # compute matrix multiplication L*Z
