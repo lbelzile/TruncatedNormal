@@ -30,7 +30,7 @@ mvtpr <- function(n, L, l, u, nu, mu){
   p <- p + lnNpr(tl, tu); # update LR corresponding to Z(d)
   # now switch back from logarithmic scale
   p <- exp(p)
-  est.prob <- exp(const)*mean(p);
-  est.relErr <- sd(p)/(sqrt(n) * est.prob); # relative error
-  return(list(prob = est.prob, err = sd(p), relErr = est.relErr))
+  est.prob <- exp(const) * mean(p);
+  est.relErr <- exp(const) * sd(p)/(sqrt(n) * est.prob); # relative error
+  return(list(prob = est.prob, err = exp(const) * sd(p), relErr = est.relErr))
 }
