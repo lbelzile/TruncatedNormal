@@ -9,7 +9,8 @@ mvtprqmc <- function(n, L, l, u, nu, mu){
   # QMC pointset
   #x <- randtoolbox::sobol(n, dim = d - 1, init = TRUE, scrambling = 1,
   #         seed = ceiling(1e6 * runif(1)))
-  x <- qrng::sobol(n = n, d = d - 1, randomize = TRUE)
+  x <- as.matrix(qrng::sobol(n = n, d = d - 1, randomize = TRUE))
+  #Fix 21.03.2018 to ensure that if d=2, no error returned
   # Monte Carlo uses 'n' samples;
   # precompute constants
   const <- log(2*pi) / 2 - lgamma(nu / 2) - (nu / 2 - 1) * log(2) +
