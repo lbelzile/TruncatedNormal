@@ -15,7 +15,8 @@ cases <-
     # case 3: otherwise use erfcinv
     I=!(I|J);
     if  (any(I)){
-      tl=l[I]; tu=u[I]; tp=p[I]; x[I]=Phinv(tp,tl,tu);
+      tl=l[I]; tu=u[I]; tp=p[I]; 
+      x[I]=Phinv(tp,tl,tu);
     }
     return(x)
   }

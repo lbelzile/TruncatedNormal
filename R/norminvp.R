@@ -33,7 +33,7 @@ norminvp <- function(p,l,u){
      if ((length(l)!=length(p))|any(l>u)|any(p>1)|any(p<0)){
       stop('l, u, and p must be the same length with u>l and 0<=p<=1')
     }
-    x=rep(NaN,length(l)); # allocate memory
+    x=rep(0,length(l)); # allocate memory
     I=(p==1);x[I]=u[I]; # extreme values of quantile
     J=(p==0);x[J]=l[J];
     I=!(I|J); # cases for which 0<x<1

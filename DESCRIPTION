@@ -7,5 +7,6 @@ Authors@R: c(person(given="Zdravko", family="Botev", role = c("aut", "cre"), ema
 Description: A collection of functions to deal with the truncated univariate and multivariate normal and Student distributions.
 License: GPL-3
 BugReports: https://github.com/lbelzile/TruncatedNormal/issues
-Imports: nleqslv, qrng
+Imports: nleqslv, qrng, Rcpp (>= 0.12.16)
+LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 6.0.1

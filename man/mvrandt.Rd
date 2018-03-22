@@ -29,8 +29,8 @@ d <- 60L; n <- 1e3;
 Sig <- 0.9 * matrix(1, d, d) + 0.1 * diag(d);
 l <- (1:d)/d * 4; u <- l+2; df <- 10;
 X <- mvrandt(l,u,Sig,df,n)
-stopifnot(all.equal(sum(X>l), d*n))
-stopifnot(all.equal(sum(X<u), d*n))
+stopifnot(all(X>l))
+stopifnot(all(X<u))
 }
 }
 \references{

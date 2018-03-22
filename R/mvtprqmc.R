@@ -21,7 +21,8 @@ mvtprqmc <- function(n, L, l, u, nu, mu){
   R <- R / sqrt(nu); # scale parameter divided by nu
   for(k in 1:(d-1)){
     # compute matrix multiplication L*Z
-    col <- L[k,1:k] %*% Z[1:k,];
+    col <- c(L[k,1:k] %*% Z[1:k,])
+    #bottleneck, but hard to reduce
     # compute limits of truncation
     tl <- R * l[k] - mu[k] - col;
     tu <- R * u[k] - mu[k] - col;
