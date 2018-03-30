@@ -19,6 +19,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cholpermGB
+List cholpermGB(arma::mat Sigma, NumericVector l, NumericVector u);
+RcppExport SEXP _TruncatedNormal_cholpermGB(SEXP SigmaSEXP, SEXP lSEXP, SEXP uSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type l(lSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type u(uSEXP);
+    rcpp_result_gen = Rcpp::wrap(cholpermGB(Sigma, l, u));
+    return rcpp_result_gen;
+END_RCPP
+}
 // cholperm
 List cholperm(arma::mat Sigma, NumericVector l, NumericVector u);
 RcppExport SEXP _TruncatedNormal_cholperm(SEXP SigmaSEXP, SEXP lSEXP, SEXP uSEXP) {
