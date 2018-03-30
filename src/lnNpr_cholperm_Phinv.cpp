@@ -82,7 +82,7 @@ NumericVector lnNpr(NumericVector a, NumericVector b, bool check = false){
 //' }
 //' @references Genz, A. and Bretz, F. (2009). Computations of Multivariate Normal and t Probabilities, volume 105. Springer, Dordrecht.
 //' @references Gibson G.J., Glasbey C.A. and D.A. Elton (1994).  Monte Carlo evaluation of multivariate normal integrals and sensitivity to variate ordering. In: Dimon et al., Advances in Numerical Methods and Applications, WSP, pp. 120-126.
-// [[Rcpp::export('cholperm2')]]
+// [[Rcpp::export('cholperm')]]
 List cholperm(arma::mat Sigma, NumericVector l, NumericVector u){
   if(Sigma.n_cols != l.size() || Sigma.n_cols != u.size()){
     Rcpp::stop("Non conformal size for `l`, `u` and `Sigma`. Check input arguments");
