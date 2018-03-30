@@ -82,12 +82,12 @@ NumericVector lnNpr(NumericVector a, NumericVector b, bool check = false){
 //' }
 //' @references Genz, A. and Bretz, F. (2009). Computations of Multivariate Normal and t Probabilities, volume 105. Springer, Dordrecht.
 //' @references Gibson G.J., Glasbey C.A. and D.A. Elton (1994).  Monte Carlo evaluation of multivariate normal integrals and sensitivity to variate ordering. In: Dimon et al., Advances in Numerical Methods and Applications, WSP, pp. 120-126.
-// [[Rcpp::export]]
+// [[Rcpp::export('cholperm2')]]
 List cholperm(arma::mat Sigma, NumericVector l, NumericVector u){
   if(Sigma.n_cols != l.size() || Sigma.n_cols != u.size()){
     Rcpp::stop("Non conformal size for `l`, `u` and `Sigma`. Check input arguments");
   }
-  if(Sigma.n_rows == 1){
+  if(Sigma.n_rows <= 1){
     Rcpp::stop("Matrix must be larger than 1x1");
   }
   double tol = 1.0e-10;
@@ -96,7 +96,6 @@ List cholperm(arma::mat Sigma, NumericVector l, NumericVector u){
   NumericVector a(d);
   NumericVector b(d);
   arma::vec mu(d);
-  mu.zeros();
   IntegerVector perm(d);
   arma::mat Lc(Sigma.n_rows, Sigma.n_cols); //Cholesky matrix
   Lc.zeros(); // Initialize to zero matrix
@@ -128,16 +127,17 @@ List cholperm(arma::mat Sigma, NumericVector l, NumericVector u){
         Rcpp::stop("`Sigma` is not positive definite");
       } else if(denomi < 0){
         denomi = tol;
+      } else{
+       denomi = pow(denomi, 0.5); 
       }
       a[i0 - j] = (l[i] - mui) / denomi;
       b[i0 - j] = (u[i] - mui) / denomi;
     }
     NumericVector pr = lnNpr(a, b);
     int min0 = which_min(pr);
-    
+    int indmin = perm[min0 + j]; // index of minimum amongst remaining entries
     if(min0 > 0){
       Lc.swap_rows(min0 + j, j);
-      int indmin = perm[min0 + j]; // index of minimum amongst remaining entries
       perm[min0 + j] = perm[j]; // swap indices in permutation
       perm[j] = indmin;
     }
@@ -150,9 +150,9 @@ List cholperm(arma::mat Sigma, NumericVector l, NumericVector u){
       }
     }
     // Compute E(a,b)
-    mu(j) = (exp(-0.5 * pow(a[min0], 2) - min(pr)) - exp(-0.5 * pow(b[min0], 2) - min(pr)))/pow(2.0 * M_PI, 0.5);
+    mu(j) = (exp(-0.5 * pow(a[min0], 2) - pr[min0]) - exp(-0.5 * pow(b[min0], 2) - pr[min0]))/pow(2.0 * M_PI, 0.5);
   }
-  return Rcpp::List::create(Named("L") = Lc, Named("l") = l[perm], Named("u") = u[perm], Named("perm") = perm + IntegerVector(d, 1));
+  return Rcpp::List::create(Named("L") = Lc, Named("l") = l[perm], Named("u") = u[perm], Named("z") = mu, Named("perm") = perm + IntegerVector(d, 1));
 }
 
 //' Return quantile of truncated Gaussian
