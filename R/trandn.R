@@ -22,12 +22,12 @@
 #' @references Z. I. Botev (2017), \emph{The Normal Law Under Linear Restrictions:
 #' Simulation and Estimation via Minimax Tilting}, Journal of the Royal
 #' Statistical Society, Series B, \bold{79} (1), pp. 1--24.
-#'
+#' @importFrom stats "pt" "qt"
 #' @examples
 #' trandn(l = 1,u = Inf)
 #' trandn(l = rep(1, 10), u = rep(Inf, 10))
 trandn <-  function(l, u){
-     if (any(l > u)){
+     if (isTRUE(any(l > u))){
       stop('Truncation limits have to be vectors of the same length with l<u')
      }
     x <- rep(0,length(l));
