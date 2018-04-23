@@ -27,27 +27,27 @@
 #' trandn(l = 1,u = Inf)
 #' trandn(l = rep(1, 10), u = rep(Inf, 10))
 trandn <-  function(l, u){
-     if (any(l>u)){
+     if (any(l > u)){
       stop('Truncation limits have to be vectors of the same length with l<u')
-    }
-    x=rep(0,length(l));
-    a=.4; # treshold for switching between methods
+     }
+    x <- rep(0,length(l));
+    a <- .4; # threshold for switching between methods
     # threshold can be tuned for maximum speed for each Matlab version
     # three cases to consider:
     # case 1: a<l<u
-    I=l>a;
-    if (any(I)){
-      tl=l[I]; tu=u[I]; x[I]=ntail(tl,tu);
+    I1 <- l > a;
+    if(any(I1)){
+      x[I1] <- ntail(l[I1], u[I1]);
     }
     # case 2: l<u<-a
-    J=u<(-a);
-    if (any(J)){
-      tl=-u[J]; tu=-l[J]; x[J]=-ntail(tl,tu);
+    I2 <- u < (-a);
+    if(any(I2)){
+      x[I2] <- -ntail(l[I2], u[I2]);
     }
     # case 3: otherwise use inverse transform or accept-reject
-    I=!(I|J);
-    if (any(I)){
-      tl=l[I]; tu=u[I]; x[I]=tn(tl,tu);
+    I3 <- !(I1 | I2);
+    if(any(I3)){
+      x[I3] <- tn(l[I3], u[I3]);
     }
     return(x)
   }

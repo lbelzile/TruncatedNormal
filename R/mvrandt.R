@@ -28,7 +28,19 @@ mvrandt <- function (l, u, Sig, df, n)
   if (length(u) != d | d != sqrt(length(Sig)) | any(l > u)) {
     stop("l, u, and Sig have to match in dimension with u>l")
   }
-  out = cholperm(Sig, l, u)
+  if (d == 1){ #Univariate case, via inverse CDF method
+    std.dev <- sqrt(Sig[1])
+    #Inverse CDF method
+    if(l > 0){
+      return( std.dev * (-qt( pt(l/std.dev, df = df, lower.tail = FALSE) - runif(n) * 
+                     (pt(l/std.dev, df = df, lower.tail = FALSE) - pt(u/std.dev, df = df, lower.tail = FALSE)), df = df)))
+    } else{
+      return(std.dev * (qt(pt(l/std.dev, df = df) + runif(n) * 
+                   (pt(u/std.dev, df = df) - pt(l/std.dev, df = df)), df = df)))         
+    }
+  }
+  #else
+  out <- cholperm(Sig, l, u)
   Lfull = out$L
   l = out$l
   u = out$u

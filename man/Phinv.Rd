@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{Phinv}
 \alias{Phinv}
-\title{Return quantile of truncated Gaussian}
+\title{Quantile of truncated Gaussian}
 \usage{
 Phinv(p, l, u)
 }

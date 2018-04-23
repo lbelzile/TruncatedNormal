@@ -27,6 +27,6 @@ cholperm <- function(Sigma, l, u, method = c("GGE", "GB")){
   if(method == "GGE"){
     .cholpermGGE(Sigma = Sigma, l = l, u = u)
   } else{
-      .cholpermGB(Sigma = Sigma, l = l, u = u)
+    .cholpermGB(Sigma = Sigma, l = l, u = u)
   }
 }

@@ -59,15 +59,15 @@ NumericVector lnNpr(NumericVector a, NumericVector b, bool check = false){
   return p;
 }
 
-//' Variance of truncated Gaussian
-//' 
-//' The function computes the variance of the standard truncated Gaussian on the
-//' interval \code{a}, \code{b} with \code{a}< \code{b}.
-//' 
-//' @param a vector of lower bound
-//' @param b vector of upper bound
-//' @param check logical; should checks be performed? 
-//' @return vector of variances
+// Variance of truncated Gaussian
+// 
+// The function computes the variance of the standard truncated Gaussian on the
+// interval \code{a}, \code{b} with \code{a}< \code{b}.
+// 
+// @param a vector of lower bound
+// @param b vector of upper bound
+// @param check logical; should checks be performed? 
+// @return vector of variances
 NumericVector varTN(NumericVector a, NumericVector b, bool check = false){
   //Sanity checks
   if(a.size() != b.size()){
@@ -142,6 +142,7 @@ List cholpermGB(arma::mat Sigma, NumericVector l, NumericVector u){
   mu(0) = (exp(-0.5 * pow(a[indmin], 2) - pr0[0]) - exp(-0.5 * pow(b[indmin], 2) - pr0[0]))/pow(2.0 * M_PI, 0.5);
   // END OF LOOP FOR FIRST ITERATION
   double mui; double denomi;
+  if(d > 1){
   for(int j = 1; j < d; j++){
     NumericVector a = NumericVector(d - j);
     NumericVector b = NumericVector(d - j);
@@ -180,6 +181,7 @@ List cholpermGB(arma::mat Sigma, NumericVector l, NumericVector u){
     pr0 = lnNpr(a0, b0);
     // Compute E(a,b)
     mu(j) = (exp(-0.5 * pow(a0[0], 2) - pr0[0]) - exp(-0.5 * pow(b0[0], 2) - pr0[0]))/pow(2.0 * M_PI, 0.5);
+  }
   }
   return Rcpp::List::create(Named("L") = Lc, Named("l") = l[perm], Named("u") = u[perm], Named("perm") = perm + IntegerVector(d, 1));
 }
