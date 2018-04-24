@@ -13,6 +13,7 @@
 #' Proceedings of the 2015 Winter Simulation Conference, pp. 380-391,
 #' @return a \code{d} by \code{n} matrix
 #' @importFrom nleqslv nleqslv
+#' @importFrom stats "pt" "qt"
 #' @examples
 #' \dontrun{
 #' d <- 60L; n <- 1e3;
@@ -33,13 +34,13 @@ mvrandt <- function (l, u, Sig, df, n)
     #Inverse CDF method
     if(l > 0){
       return( std.dev * (-qt( pt(l/std.dev, df = df, lower.tail = FALSE) - runif(n) * 
-                     (pt(l/std.dev, df = df, lower.tail = FALSE) - pt(u/std.dev, df = df, lower.tail = FALSE)), df = df)))
+                                (pt(l/std.dev, df = df, lower.tail = FALSE) - pt(u/std.dev, df = df, lower.tail = FALSE)), df = df)))
     } else{
       return(std.dev * (qt(pt(l/std.dev, df = df) + runif(n) * 
-                   (pt(u/std.dev, df = df) - pt(l/std.dev, df = df)), df = df)))         
+                             (pt(u/std.dev, df = df) - pt(l/std.dev, df = df)), df = df)))         
     }
   }
-  #else
+  
   out <- cholperm(Sig, l, u)
   Lfull = out$L
   l = out$l

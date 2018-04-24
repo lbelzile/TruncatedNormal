@@ -65,17 +65,18 @@
 #'  # plot the boxplots of the marginal
 #'  # distribution of the coefficients in beta
 #'  print(rowMeans(beta)) # output the posterior means
-mvrandn <-  function(l, u, Sig, n){
-    d <- length(l); # basic input check
-    if(length(u) != d | d != sqrt(length(Sig)) | any(l > u)){
+mvrandn <-  function(l,u,Sig,n){
+    d=length(l); # basic input check
+    if  (length(u)!=d|d!=sqrt(length(Sig))|any(l>u)){
       stop('l, u, and Sig have to match in dimension with u>l')
     }
+    #Univariate case
     if(d == 1){
       std.dev <- sqrt(Sig[1]) #if Sigma not declared as matrix
       return(std.dev * trandn(rep(l/std.dev, n), rep(u/std.dev, n)))
     }
     # Cholesky decomposition of matrix
-    out <- cholperm(Sig,l,u);
+    out=cholperm(Sig,l,u);
     Lfull=out$L;l=out$l;u=out$u;D=diag(Lfull);perm=out$perm;
     if (any(D<1e-10)){
       warning('Method may fail as covariance matrix is singular!')
