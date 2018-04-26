@@ -56,6 +56,7 @@ The algorithm may not work or be very inefficient if \eqn{\Sigma} is close to be
  X <- rep(mu, n) + solve(A, diag(2)) \%*\% Y;
  # now apply the inverse map as explained above
  plot(X[1,], X[2,]) # provide a scatterplot of exactly simulated points
+ \dontrun{
 # Exact Bayesian Posterior Simulation Example.
 
 data("lupus"); # load lupus data
@@ -81,6 +82,7 @@ m=dim(X)[1]; d=dim(X)[2]; # dimensions of problem
  # plot the boxplots of the marginal
  # distribution of the coefficients in beta
  print(rowMeans(beta)) # output the posterior means
+ }
 }
 \seealso{
 \code{\link{mvNqmc}}, \code{\link{mvNcdf}}

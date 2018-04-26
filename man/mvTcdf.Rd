@@ -42,10 +42,10 @@ location vector \code{m} and scale matrix \code{Sig},
 then use \code{mvTqmc(Sig, l - m, u - m, nu, n)}.
 }
 \examples{
- d <- 25; nu <- 30;
+ d <- 15; nu <- 30;
  l <- rep(2, d); u <- rep(Inf, d);
  Sig <- 0.5 * matrix(1, d, d) + 0.5 * diag(1, d);
- est <- mvTcdf(l, u, Sig, nu, n = 1e5)
+ est <- mvTcdf(l, u, Sig, nu, n = 1e4)
  # mvtnorm::pmvt(lower = l, upper = u, df = nu, sigma = Sig)
 \dontrun{
 d <- 5

@@ -91,10 +91,14 @@ mvrandt <- function (l, u, Sig, df, n)
     nsim <- min(n, ceiling(nsim/m))
     if(iter == 1e3){ # if iterations are getting large, give warning
       warning('Acceptance prob. smaller than 0.001')
-    } else if(iter > 1e4){ # if iterations too large, seek approximation only
-      R[,1:accept]
-      Z[,1:accept]
-      warning('Sample of size smaller than n returned.')
+    } else if(iter > 1e5){ # if iterations too large, seek approximation only
+      if(accept == 0){
+        stop("Could not sample from Student - check input")
+      } else if(accept > 1){
+        R <- R[1:accept]
+        Z <- Z[,1:accept]
+        warning('Sample of size smaller than n returned.')
+      }
     }
   }
   # # finish sampling; postprocessing

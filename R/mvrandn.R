@@ -40,6 +40,7 @@
 #'  X <- rep(mu, n) + solve(A, diag(2)) %*% Y;
 #'  # now apply the inverse map as explained above
 #'  plot(X[1,], X[2,]) # provide a scatterplot of exactly simulated points
+#'  \dontrun{
 #' # Exact Bayesian Posterior Simulation Example.
 #'
 #' data("lupus"); # load lupus data
@@ -65,6 +66,7 @@
 #'  # plot the boxplots of the marginal
 #'  # distribution of the coefficients in beta
 #'  print(rowMeans(beta)) # output the posterior means
+#'  }
 mvrandn <-  function(l,u,Sig,n){
     d=length(l); # basic input check
     if  (length(u)!=d|d!=sqrt(length(Sig))|any(l>u)){
