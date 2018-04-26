@@ -57,7 +57,10 @@ mvrandt <- function (l, u, Sig, df, n)
   #Starting value
   x0 <- rep(0, 2*d); x0[2*d] <- sqrt(df); x0[d] <- log(x0[2*d])
   solvneq <- nleqslv::nleqslv(x = x0, fn = gradpsiT, L = L, l = l, u = u, nu = df,
-                              global = "pwldog", method = "Broyden")
+                              global = "pwldog", method = "Broyden", control = list(maxit = 500L))
+  if(!solvneq$termcd  %in% c(1, 2)){
+    stop("Convex program did not converge")
+  }
   soln <- solvneq$x
   #fval <- solvneq$fvec
   exitflag <- solvneq$termcd
