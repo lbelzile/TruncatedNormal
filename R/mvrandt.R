@@ -5,6 +5,7 @@
 #' @param Sig Covariance matrix
 #' @param df degrees of freedom
 #' @param n sample size
+#' @param mu location parameter
 #'
 #' @author \code{Matlab} code by Zdravko Botev, \code{R} port by Leo Belzile
 #' @export
@@ -23,21 +24,23 @@
 #' stopifnot(all(X>l))
 #' stopifnot(all(X<u))
 #' }
-mvrandt <- function (l, u, Sig, df, n)
+mvrandt <- function (l, u, Sig, df, n, mu = rep(0, length(l)))
 {
   d = length(l)
   if (length(u) != d | d != sqrt(length(Sig)) | any(l > u)) {
     stop("l, u, and Sig have to match in dimension with u>l")
   }
+  l <- l - mu
+  u <- u - mu
   if (d == 1){ #Univariate case, via inverse CDF method
     std.dev <- sqrt(Sig[1])
     #Inverse CDF method
     if(l > 0){
       return( std.dev * (-qt( pt(l/std.dev, df = df, lower.tail = FALSE) - runif(n) * 
-                                (pt(l/std.dev, df = df, lower.tail = FALSE) - pt(u/std.dev, df = df, lower.tail = FALSE)), df = df)))
+                                (pt(l/std.dev, df = df, lower.tail = FALSE) - pt(u/std.dev, df = df, lower.tail = FALSE)), df = df)) + mu)
     } else{
       return(std.dev * (qt(pt(l/std.dev, df = df) + runif(n) * 
-                             (pt(u/std.dev, df = df) - pt(l/std.dev, df = df)), df = df)))         
+                             (pt(u/std.dev, df = df) - pt(l/std.dev, df = df)), df = df)) + mu)         
     }
   }
   
@@ -58,18 +61,22 @@ mvrandt <- function (l, u, Sig, df, n)
   x0 <- rep(0, 2*d); x0[2*d] <- sqrt(df); x0[d] <- log(x0[2*d])
   solvneq <- nleqslv::nleqslv(x = x0, fn = gradpsiT, L = L, l = l, u = u, nu = df,
                               global = "pwldog", method = "Broyden", control = list(maxit = 500L))
-  if(!solvneq$termcd  %in% c(1, 2)){
-    stop("Convex program did not converge")
-  }
+  
   soln <- solvneq$x
   #fval <- solvneq$fvec
   exitflag <- solvneq$termcd
-  if(!(exitflag %in% 1:2) || !all.equal(solvneq$fvec, rep(0, length(x0)))){
-    warning('Method may fail as covariance matrix is close to singular!')
+  if(!(exitflag %in% 1:2) || !isTRUE(all.equal(solvneq$fvec, rep(0, length(x0)), tolerance = 1e-6))){
+    warning('Did not find a solution to the nonlinear system in `mvrandt`!')
   }
   # assign saddlepoint x* and mu*
   soln[d] <- exp(soln[d])
   x <- soln[1:d];
+  #TODO check that the solution lies in convex set
+  #Problem is: we did not generate Zd
+  # mid <- sqrt(df) * L[,-d] %*% x[-d]
+  # if(any(x[d] * l[-d] > mid, x[d] * u[-d] < mid)){
+  #   warning("Solution of nonlinear system does not satisfy convex optimization problem constraints")
+  # }
   mu <- soln[(d+1):length(soln)];
   # compute psi star
   psistar <- psyT(x= x, L = L, l = l, u = u, nu = df, mu = mu);
@@ -109,5 +116,10 @@ mvrandt <- function (l, u, Sig, df, n)
   order = out$ix
   Z = Lfull %*% Z
   Z = Z[order, ]
-  return(t(sqrt(df)*t(Z)/R))
+  #Add back mean only if non-zero
+  if(!isTRUE(all.equal(mu, rep(0, d)))){
+    return(t(sqrt(df)*t(Z)/R) + mu)
+  } else{
+    return(t(sqrt(df)*t(Z)/R)) 
+  }
 }

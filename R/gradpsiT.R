@@ -15,7 +15,7 @@ gradpsiT <- function(y, L, l, u, nu)
   lt <- r * l - mu - co;
   ut <- r * u - mu - co;
   # compute gradients avoiding catastrophic cancellation
-  w <-lnNpr(lt, ut);
+  w <- lnNpr(lt, ut);
   pl <- exp(-0.5 * lt^2 - w) / sqrt(2 * pi);
   pu <- exp(-0.5 * ut^2 - w) / sqrt(2 * pi);
   P <- pl - pu;

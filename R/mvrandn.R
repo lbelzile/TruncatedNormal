@@ -8,6 +8,7 @@
 #' @param u upper truncation limit
 #' @param Sig covariance matrix of \eqn{N(0,\Sigma)}
 #' @param n number of simulated vectors
+#' @param mu location parameter
 #' @details
 #' \itemize{
 #' \item{Bivariate normal:}{
@@ -67,15 +68,17 @@
 #'  # distribution of the coefficients in beta
 #'  print(rowMeans(beta)) # output the posterior means
 #'  }
-mvrandn <-  function(l,u,Sig,n){
+mvrandn <-  function(l, u, Sig, n, mu = rep(0, length(l))){
     d=length(l); # basic input check
-    if  (length(u)!=d|d!=sqrt(length(Sig))|any(l>u)){
+    if(length(u)!=d|d!=sqrt(length(Sig))|any(l>u)){
       stop('l, u, and Sig have to match in dimension with u>l')
     }
+    l <- l - mu
+    u <- u - mu
     #Univariate case
     if(d == 1){
       std.dev <- sqrt(Sig[1]) #if Sigma not declared as matrix
-      return(std.dev * trandn(rep(l/std.dev, n), rep(u/std.dev, n)))
+      return(std.dev * trandn(rep(l/std.dev, n), rep(u/std.dev, n)) + mu)
     }
     # Cholesky decomposition of matrix
     out=cholperm(Sig,l,u);
@@ -113,5 +116,9 @@ mvrandn <-  function(l,u,Sig,n){
     rv=rv[,1:n]; # cut-down the array to desired n samples
     rv=Lfull%*%rv; # reverse scaling of L
     rv=rv[order,]; # reverse the Cholesky permutation
-    return(rv)
+    if(!isTRUE(all.equal(mu, rep(0, d)))){
+      return(rv + mu)
+    } else{
+     return(rv) 
+    }
   }
