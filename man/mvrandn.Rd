@@ -4,7 +4,7 @@
 \alias{mvrandn}
 \title{Truncated multivariate normal generator}
 \usage{
-mvrandn(l, u, Sig, n)
+mvrandn(l, u, Sig, n, mu = NULL)
 }
 \arguments{
 \item{l}{lower truncation limit}
@@ -14,6 +14,8 @@ mvrandn(l, u, Sig, n)
 \item{Sig}{covariance matrix of \eqn{N(0,\Sigma)}}
 
 \item{n}{number of simulated vectors}
+
+\item{mu}{location parameter}
 }
 \value{
 a \eqn{d} by \eqn{n} matrix storing the random vectors, \eqn{X}, drawn from \eqn{N(0,\Sigma)}, conditional on \eqn{l<X<u};
@@ -65,7 +67,7 @@ X = lupus[,-1]  # construct design matrix
 m=dim(X)[1]; d=dim(X)[2]; # dimensions of problem
  X=diag(2*Y-1) \%*\%X; # incorporate response into design matrix
  nu=sqrt(10000); # prior scale parameter
- C=solve(diag(d)/nu^2+t(X)\\\%*\\\%X);
+ C=solve(diag(d)/nu^2+t(X)\%*\%X);
  L=t(chol(t(C))); # lower Cholesky decomposition
  Sig=diag(m)+nu^2*X \%*\% t(X); # this is covariance of Z given beta
  l=rep(0,m);u=rep(Inf,m);

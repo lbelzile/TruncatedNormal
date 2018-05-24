@@ -81,11 +81,20 @@ mvNqmc <-function(l,u,Sig,n){
   L=L/D;u=u/D;l=l/D; # rescale
   L=L-diag(d); # remove diagonal
   # find optimal tilting parameter via non-linear equation solver
-  xmu<-nleq(l,u,L) # nonlinear equation solver
-  x=xmu[1:(d-1)];mu=xmu[d:(2*d-2)]; # assign saddlepoint x* and mu*
-  p=rep(NaN,12);
+  x0 <- rep(0, 2 * length(l) - 2)
+  solvneq <- nleqslv::nleqslv(x0, fn = gradpsi, jac = jacpsi,
+                              L = L, l = l, u = u, global = "pwldog", method = "Broyden",
+                              control = list(maxit = 500L))
+  xmu <- solvneq$x
+  exitflag <- solvneq$termcd
+  if(!(exitflag %in% 1:2) || !isTRUE(all.equal(solvneq$fvec, rep(0, length(x0)), tolerance = 1e-6))){
+    warning('Did not find a solution to the nonlinear system in `mvrandn`!')
+  }
+  x <- xmu[1:(d-1)];
+  mu <- xmu[d:(2*d-2)]; # assign saddlepoint x* and mu*
+  p <- rep(0,12);
   for (i in 1:12){ # repeat randomized QMC
-    p[i]=mvnprqmc(ceiling(n/12),L,l,u,mu);
+    p[i] <- mvnprqmc(ceiling(n/12), L, l, u, mu);
   }
   prob=mean(p); # average of QMC estimates
   relErr=sd(p)/sqrt(12)/prob; # relative error

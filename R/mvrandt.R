@@ -24,23 +24,37 @@
 #' stopifnot(all(X>l))
 #' stopifnot(all(X<u))
 #' }
-mvrandt <- function (l, u, Sig, df, n, mu = rep(0, length(l)))
+mvrandt <- function (l, u, Sig, df, n, mu = NULL)
 {
   d = length(l)
   if (length(u) != d | d != sqrt(length(Sig)) | any(l > u)) {
     stop("l, u, and Sig have to match in dimension with u>l")
   }
-  l <- l - mu
-  u <- u - mu
+  if(!is.null(mu)){
+    l <- l - mu
+    u <- u - mu
+  }
   if (d == 1){ #Univariate case, via inverse CDF method
     std.dev <- sqrt(Sig[1])
     #Inverse CDF method
     if(l > 0){
-      return( std.dev * (-qt( pt(l/std.dev, df = df, lower.tail = FALSE) - runif(n) * 
-                                (pt(l/std.dev, df = df, lower.tail = FALSE) - pt(u/std.dev, df = df, lower.tail = FALSE)), df = df)) + mu)
+      if(is.null(mu)){
+        return( std.dev * (-qt( pt(l/std.dev, df = df, lower.tail = FALSE) - runif(n) * 
+                                  (pt(l/std.dev, df = df, lower.tail = FALSE) - pt(u/std.dev, 
+                                                                                   df = df, lower.tail = FALSE)), df = df))) 
+      } else{
+        return( std.dev * (-qt( pt(l/std.dev, df = df, lower.tail = FALSE) - runif(n) * 
+                                (pt(l/std.dev, df = df, lower.tail = FALSE) - pt(u/std.dev, 
+                                                                                 df = df, lower.tail = FALSE)), df = df)) + mu)
+      }
     } else{
-      return(std.dev * (qt(pt(l/std.dev, df = df) + runif(n) * 
-                             (pt(u/std.dev, df = df) - pt(l/std.dev, df = df)), df = df)) + mu)         
+      if(is.null(mu)){
+        return(std.dev * (qt(pt(l/std.dev, df = df) + runif(n) * 
+                             (pt(u/std.dev, df = df) - pt(l/std.dev, df = df)), df = df)))         
+      } else{
+        return(std.dev * (qt(pt(l/std.dev, df = df) + runif(n) * 
+                               (pt(u/std.dev, df = df) - pt(l/std.dev, df = df)), df = df)) + mu)     
+      }
     }
   }
   
@@ -77,15 +91,16 @@ mvrandt <- function (l, u, Sig, df, n, mu = rep(0, length(l)))
   # if(any(x[d] * l[-d] > mid, x[d] * u[-d] < mid)){
   #   warning("Solution of nonlinear system does not satisfy convex optimization problem constraints")
   # }
-  mu <- soln[(d+1):length(soln)];
+  muV <- soln[(d+1):length(soln)];
   # compute psi star
-  psistar <- psyT(x= x, L = L, l = l, u = u, nu = df, mu = mu);
+  psistar <- psyT(x= x, L = L, l = l, u = u, nu = df, mu = muV);
   # start acceptance rejection sampling
   Z <- matrix(0, nrow = d, ncol = n)
   R <- rep(0, n)
-  accept <- 0L; iter <- 0L; nsim <- n
+  accept <- 0L; iter <- 0L; nsim <- n; ntotsim <- 0L
   while(accept < n){ # while # of accepted is less than n
-    call <- mvtrnd(n = nsim, L = L, l = l, u = u, nu = df, mu = mu); # simulate n proposals
+    call <- mvtrnd(n = nsim, L = L, l = l, u = u, nu = df, mu = muV); # simulate n proposals
+    ntotsim <- ntotsim + nsim
     idx <-  rexp(nsim) > (psistar - call$p); # acceptance tests
     m <- sum(idx)
     if(m > n - accept){
@@ -99,7 +114,7 @@ mvrandt <- function (l, u, Sig, df, n, mu = rep(0, length(l)))
     accept <- accept + m; # keep track of # of accepted
     iter <- iter + 1L;  # keep track of while loop iterations
     nsim <- min(n, ceiling(nsim/m))
-    if(iter == 1e3){ # if iterations are getting large, give warning
+    if(accept / ntotsim < 1e-3){ # if iterations are getting large, give warning
       warning('Acceptance prob. smaller than 0.001')
     } else if(iter > 1e5){ # if iterations too large, seek approximation only
       if(accept == 0){
@@ -117,8 +132,8 @@ mvrandt <- function (l, u, Sig, df, n, mu = rep(0, length(l)))
   Z = Lfull %*% Z
   Z = Z[order, ]
   #Add back mean only if non-zero
-  if(!isTRUE(all.equal(mu, rep(0, d)))){
-    return(t(sqrt(df)*t(Z)/R) + mu)
+  if(!is.null(mu)){
+    return(t(sqrt(df)*t(Z)/R + mu))
   } else{
     return(t(sqrt(df)*t(Z)/R)) 
   }

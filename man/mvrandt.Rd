@@ -4,7 +4,7 @@
 \alias{mvrandt}
 \title{Random number generation from multivariate truncated Student distribution}
 \usage{
-mvrandt(l, u, Sig, df, n)
+mvrandt(l, u, Sig, df, n, mu = NULL)
 }
 \arguments{
 \item{l}{lower bound for truncation (infinite values allowed)}
@@ -16,6 +16,8 @@ mvrandt(l, u, Sig, df, n)
 \item{df}{degrees of freedom}
 
 \item{n}{sample size}
+
+\item{mu}{location parameter}
 }
 \value{
 a \code{d} by \code{n} matrix

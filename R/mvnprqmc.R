@@ -4,16 +4,16 @@ mvnprqmc <-
     # 'Cov(X)=L*L' and zero mean vector;
     # exponential tilting uses parameter 'mu';
     # Quasi Monte Carlo uses 'n' samples;
-    d=length(l); # Initialization
-    mu[d]=0;
-    Z=matrix(0,d,n); # create array for variables
+    d <- length(l); # Initialization
+    mu[d] <- 0;
+    Z <- matrix(0,d,n); # create array for variables
     # QMC pointset
     #x=randtoolbox::sobol(n, dim = d-1, init =TRUE, scrambling = 1, seed=ceiling(1e6*runif(1)))
     x <- qrng::sobol(n = n, d = d - 1, randomize = TRUE)
     p=0;
     for (k in 1:(d-1)){
       # compute matrix multiplication L*Z
-      col=t(L[k,1:k])%*%Z[1:k,];
+      col <- crossprod(L[k,1:k], Z[1:k,]);
       # compute limits of truncation
       tl=l[k]-mu[k]-col;
       tu=u[k]-mu[k]-col;
