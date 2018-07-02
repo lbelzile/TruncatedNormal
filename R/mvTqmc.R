@@ -43,7 +43,7 @@
 #' Proceedings of the 2015 Winter Simulation Conference, pp. 380-391,
 #' @export
 #' @author \code{Matlab} code by Zdravko I. Botev, \code{R} port by Leo Belzile
-mvTqmc <- function(l, u, Sig, df, n){
+mvTqmc <- function(l, u, Sig, df, n = 1e5){
   d <- length(l)
   if (length(u) != d | d != sqrt(length(Sig)) | any(l > u)) {
     stop("l, u, and Sig have to match in dimension with u>l")

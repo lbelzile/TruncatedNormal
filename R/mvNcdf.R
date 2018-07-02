@@ -36,7 +36,7 @@
 #' d <- 15; l <- 1:d; u <- rep(Inf, d);
 #' Sig <- matrix(rnorm(d^2), d, d)*2; Sig=Sig %*% t(Sig)
 #' mvNcdf(l, u, Sig, 1e4) # compute the probability 
-mvNcdf <-  function(l,u,Sig,n){
+mvNcdf <-  function(l, u, Sig, n = 1e5){
     d=length(l); # basic input check
     if  (length(u)!=d|d!=sqrt(length(Sig))|any(l>u)){
       stop('l, u, and Sig have to match in dimension with u>l')

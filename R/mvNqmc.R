@@ -39,7 +39,7 @@
 #' d <- 15; l <- 1:d; u <- rep(Inf, d);
 #' Sig <- matrix(rnorm(d^2), d, d)*2; Sig=Sig %*% t(Sig)
 #' mvNqmc(l, u, Sig, 1e4) # compute the probability
-mvNqmc <-function(l,u,Sig,n){
+mvNqmc <-function(l, u, Sig, n = 1e5){
   ## truncated multivariate normal cumulative distribution (qmc version)
   # computes an estimator of the probability Pr(l<X<u),
   # where 'X' is a zero-mean multivariate normal vector
