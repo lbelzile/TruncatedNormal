@@ -4,7 +4,7 @@
 \alias{mvTqmc}
 \title{Truncated multivariate student cumulative distribution (QMC version)}
 \usage{
-mvTqmc(l, u, Sig, df, n)
+mvTqmc(l, u, Sig, df, n = 1e+05)
 }
 \arguments{
 \item{l}{lower bound for truncation (infinite values allowed)}

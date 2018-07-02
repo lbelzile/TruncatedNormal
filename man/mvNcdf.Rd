@@ -4,7 +4,7 @@
 \alias{mvNcdf}
 \title{Truncated multivariate normal cumulative distribution}
 \usage{
-mvNcdf(l, u, Sig, n)
+mvNcdf(l, u, Sig, n = 1e+05)
 }
 \arguments{
 \item{l}{lower truncation limit}

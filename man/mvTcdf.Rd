@@ -4,7 +4,7 @@
 \alias{mvTcdf}
 \title{Truncated multivariate student cumulative distribution}
 \usage{
-mvTcdf(l, u, Sig, df, n)
+mvTcdf(l, u, Sig, df, n = 1e+05)
 }
 \arguments{
 \item{l}{lower bound for truncation (infinite values allowed)}
