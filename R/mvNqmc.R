@@ -40,39 +40,15 @@
 #' Sig <- matrix(rnorm(d^2), d, d)*2; Sig=Sig %*% t(Sig)
 #' mvNqmc(l, u, Sig, 1e4) # compute the probability
 mvNqmc <-function(l, u, Sig, n = 1e5){
-  ## truncated multivariate normal cumulative distribution (qmc version)
-  # computes an estimator of the probability Pr(l<X<u),
-  # where 'X' is a zero-mean multivariate normal vector
-  # with covariance matrix 'Sig', that is, X~N(0,Sig)
-  # infinite values for vectors 'u' and 'l' are accepted;
-  #
-  # This version uses a Quasi Monte Carlo (QMC) pointset
-  # of size ceil(n/12) and estimates the relative error
-  # using 12 independent randomized QMC estimators; QMC
-  # is slower than ordinary Monte Carlo (see my mvncdf.m),
-  # but is also likely to be more accurate when d<50.
-  #
-  # output:      structure 'est' with
-  #              1. estimated value of probability Pr(l<X<u)
-  #              2. estimated relative error of estimator
-  #              3. theoretical upper bound on true Pr(l<X<u)
-  #
-  # * Remark: If you want to estimate Pr(l<Y<u),
-  #           where Y~N(m,Sig) has mean vector 'm',
-  #           then use 'mvNqmc(Sig,l-m,u-m,n)'.
-  #
-  # * Example:
-  #  d=25;l=rep(5,d);u=rep(Inf,d);
-  #  Sig=0.5*diag(d)+.5*matrix(1,d,d);
-  #  est=mvNqmc(l,u,Sig,1e4) # output of our method
-  #
-  # Reference: Z. I. Botev (2015),
-  # "The Normal Law Under Linear Restrictions:
-  #  Simulation and Estimation via Minimax Tilting", submitted to JRSS(B)
-  d=length(l); # basic input check
-  if  (length(u)!=d|d!=sqrt(length(Sig))|any(l>u)){
+  d <- length(l); # basic input check
+  if  (length(u) != d | d != sqrt(length(Sig)) | any(l > u)){
     stop('l, u, and Sig have to match in dimension with u>l')
   }
+  if(d == 1L){
+    warning("Univariate problem not handled; using `pnorm`")
+    return(list(prob = pnorm(q = u) - pnorm(q = l), err = NA, relErr = NA, upbnd = NA))
+  }
+  
   # Cholesky decomposition of matrix
   out=cholperm( Sig, l, u ); L=out$L; l=out$l; u=out$u; D=diag(L);
   if (any(D<1e-10)){

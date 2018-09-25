@@ -48,9 +48,13 @@ mvTqmc <- function(l, u, Sig, df, n = 1e5){
   if (length(u) != d | d != sqrt(length(Sig)) | any(l > u)) {
     stop("l, u, and Sig have to match in dimension with u>l")
   }
+  if(d == 1L){
+    warning("Univariate problem not handled; using `pt`")
+    return(list(prob = pt(q = u, df = df) - pt(q = l, df = df), err = NA, relErr = NA, upbnd = NA))
+  }
+  
   out <- cholperm(Sig, l, u)
   D <- diag(out$L)
-  perm <- out$perm
   if (any(D < 1e-10)) {
     warning("Method may fail as covariance matrix is singular!")
   }

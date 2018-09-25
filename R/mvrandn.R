@@ -6,7 +6,7 @@
 #' Infinite values for \eqn{l} and \eqn{u} are accepted.
 #' @param l lower truncation limit
 #' @param u upper truncation limit
-#' @param Sig covariance matrix of \eqn{N(0,\Sigma)}
+#' @param Sig covariance matrix
 #' @param n number of simulated vectors
 #' @param mu location parameter
 #' @details

@@ -2,7 +2,7 @@
 #'
 #' @param l lower bound for truncation (infinite values allowed)
 #' @param u upper bound for truncation
-#' @param Sig Covariance matrix
+#' @param Sig covariance matrix
 #' @param df degrees of freedom
 #' @param n sample size
 #' @param mu location parameter

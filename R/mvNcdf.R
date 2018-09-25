@@ -41,6 +41,10 @@ mvNcdf <-  function(l, u, Sig, n = 1e5){
     if  (length(u)!=d|d!=sqrt(length(Sig))|any(l>u)){
       stop('l, u, and Sig have to match in dimension with u>l')
     }
+    if(d == 1L){
+      warning("Univariate problem not handled; using `pnorm`")
+      return(list(prob = pnorm(q = u) - pnorm(q = l), err = NA, relErr = NA, upbnd = NA))
+    }
     # Cholesky decomposition of matrix
     out=cholperm( Sig, l, u ); L=out$L; l=out$l; u=out$u; D=diag(L);
     if (any(D<1e-10)){

@@ -107,12 +107,16 @@ List cholpermGB(arma::mat Sigma, NumericVector l, NumericVector u){
   if(Sigma.n_cols != l.size() || Sigma.n_cols != u.size()){
     Rcpp::stop("Non conformal size for `l`, `u` and `Sigma`. Check input arguments");
   }
+  int d = Sigma.n_cols;
+  arma::mat Lc(d, d); //Cholesky matrix
+  Lc.zeros(); // Initialize to zero matrix
   if(Sigma.n_rows <= 1){
-    Rcpp::stop("Matrix must be larger than 1x1");
+    Lc(0,0) = pow(Sigma(0,0), 0.5);
+    return Rcpp::List::create(Named("L") = Lc, Named("l") = l, Named("u") = u, Named("perm") = IntegerVector::create(1));
+    //Rcpp::stop("Matrix must be larger than 1x1");
   }
   double tol = 1.0e-10;
   //Declare containers
-  int d = Sigma.n_cols;
   NumericVector a(d);
   NumericVector b(d);
   NumericVector a0(1);
@@ -120,8 +124,6 @@ List cholpermGB(arma::mat Sigma, NumericVector l, NumericVector u){
   NumericVector pr0(1);
   arma::vec mu(d);
   IntegerVector perm(d);
-  arma::mat Lc(Sigma.n_rows, Sigma.n_cols); //Cholesky matrix
-  Lc.zeros(); // Initialize to zero matrix
   for(int i = 0; i < d; i++){
     a[i] = l[i] / sqrt(Sigma(i,i));
     b[i] = u[i] / sqrt(Sigma(i,i));
@@ -214,18 +216,22 @@ List cholperm(arma::mat Sigma, NumericVector l, NumericVector u){
   if(Sigma.n_cols != l.size() || Sigma.n_cols != u.size()){
     Rcpp::stop("Non conformal size for `l`, `u` and `Sigma`. Check input arguments");
   }
+  int d = Sigma.n_cols;
+  arma::mat Lc(d, d); //Cholesky matrix
+  Lc.zeros(); // Initialize to zero matrix
   if(Sigma.n_rows <= 1){
-    Rcpp::stop("Matrix must be larger than 1x1");
+    Lc(0,0) = pow(Sigma(0,0), 0.5);
+    return Rcpp::List::create(Named("L") = Lc, Named("l") = l, Named("u") = u, Named("perm") = IntegerVector::create(1));
+    //Rcpp::stop("Matrix must be larger than 1x1");
   }
   double tol = 1.0e-10;
   //Declare containers
-  int d = Sigma.n_cols;
+ 
   NumericVector a(d);
   NumericVector b(d);
   arma::vec mu(d);
   IntegerVector perm(d);
-  arma::mat Lc(Sigma.n_rows, Sigma.n_cols); //Cholesky matrix
-  Lc.zeros(); // Initialize to zero matrix
+
   for(int i = 0; i < d; i++){
     a[i] = l[i] / sqrt(Sigma(i,i));
     b[i] = u[i] / sqrt(Sigma(i,i));

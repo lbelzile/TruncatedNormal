@@ -20,6 +20,7 @@
 #' \item{\code{u}: }{permuted vector of upper bounds}
 #' \item{\code{perm}: }{vector of integers with ordering of permutation}
 #' }
+#' @export
 #' @references Genz, A. and Bretz, F. (2009). Computations of Multivariate Normal and t Probabilities, volume 105. Springer, Dordrecht.
 #' @references Gibson G.J., Glasbey C.A. and D.A. Elton (1994).  Monte Carlo evaluation of multivariate normal integrals and sensitivity to variate ordering. In: Dimon et al., Advances in Numerical Methods and Applications, WSP, pp. 120-126.
 cholperm <- function(Sigma, l, u, method = c("GGE", "GB")){
@@ -27,6 +28,6 @@ cholperm <- function(Sigma, l, u, method = c("GGE", "GB")){
   if(method == "GGE"){
     .cholpermGGE(Sigma = Sigma, l = l, u = u)
   } else{
-      .cholpermGB(Sigma = Sigma, l = l, u = u)
+    .cholpermGB(Sigma = Sigma, l = l, u = u)
   }
 }
