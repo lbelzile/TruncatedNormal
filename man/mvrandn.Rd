@@ -11,7 +11,7 @@ mvrandn(l, u, Sig, n, mu = NULL)
 
 \item{u}{upper truncation limit}
 
-\item{Sig}{covariance matrix of \eqn{N(0,\Sigma)}}
+\item{Sig}{covariance matrix}
 
 \item{n}{number of simulated vectors}
 

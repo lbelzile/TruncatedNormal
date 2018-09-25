@@ -11,7 +11,7 @@ mvrandt(l, u, Sig, df, n, mu = NULL)
 
 \item{u}{upper bound for truncation}
 
-\item{Sig}{Covariance matrix}
+\item{Sig}{covariance matrix}
 
 \item{df}{degrees of freedom}
 
