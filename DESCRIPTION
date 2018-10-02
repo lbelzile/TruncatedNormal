@@ -1,6 +1,6 @@
 Package: TruncatedNormal
 Type: Package
-Title: Truncated Multivariate Normal
+Title: Truncated Multivariate Normal and Student Distributions
 Version: 1.1.8
 Date: 2018-09-25
 Authors@R: c(person(given="Zdravko", family="Botev", role = c("aut", "cre"), email = "botev@unsw.edu.au"), person(given="Leo", family="Belzile", role = c("aut", "ctb"), email = "belzilel@gmail.com"))

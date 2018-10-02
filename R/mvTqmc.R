@@ -50,7 +50,7 @@ mvTqmc <- function(l, u, Sig, df, n = 1e5){
   }
   if(d == 1L){
     warning("Univariate problem not handled; using `pt`")
-    return(list(prob = pt(q = u, df = df) - pt(q = l, df = df), err = NA, relErr = NA, upbnd = NA))
+    return(list(prob = pt(q = u/sqrt(Sig[1], df = df) - pt(q = l/sqrt(Sig[1], df = df), err = NA, relErr = NA, upbnd = NA))
   }
   
   out <- cholperm(Sig, l, u)
@@ -62,7 +62,9 @@ mvTqmc <- function(l, u, Sig, df, n = 1e5){
   u <- out$u/D
   l <- out$l/D
   #Starting value
-  x0 <- rep(0, 2*d); x0[2*d] <- sqrt(df); x0[d] <- log(x0[2*d])
+  x0 <- rep(0, 2*d) 
+  x0[2*d] <- sqrt(df) 
+  x0[d] <- log(x0[2*d])
   solvneq <- nleqslv::nleqslv(x = x0, fn = gradpsiT, L = L, l = l, u = u, nu = df,
                               global = "pwldog", method = "Broyden")
   soln <- solvneq$x
@@ -73,18 +75,18 @@ mvTqmc <- function(l, u, Sig, df, n = 1e5){
   }
   # assign saddlepoint x* and mu*
   soln[d] <- exp(soln[d])
-  x <- soln[1:d];
-  mu <- soln[(d+1):length(soln)];
+  x <- soln[1:d]
+  mu <- soln[(d+1):length(soln)]
   p <- rep(0, 12)
   for(i in 1:12){ # repeat randomized QMC
-    p[i] <- mvtprqmc(ceiling(n/12), L = L, l = l, u = u, nu = df, mu = mu);
+    p[i] <- mvtprqmc(ceiling(n/12), L = L, l = l, u = u, nu = df, mu = mu)
   }
-  est.prob <- mean(p); # average of QMC estimates
-  est.relErr <- sd(p)/(sqrt(12) * est.prob); # relative error
-  est.upbnd <- psyT(x = x, L = L, l = l, u = u, nu = df, mu = mu); # compute psi star
+  est.prob <- mean(p) # average of QMC estimates
+  est.relErr <- sd(p)/(sqrt(12) * est.prob) # relative error
+  est.upbnd <- psyT(x = x, L = L, l = l, u = u, nu = df, mu = mu) # compute psi star
   if(est.upbnd < -743){
     warning('Natural log of probability is less than -743, yielding 0 after exponentiation!')
   }
-  est.upbnd <- exp(est.upbnd);
+  est.upbnd <- exp(est.upbnd)
   list(prob = est.prob, relErr = est.relErr, upbnd = est.upbnd)
 }

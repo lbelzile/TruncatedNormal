@@ -38,20 +38,26 @@
 #' mvNcdf(l, u, Sig, 1e4) # compute the probability 
 mvNcdf <-  function(l, u, Sig, n = 1e5){
     d=length(l); # basic input check
-    if  (length(u)!=d|d!=sqrt(length(Sig))|any(l>u)){
+    if  (length(u) !=d | d != sqrt(length(Sig)) | any(l > u)){
       stop('l, u, and Sig have to match in dimension with u>l')
     }
     if(d == 1L){
       warning("Univariate problem not handled; using `pnorm`")
-      return(list(prob = pnorm(q = u) - pnorm(q = l), err = NA, relErr = NA, upbnd = NA))
+      return(list(prob = pnorm(q = u / sqrt(Sig[1]) - pnorm(q = l / sqrt(Sig[1]), err = NA, relErr = NA, upbnd = NA))
     }
     # Cholesky decomposition of matrix
-    out=cholperm( Sig, l, u ); L=out$L; l=out$l; u=out$u; D=diag(L);
-    if (any(D<1e-10)){
+    out <- cholperm(Sig, l, u)
+    L <- out$L
+    l <- out$l
+    u <- out$u
+    D <- diag(L)
+    if (any(D < 1e-10)){
       warning('Method may fail as covariance matrix is singular!')
     }
-    L=L/D;u=u/D;l=l/D; # rescale
-    L=L-diag(d); # remove diagonal
+    L <- L / D
+    u <- u / D
+    l <- l / D # rescale
+    L <- L - diag(d) # remove diagonal
     # find optimal tilting parameter via non-linear equation solver
     x0 <- rep(0, 2 * length(l) - 2)
     solvneq <- nleqslv::nleqslv(x0, fn = gradpsi, jac = jacpsi,
@@ -62,9 +68,10 @@ mvNcdf <-  function(l, u, Sig, n = 1e5){
     if(!(exitflag %in% 1:2) || !isTRUE(all.equal(solvneq$fvec, rep(0, length(x0)), tolerance = 1e-6))){
       warning('Did not find a solution to the nonlinear system in `mvrandn`!')
     }
-    x=xmu[1:(d-1)];mu=xmu[d:(2*d-2)]; # assign saddlepoint x* and mu*
-    est=mvnpr(n,L,l,u,mu);
+    x <- xmu[1:(d-1)]
+    mu <- xmu[d:(2*d-2)] # assign saddlepoint x* and mu*
+    est <- mvnpr(n, L, l, u, mu)
     # compute psi star
-    est$upbnd=exp(psy(x,L,l,u,mu));
+    est$upbnd <- exp(psy(x, L, l, u, mu))
     return(est)
   }

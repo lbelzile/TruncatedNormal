@@ -49,9 +49,9 @@ mvTcdf <- function(l, u, Sig, df, n = 1e5){
   }
   if(d == 1L){
     warning("Univariate problem not handled; using `pt`.")
-    return(list(prob = pt(q = u, df = df) - pt(q = l, df = df), err = NA, relErr = NA, upbnd = NA))
+    return(list(prob = pt(q = u/sqrt(Sig[1], df = df) - pt(q = l/sqrt(Sig[1], df = df), err = NA, relErr = NA, upbnd = NA))
   }
-    out <- cholperm(Sig, l, u)
+  out <- cholperm(Sig, l, u)
   Lfull <- out$L
   D <- diag(Lfull)
   if (any(D < 1e-10)) {
@@ -72,14 +72,14 @@ mvTcdf <- function(l, u, Sig, df, n = 1e5){
   }
   # assign saddlepoint x* and mu*
   soln[d] <- exp(soln[d])
-  x <- soln[1:d];
-  mu <- soln[(d+1):length(soln)];
-  est <- mvtpr(n = n, L = L, l = l, u = u, nu = df, mu = mu);
+  x <- soln[1:d]
+  mu <- soln[(d+1):length(soln)]
+  est <- mvtpr(n = n, L = L, l = l, u = u, nu = df, mu = mu)
   # compute psi star
-  est$upbnd <- psyT(x = x, L = L, l = l, u = u, nu = df, mu = mu); # compute psi star
+  est$upbnd <- psyT(x = x, L = L, l = l, u = u, nu = df, mu = mu) # compute psi star
   if(est$upbnd < -743){
     warning('Natural log of probability is less than -743, yielding 0 after exponentiation!')
   }
-  est$upbnd <- exp(est$upbnd);
+  est$upbnd <- exp(est$upbnd)
   return(est)
 }

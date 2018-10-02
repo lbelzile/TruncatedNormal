@@ -5,7 +5,7 @@
 #' where \eqn{X} is a zero-mean multivariate normal vector
 #' with covariance matrix \eqn{\Sigma}, that is, \eqn{X} is drawn from \eqn{N(0,\Sigma)}.
 #' Infinite values for vectors \eqn{u} and \eqn{l} are accepted.
-#' The Monte Carlo method uses sample size \eqn{n};
+#' The Monte Carlo method uses sample size \eqn{n}: 
 #' the larger \eqn{n}, the smaller the relative error of the estimator.
 #'
 #' @inheritParams mvNcdf
@@ -27,7 +27,7 @@
 #'
 #' @note This version uses a Quasi Monte Carlo (QMC) pointset
 #' of size \code{ceiling(n/12)} and estimates the relative error
-#' using 12 independent randomized QMC estimators; QMC
+#' using 12 independent randomized QMC estimators. QMC
 #' is slower than ordinary Monte Carlo,
 #' but is also likely to be more accurate when \eqn{d<50}.
 #' For high dimensions, say \eqn{d>50}, you may obtain the same accuracy using
@@ -36,26 +36,35 @@
 #' @seealso \code{\link{mvNcdf}}, \code{\link{mvrandn}}
 #' @export
 #' @examples
-#' d <- 15; l <- 1:d; u <- rep(Inf, d);
-#' Sig <- matrix(rnorm(d^2), d, d)*2; Sig=Sig %*% t(Sig)
+#' d <- 15 
+#' l <- 1:d
+#' u <- rep(Inf, d)
+#' Sig <- matrix(rnorm(d^2), d, d)*2 
+#' Sig <- Sig %*% t(Sig)
 #' mvNqmc(l, u, Sig, 1e4) # compute the probability
-mvNqmc <-function(l, u, Sig, n = 1e5){
-  d <- length(l); # basic input check
-  if  (length(u) != d | d != sqrt(length(Sig)) | any(l > u)){
-    stop('l, u, and Sig have to match in dimension with u>l')
-  }
-  if(d == 1L){
-    warning("Univariate problem not handled; using `pnorm`")
-    return(list(prob = pnorm(q = u) - pnorm(q = l), err = NA, relErr = NA, upbnd = NA))
-  }
-  
-  # Cholesky decomposition of matrix
-  out=cholperm( Sig, l, u ); L=out$L; l=out$l; u=out$u; D=diag(L);
-  if (any(D<1e-10)){
-    warning('Method may fail as covariance matrix is singular!')
-  }
-  L=L/D;u=u/D;l=l/D; # rescale
-  L=L-diag(d); # remove diagonal
+mvNqmc <- function(l, u, Sig, n = 1e5){
+  d <- length(l) # basic input check
+   if  (length(u) != d | d != sqrt(length(Sig)) | any(l > u)){
+      stop('l, u, and Sig have to match in dimension with u>l')
+    }
+    if(d == 1L){
+      warning("Univariate problem not handled; using `pnorm`")
+      return(list(prob = pnorm(q = u/sqrt(Sig[1])) - pnorm(q = l/sqrt(Sig[1])), err = NA, relErr = NA, upbnd = NA))
+    }
+    
+    # Cholesky decomposition of matrix
+    out <- cholperm(Sig, l, u) 
+    L <- out$L 
+    l <- out$l 
+    u <- out$u 
+    D <- diag(L)
+    if (any(D < 1e-10)){
+      warning('Method may fail as covariance matrix is singular!')
+    }
+    L <- L / D
+    u <- u / D
+    l <- l / D # rescale
+    L <- L - diag(d) # remove diagonal
   # find optimal tilting parameter via non-linear equation solver
   x0 <- rep(0, 2 * length(l) - 2)
   solvneq <- nleqslv::nleqslv(x0, fn = gradpsi, jac = jacpsi,
@@ -66,15 +75,15 @@ mvNqmc <-function(l, u, Sig, n = 1e5){
   if(!(exitflag %in% 1:2) || !isTRUE(all.equal(solvneq$fvec, rep(0, length(x0)), tolerance = 1e-6))){
     warning('Did not find a solution to the nonlinear system in `mvrandn`!')
   }
-  x <- xmu[1:(d-1)];
-  mu <- xmu[d:(2*d-2)]; # assign saddlepoint x* and mu*
-  p <- rep(0,12);
+  x <- xmu[1:(d-1)]
+  mu <- xmu[d:(2*d-2)] # assign saddlepoint x* and mu*
+  p <- rep(0, 12)
   for (i in 1:12){ # repeat randomized QMC
-    p[i] <- mvnprqmc(ceiling(n/12), L, l, u, mu);
+    p[i] <- mvnprqmc(ceiling(n/12), L, l, u, mu)
   }
-  prob=mean(p); # average of QMC estimates
-  relErr=sd(p)/sqrt(12)/prob; # relative error
-  upbnd=exp(psy(x,L,l,u,mu)); # compute psi star
-  est=list(prob=prob,relErr=relErr,upbnd=upbnd)
+  prob <- mean(p) # average of QMC estimates
+  relErr <- sd(p)/(sqrt(12) * prob) # relative error
+  upbnd <- exp(psy(x, L, l, u, mu)) # compute psi star
+  est <- list(prob = prob, relErr = relErr, upbnd = upbnd)
   return(est)
 }
