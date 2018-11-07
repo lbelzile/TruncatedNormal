@@ -17,7 +17,7 @@ gradpsi <-  function(y, L, l, u){
     pu <- exp(-0.5*ut^2-w)/sqrt(2*pi)
     P <- pl-pu;
     # output the gradient
-    dfdx <- -mu[-d] + t(crossprod(P, L[,-d]))
+    dfdx <- -mu[-d] + as.vector(crossprod(P, L[,-d]))
     dfdm <- mu - x + P
     grad <- c(dfdx, dfdm[-d])
     # here compute Jacobian matrix

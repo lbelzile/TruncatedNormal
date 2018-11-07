@@ -43,7 +43,7 @@ mvNcdf <-  function(l, u, Sig, n = 1e5){
     }
     if(d == 1L){
       warning("Univariate problem not handled; using `pnorm`")
-      return(list(prob = pnorm(q = u / sqrt(Sig[1]) - pnorm(q = l / sqrt(Sig[1]), err = NA, relErr = NA, upbnd = NA))
+      return(list(prob = pnorm(q = u / sqrt(Sig[1])) - pnorm(q = l / sqrt(Sig[1])), err = NA, relErr = NA, upbnd = NA))
     }
     # Cholesky decomposition of matrix
     out <- cholperm(Sig, l, u)

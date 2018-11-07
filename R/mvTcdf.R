@@ -49,7 +49,7 @@ mvTcdf <- function(l, u, Sig, df, n = 1e5){
   }
   if(d == 1L){
     warning("Univariate problem not handled; using `pt`.")
-    return(list(prob = pt(q = u/sqrt(Sig[1], df = df) - pt(q = l/sqrt(Sig[1], df = df), err = NA, relErr = NA, upbnd = NA))
+    return(list(prob = pt(q = u/sqrt(Sig[1]), df = df) - pt(q = l/sqrt(Sig[1]), df = df), err = NA, relErr = NA, upbnd = NA))
   }
   out <- cholperm(Sig, l, u)
   Lfull <- out$L
