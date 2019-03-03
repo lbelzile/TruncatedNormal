@@ -303,19 +303,20 @@ NumericVector Phinv(NumericVector p, NumericVector l, NumericVector u){
   if(p.size() != l.size() || p.size() != u.size()){
     Rcpp::stop("Non-conformal sizes in `p`, `l` or `u` in function `Phinv`");
   }
-    for(int i = 0; i < u.size(); i++){
-      if(u[i] < 0){
-        l[i] = -l[i];
-        u[i] = -u[i]; 
-      }
-    }
+  LogicalVector flip  = LogicalVector(u < 0);
+     for(int i = 0; i < u.size(); i++){
+       if(flip[i] == true){
+         l[i] = -l[i];
+         u[i] = -u[i]; 
+       }
+     }
   //use symmetry of normal
     NumericVector pl = Rcpp::pnorm(l, 0.0, 1.0, 0, 0);
     NumericVector x = Rcpp::qnorm(pl + (Rcpp::pnorm(u, 0.0, 1.0, 0, 0) - pl) * p, 0.0, 1.0, 0, 0);
-    for(int i = 0; i < u.size(); i++){
-      if(u[i] < 0){
+     for(int i = 0; i < u.size(); i++){
+       if(flip[i] == true){
         x[i] = -x[i];
-      }
+     }
     }
     return x;
   }

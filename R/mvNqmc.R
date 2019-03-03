@@ -84,7 +84,7 @@ mvNqmc <- function(l, u, Sig, n = 1e5){
   }
   p <- rep(0, 12)
   for (i in 1:12){ # repeat randomized QMC
-    p[i] <- mvnprqmc(ceiling(n/12), L, l, u, mu)
+    p[i] <- mvnprqmc(ceiling(n/12), L = L, l = l, u = u, mu = mu)
   }
   prob <- mean(p) # average of QMC estimates
   relErr <- sd(p)/(sqrt(12) * prob) # relative error

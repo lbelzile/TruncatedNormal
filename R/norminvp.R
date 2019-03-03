@@ -29,16 +29,21 @@
 #' @examples
 #'  d <- 150 # simulate via inverse transform method
 #'  norminvp(runif(d),l = 1:d, u = rep(Inf, d))
-norminvp <- function(p,l,u){
-     if ((length(l)!=length(p))|any(l>u)|any(p>1)|any(p<0)){
-      stop('l, u, and p must be the same length with u>l and 0<=p<=1')
-    }
-    x=rep(0,length(l)); # allocate memory
-    I=(p==1);x[I]=u[I]; # extreme values of quantile
-    J=(p==0);x[J]=l[J];
-    I=!(I|J); # cases for which 0<x<1
-    if (any(I)){
-      x[I]=cases(p[I],l[I],u[I]);
-    }
-    return(x)
+norminvp <- function (p, l, u){
+  if ((length(l) != length(p)) | any(l > u) | any(p > 1) |  any(p < 0)) {
+    stop("l, u, and p must be the same length with u > l and 0 <= p <= 1")
   }
+  x = rep(NaN, length(l))
+  K <- ((p < 1) + (p > 0)) == 2L
+  if(any(K)){
+    x[K] = cases(p = p[K], l = l[K], u = u[K])
+  }
+  if(sum(K) == length(p)){
+   return(x) 
+  } 
+  I1 <- (p == 1)
+  x[I1] = u[I1]
+  I2 <- (p == 0)
+  x[I2] = l[I2]
+  return(x)
+}
