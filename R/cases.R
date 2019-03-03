@@ -13,10 +13,10 @@ cases <-
       tl=-u[J]; tu=-l[J]; tp=p[J]; x[J]=-normq(1-tp,tl,tu);
     }
     # case 3: otherwise use erfcinv
-    I=!(I|J);
-    if  (any(I)){
-      tl=l[I]; tu=u[I]; tp=p[I]; 
-      x[I]=Phinv(tp,tl,tu);
+    K=!(I|J);
+    if  (any(K)){
+      tl=l[K]; tu=u[K]; tp=p[K]; 
+      x[K]=Phinv(p = tp, l = tl, u = tu);
     }
     return(x)
   }
