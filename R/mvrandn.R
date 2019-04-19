@@ -137,7 +137,7 @@ mvrandn <-  function(l, u, Sig, n, mu = NULL){
         warning('Acceptance probability smaller than 0.001')
       } else if(iter > 1e5){ # if iterations too large, seek approximation only
         if(accept == 0){
-          stop("Could not sample from Student - check input")
+          stop("Could not sample from truncated Normal - check input")
         } else if(accept > 1){
           Z <- Z[,1:accept]
           warning('Sample of size smaller than n returned.')
