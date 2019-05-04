@@ -14,6 +14,7 @@
 #' @keywords internal
 #' @useDynLib TruncatedNormal
 #' @importFrom Rcpp evalCpp
+#' @export
 lnNpr <- function(a, b, check = FALSE) {
     .Call('_TruncatedNormal_lnNpr', PACKAGE = 'TruncatedNormal', a, b, check)
 }
@@ -31,6 +32,7 @@ lnNpr <- function(a, b, check = FALSE) {
 #' @param Sigma \code{d} by \code{d} covariance matrix
 #' @param l \code{d} vector of lower bounds
 #' @param u \code{d} vector of upper bounds
+#' @export
 #' @return a list with components
 #' \itemize{
 #' \item{\code{L}: }{Cholesky root}
@@ -57,6 +59,7 @@ lnNpr <- function(a, b, check = FALSE) {
 #' @param Sigma \code{d} by \code{d} covariance matrix
 #' @param l \code{d} vector of lower bounds
 #' @param u \code{d} vector of upper bounds
+#' @export
 #' @return a list with components
 #' \itemize{
 #' \item{\code{L}: }{Cholesky root}
@@ -80,6 +83,7 @@ lnNpr <- function(a, b, check = FALSE) {
 #' @param u \code{d} vector of upper bounds
 #' @return vector of quantiles
 #' @keywords internal
+#' @export
 Phinv <- function(p, l, u) {
     .Call('_TruncatedNormal_Phinv', PACKAGE = 'TruncatedNormal', p, l, u)
 }

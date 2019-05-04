@@ -17,6 +17,7 @@ using namespace Rcpp;
 //' @keywords internal
 //' @useDynLib TruncatedNormal
 //' @importFrom Rcpp evalCpp
+//' @export
 // [[Rcpp::export]]
 NumericVector lnNpr(NumericVector a, NumericVector b, bool check = false){
   if(check){
@@ -93,6 +94,7 @@ NumericVector varTN(NumericVector a, NumericVector b, bool check = false){
 //' @param Sigma \code{d} by \code{d} covariance matrix
 //' @param l \code{d} vector of lower bounds
 //' @param u \code{d} vector of upper bounds
+//' @export
 //' @return a list with components
 //' \itemize{
 //' \item{\code{L}: }{Cholesky root}
@@ -202,6 +204,7 @@ List cholpermGB(arma::mat Sigma, NumericVector l, NumericVector u){
 //' @param Sigma \code{d} by \code{d} covariance matrix
 //' @param l \code{d} vector of lower bounds
 //' @param u \code{d} vector of upper bounds
+//' @export
 //' @return a list with components
 //' \itemize{
 //' \item{\code{L}: }{Cholesky root}
@@ -298,6 +301,7 @@ List cholperm(arma::mat Sigma, NumericVector l, NumericVector u){
 //' @param u \code{d} vector of upper bounds
 //' @return vector of quantiles
 //' @keywords internal
+//' @export
 // [[Rcpp::export]]
 NumericVector Phinv(NumericVector p, NumericVector l, NumericVector u){
   if(p.size() != l.size() || p.size() != u.size()){
