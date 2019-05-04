@@ -16,8 +16,7 @@ random variable drawn from the truncated normal distribution
 }
 \description{
 Efficient state-of-the-art generator of a vector of \code{length(l)=length(u)}
- from the standard multivariate normal distribution,
- truncated over the region \eqn{[l,u]}.
+ from the standard multivariate normal distribution truncated over the region \eqn{[l,u]}.
  Infinite values for \code{u} and \code{l} are accepted.
 }
 \details{
