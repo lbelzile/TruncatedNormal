@@ -38,3 +38,4 @@ Genz, A. and Bretz, F. (2009). Computations of Multivariate Normal and t Probabi
 
 Gibson G.J., Glasbey C.A. and D.A. Elton (1994).  Monte Carlo evaluation of multivariate normal integrals and sensitivity to variate ordering. In: Dimon et al., Advances in Numerical Methods and Applications, WSP, pp. 120-126.
 }
+\keyword{internal}

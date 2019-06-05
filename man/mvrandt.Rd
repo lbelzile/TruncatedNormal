@@ -43,3 +43,4 @@ Proceedings of the 2015 Winter Simulation Conference, pp. 380-391,
 \author{
 \code{Matlab} code by Zdravko Botev, \code{R} port by Leo Belzile
 }
+\keyword{internal}

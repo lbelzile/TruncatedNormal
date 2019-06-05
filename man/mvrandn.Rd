@@ -89,3 +89,4 @@ m=dim(X)[1]; d=dim(X)[2]; # dimensions of problem
 \seealso{
 \code{\link{mvNqmc}}, \code{\link{mvNcdf}}
 }
+\keyword{internal}

@@ -16,7 +16,7 @@
 #' @note  Use \code{\link{norminvp}} for the (slower) inverse transform method of simulating truncated normal variables.
 #' @seealso \code{\link{norminvp}}
 #' @export
-#'
+#' @keywords internal
 #' @author Zdravko I. Botev
 #' @references Z. I. Botev (2017), \emph{The Normal Law Under Linear Restrictions:
 #' Simulation and Estimation via Minimax Tilting}, Journal of the Royal

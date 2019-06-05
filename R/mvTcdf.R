@@ -38,8 +38,9 @@
 #' Statistical Society, Series B, \bold{79} (1), pp. 1--24
 #' @references  Z. I. Botev and P. L'Ecuyer (2015), Efficient probability estimation
 #' and simulation of the truncated multivariate Student-t distribution,
-#' Proceedings of the 2015 Winter Simulation Conference, pp. 380-391,
+#' Proceedings of the 2015 Winter Simulation Conference, pp. 380-391
 #' @export
+#' @keywords internal
 #' @author \code{Matlab} code by Zdravko Botev, \code{R} port by Leo Belzile
 #' @importFrom qrng sobol
 mvTcdf <- function(l, u, Sig, df, n = 1e5){

@@ -7,7 +7,7 @@
 #' @param p quantile  at \eqn{0\le p\le 1}
 #' @param l lower truncation limit
 #' @param u upper truncation limit
-#'
+#' @keywords internal
 #' @author Zdravko I. Botev
 #' @references Z. I. Botev (2017), \emph{The Normal Law Under Linear Restrictions:
 #' Simulation and Estimation via Minimax Tilting}, Journal of the Royal

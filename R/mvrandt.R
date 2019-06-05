@@ -15,6 +15,7 @@
 #' @return a \code{d} by \code{n} matrix
 #' @importFrom nleqslv nleqslv
 #' @importFrom stats "pt" "qt"
+#' @keywords internal
 #' @examples
 #' \dontrun{
 #' d <- 60L; n <- 1e3;

@@ -30,6 +30,7 @@
 #' @note The algorithm may not work or be very inefficient if \eqn{\Sigma} is close to being rank deficient.
 #' @seealso \code{\link{mvNqmc}}, \code{\link{mvNcdf}}
 #' @export
+#' @keywords internal
 #' @examples
 #'  # Bivariate example.
 #'

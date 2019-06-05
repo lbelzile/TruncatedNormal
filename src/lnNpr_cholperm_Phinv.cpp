@@ -15,7 +15,7 @@ using namespace Rcpp;
 //' @param check logical; should checks be performed? 
 //' @return a vector of log probability.
 //' @keywords internal
-//' @useDynLib TruncatedNormal
+//' @useDynLib TruncatedNormal, .registration = TRUE
 //' @importFrom Rcpp evalCpp
 //' @export
 // [[Rcpp::export]]
@@ -95,6 +95,7 @@ NumericVector varTN(NumericVector a, NumericVector b, bool check = false){
 //' @param l \code{d} vector of lower bounds
 //' @param u \code{d} vector of upper bounds
 //' @export
+//' @keywords internal
 //' @return a list with components
 //' \itemize{
 //' \item{\code{L}: }{Cholesky root}
@@ -205,6 +206,7 @@ List cholpermGB(arma::mat Sigma, NumericVector l, NumericVector u){
 //' @param l \code{d} vector of lower bounds
 //' @param u \code{d} vector of upper bounds
 //' @export
+//' @keywords internal
 //' @return a list with components
 //' \itemize{
 //' \item{\code{L}: }{Cholesky root}

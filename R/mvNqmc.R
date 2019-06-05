@@ -35,6 +35,7 @@
 #'
 #' @seealso \code{\link{mvNcdf}}, \code{\link{mvrandn}}
 #' @export
+#' @keywords internal
 #' @examples
 #' d <- 15 
 #' l <- 1:d

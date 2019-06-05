@@ -15,27 +15,32 @@ The routines include:
 }
 \details{
 \describe{
- \item{\code{\link{mvNcdf}(l,u,Sig,n)}}{uses a Monte Carlo sample of size \eqn{n} to estimate the cumulative
+\item{\code{\link{cholperm}}}{computes the Cholesky decomposition of a covariance matrix and returns a list containing the permuted bounds for integration. The prioritization of the variables follow the rule proposed in Gibson, Glasbey and Elston}
+ \item{\code{\link{mvNcdf}}}{uses a Monte Carlo sample of size \eqn{n} to estimate the cumulative
  distribution function, Pr\eqn{( l < X < u)}, of the \eqn{d}-dimensional
  multivariate normal with zero-mean and covariance \eqn{\Sigma}, that is,
  \eqn{X} has \eqn{N(0,\Sigma)} distribution;}
-\item{\code{\link{mvNqmc}(l,u,Sig,n)}}{ provides a Quasi Monte Carlo algorithm for medium dimensions
+\item{\code{\link{mvNqmc}}}{ provides a Quasi Monte Carlo algorithm for medium dimensions
  (say, \eqn{d<50}), in addition to the faster Monte Carlo algorithm in \code{\link{mvNcdf}};}
-\item{\code{\link{mvrandn}(l,u,Sig,n)}}{
+  \item{\code{\link{mvTqmc}}}{ provides a Quasi Monte Carlo algorithm for medium dimensions
+ (say, \eqn{d<50}), in addition to the faster Monte Carlo algorithm in \code{\link{mvTcdf}};}
+\item{\code{\link{mvrandn}}}{
 simulates \eqn{n} \bold{identically and independently distributed} random vectors \eqn{X} from \eqn{N(0,\Sigma)}, conditional on \eqn{l<X<u};}
-\item{\code{\link{norminvp}(p,l,u)}}{ computes the quantile function at \eqn{0\le p\le 1} of the univariate \eqn{N(0,1)} distribution
+\item{\code{\link{mvrandt}}}{
+simulates \eqn{n} \bold{identically and independently distributed} random vectors \eqn{X} from a Student distribution with scale matrix \eqn{\Sigma} and \eqn{\nu} degrees of freedom, conditional on \eqn{l<X<u};}
+\item{\code{\link{norminvp}}}{ computes the quantile function at \eqn{0\le p\le 1} of the univariate \eqn{N(0,1)} distribution
  truncated to \eqn{[l,u]}, and with high precision in the tails;}
-\item{\code{\link{trandn}(l,u)}}{ is a fast random number generator from the univariate \eqn{N(0,1)}
+\item{\code{\link{trandn}}}{ is a fast random number generator from the univariate \eqn{N(0,1)}
  distribution truncated to \eqn{[l,u]}.}
- \item{\code{\link{mvTcdf}(l,u,Sig,nu,n)}}{ which uses a Monte Carlo sample of size \eqn{n} to estimate the cumulative distribution function, Pr\eqn{(l < X < u)}, of the \eqn{d}-dimensional multivariate Student with zero-mean and covariance \eqn{\Sigma} and degrees of freedom \eqn{\nu}, that is, \eqn{X \sim t_\nu(0, \Sigma)}{X ~  t[\nu](0, \Sigma)}.}
-\item{\code{\link{mvTqmc}(l,u,Sig,nu,n)}}{ provides a Quasi Monte Carlo algorithm for medium dimensions
+ \item{\code{\link{mvTcdf}}}{ uses a Monte Carlo sample of size \eqn{n} to estimate the cumulative distribution function, Pr\eqn{(l < X < u)}, of the \eqn{d}-dimensional multivariate Student with zero-mean and covariance \eqn{\Sigma} and degrees of freedom \eqn{\nu}, that is, \eqn{X \sim t_\nu(0, \Sigma)}{X ~  t[\nu](0, \Sigma)}.}
+\item{\code{\link{mvTqmc}}}{ provides a Quasi Monte Carlo algorithm for medium dimensions
 (say, \eqn{d < 50}), in addition to the faster Monte Carlo algorithm in \code{\link{mvTcdf}}.}
-\item{\code{\link{mvrandt}(l,u,Sig,nu,n)}}{ simulates \eqn{n} random vectors \eqn{X \sim t_\nu(0, \Sigma)}{X ~  t[\nu](0, \Sigma)}, conditional on \eqn{l < X <u}.}
-\item{\code{\link{tregress}(l,u,Sig,df,n)}}{ simulates \eqn{n} pairs, \eqn{Z, R}, so that \eqn{\sqrt{\nu}Z/R \sim t_\nu(0, \Sigma)}{\sqrt{\nu}Z/R ~  t[\nu]((0, \Sigma)}, conditional on \eqn{l < X <u}.}
+\item{\code{\link{mvrandt}}}{ simulates \eqn{n} random vectors \eqn{X \sim t_\nu(0, \Sigma)}{X ~  t[\nu](0, \Sigma)}, conditional on \eqn{l < X <u}.}
+\item{\code{\link{tregress}}}{ simulates \eqn{n} pairs, \eqn{Z, R}, so that \eqn{\sqrt{\nu}Z/R \sim t_\nu(0, \Sigma)}{\sqrt{\nu}Z/R ~  t[\nu]((0, \Sigma)}, conditional on \eqn{l < X <u}.}
 }
 }
 \author{
-Z. I. Botev, email: \email{botev@unsw.edu.au} and web page: \url{http://web.maths.unsw.edu.au/~zdravkobotev/}
+Z. I. Botev, email: \email{botev@unsw.edu.au} and web page: \code{https://web.maths.unsw.edu.au/~zdravkobotev/}
 }
 \references{
 \itemize{
@@ -50,8 +55,3 @@ Simulation and Estimation via Minimax Tilting}, Journal of the Royal
   In: Advances in Numerical Methods and Applications, pages 120--126
  }
 }
-
-\seealso{ Matlab toolbox:
-\url{http://web.maths.unsw.edu.au/~zdravkobotev/}
-}
-

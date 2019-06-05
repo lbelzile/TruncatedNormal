@@ -25,6 +25,7 @@
 #' }  
 #' @author Zdravko I. Botev
 #' @export
+#' @keywords internal
 #' @references Z. I. Botev (2017), \emph{The Normal Law Under Linear Restrictions:
 #' Simulation and Estimation via Minimax Tilting}, Journal of the Royal
 #' Statistical Society, Series B, \bold{79} (1), pp. 1--24.

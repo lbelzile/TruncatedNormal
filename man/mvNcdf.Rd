@@ -58,3 +58,4 @@ Statistical Society, Series B, \bold{79} (1), pp. 1--24.
 \author{
 Zdravko I. Botev
 }
+\keyword{internal}

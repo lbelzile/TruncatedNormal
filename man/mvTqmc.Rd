@@ -63,7 +63,7 @@ Statistical Society, Series B, \bold{79} (1), pp. 1--24
 
 Z. I. Botev and P. L'Ecuyer (2015), Efficient probability estimation
 and simulation of the truncated multivariate Student-t distribution,
-Proceedings of the 2015 Winter Simulation Conference, pp. 380-391,
+Proceedings of the 2015 Winter Simulation Conference, pp. 380-391
 }
 \seealso{
 \code{\link{mvTcdf}}, \code{\link{mvrandt}}, \code{\link{mvNqmc}}, \code{\link{mvrandn}}
@@ -71,3 +71,4 @@ Proceedings of the 2015 Winter Simulation Conference, pp. 380-391,
 \author{
 \code{Matlab} code by Zdravko I. Botev, \code{R} port by Leo Belzile
 }
+\keyword{internal}
