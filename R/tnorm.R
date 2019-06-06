@@ -40,17 +40,23 @@ rtnorm <- function(n, mu, sd, lb, ub, method = c("fast","invtransfo")){
   mu <- rep(mu, length.out = d)
   sd <- rep(sd, length.out = d)
   #To achieve this, first compute X=norminvp(runif(1),(lb-mu)/sig,(ub-mu)/sig) and then set Z=mu+sig*X
-  res <- matrix(0, ncol = d, nrow = n)
   lb <- (lb - mu) / sd
   ub <- (ub - mu) / sd
+  if(d == 1L && n > 1){
+    res <- mu + sd * switch(method, 
+                            fast = trandn(l = rep(lb, n), u = rep(ub, n)),
+                            invtransfo = norminvp(p = runif(n), l = rep(lb, n), u = rep(ub, n)))
+  } else{
+  res <- matrix(0, ncol = d, nrow = n)
   for(i in 1:n){
     res[i,] <- mu + sd * switch(method, 
                       fast = trandn(l = lb, u = ub),
                       invtransfo = norminvp(p = runif(d), l = lb, u = ub))
   }
-if(d == 1L || n == 1L){
-  res <- as.vector(res)
-} 
+  if(d == 1L || n == 1L){
+    res <- as.vector(res)
+  } 
+  }
  res 
 }
 
