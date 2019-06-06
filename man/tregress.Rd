@@ -4,18 +4,18 @@
 \alias{tregress}
 \title{Truncated student generator for Bayesian regression simulation}
 \usage{
-tregress(l, u, Sig, df, n)
+tregress(n, lb, ub, sigma, df)
 }
 \arguments{
-\item{l}{lower bound for truncation (infinite values allowed)}
+\item{n}{number of observations}
 
-\item{u}{upper bound for truncation}
+\item{lb}{vector of lower truncation limits}
 
-\item{Sig}{covariance matrix}
+\item{ub}{vector of upper truncation limits}
+
+\item{sigma}{scale matrix}
 
 \item{df}{degrees of freedom}
-
-\item{n}{sample size}
 }
 \value{
 list with components
@@ -29,12 +29,12 @@ a truncated Student distribution
 Simulates \code{n} random vectors \eqn{X} exactly distributed
 from the \code{d}-dimensional Student distribution with
 \code{df=}\eqn{\nu} degrees of freedom, mean zero and scale matrix
-\code{Sig}, conditional on \eqn{l<X<u},
+\code{sigma}, conditional on \eqn{l<X<u},
 }
 \examples{
 d <- 5
-tregress(rep(-2, d), rep(2, d), df = 3, n = 10,
-  Sig = diag(0.5, d) + matrix(1, d, d))
+tregress(lb =rep(-2, d), ub = rep(2, d), df = 3, n = 10,
+  sigma = diag(0.5, d) + matrix(1, d, d))
 }
 \references{
 Z. I. Botev and P. L'Ecuyer (2015), Efficient probability estimation

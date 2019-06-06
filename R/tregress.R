@@ -3,9 +3,9 @@
 #' Simulates \code{n} random vectors \eqn{X} exactly distributed
 #' from the \code{d}-dimensional Student distribution with
 #' \code{df=}\eqn{\nu} degrees of freedom, mean zero and scale matrix
-#' \code{Sig}, conditional on \eqn{l<X<u},
+#' \code{sigma}, conditional on \eqn{l<X<u},
 #'
-#' @inheritParams mvrandt
+#' @inheritParams tmvt
 #'
 #' @author \code{Matlab} code by Zdravko Botev, \code{R} port by Leo Belzile
 #' @export
@@ -20,15 +20,15 @@
 #' a truncated Student distribution
 #' @examples
 #' d <- 5
-#' tregress(rep(-2, d), rep(2, d), df = 3, n = 10,
-#'   Sig = diag(0.5, d) + matrix(1, d, d))
-tregress <- function (l, u, Sig, df, n)
+#' tregress(lb =rep(-2, d), ub = rep(2, d), df = 3, n = 10,
+#'   sigma = diag(0.5, d) + matrix(1, d, d))
+tregress <- function (n, lb, ub, sigma, df)
 {
-  d = length(l)
-  if (length(u) != d | d != sqrt(length(Sig)) | any(l > u)) {
-    stop("l, u, and Sig have to match in dimension with u>l")
+  d = length(lb)
+  if (length(ub) != d | d != sqrt(length(sigma)) | any(lb > ub)) {
+    stop("lb, ub, and sigma have to match in dimension with ub>lb")
   }
-  out = cholperm(Sig, l, u)
+  out = cholperm(sigma, lb, ub)
   Lfull = out$L
   l = out$l
   u = out$u
@@ -51,7 +51,7 @@ tregress <- function (l, u, Sig, df, n)
   if(!(exitflag %in% 1:2) || !all.equal(solvneq$fvec, rep(0, length(x0)))){
     warning('Method may fail as covariance matrix is close to singular!')
   }
-  # assign saddlepoint x* and mu*
+  # assigman saddlepoint x* and mu*
   soln[d] <- exp(soln[d])
   x <- soln[1:d];
   mu <- soln[(d+1):length(soln)];
@@ -89,5 +89,5 @@ tregress <- function (l, u, Sig, df, n)
   order = out$ix
   Z = Lfull %*% Z
   Z = Z[order, ]
-  return(list(R = R, Z = Z))
+  return(list(R = R, Z = t(Z)))
 }

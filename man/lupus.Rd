@@ -2,7 +2,7 @@
 \alias{lupus}
 \docType{data}
 \title{
-Latent Membranous Lupus Nephritis Dataset
+Latent membranous Lupus Nephritis dataset
 }
 \description{
 The data represents
@@ -12,16 +12,14 @@ on 55 patients of which 18 have been diagnosed with latent membranous lupus.
 }
 \usage{data("lupus")}
 \format{
-  The format is:
- "response" "const" "x1" "x2"
+A data frame with columns "response", "const", "x1" and "x2"
 }
 \details{
- The data was transcribed manually into this format 
- from Table 1, page 22, of Dyk and  Meng (2001).
+ The data were transcribed from Table 1, page 22, of Dyk and  Meng (2001).
 }
 
 \seealso{
- See Also as \code{\link{mvrandn}}, which uses this dataset.
+ \code{\link{mvrandn}}, which uses this dataset.
 }
 
 

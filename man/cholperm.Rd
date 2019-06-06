@@ -2,7 +2,7 @@
 % Please edit documentation in R/cholperm.R
 \name{cholperm}
 \alias{cholperm}
-\title{Cholesky matrix decomposition for Gaussian distribution function evaluations}
+\title{Cholesky decomposition for Gaussian distribution function with permutation}
 \usage{
 cholperm(Sigma, l, u, method = c("GGE", "GB"))
 }

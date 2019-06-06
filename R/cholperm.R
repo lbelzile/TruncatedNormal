@@ -1,4 +1,4 @@
-#' Cholesky matrix decomposition for Gaussian distribution function evaluations
+#' Cholesky decomposition for Gaussian distribution function with permutation
 #' 
 #' This function computes the Cholesky decomposition of a covariance matrix
 #' \code{Sigma} and returns a list containing the permuted bounds for integration. 
