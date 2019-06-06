@@ -188,9 +188,9 @@ rtmvt <- function(n, mu, sigma, df, lb, ub){
     ub <- rep(Inf, d) 
   }
   if(n == 1){
-    as.vector(mvrandt(l = lb, u = ub, Sig = sigma, df = df, n = n, mu = mu)) + mu
+    as.vector(mvrandt(l = lb, u = ub, Sig = sigma, df = df, n = n, mu = mu))
   } else{
-    t(mvrandt(l = lb, u = ub, Sig = sigma, df = df, n = n, mu = mu) + mu)
+    t(mvrandt(l = lb, u = ub, Sig = sigma, df = df, n = n, mu = mu))
   }
 }
 

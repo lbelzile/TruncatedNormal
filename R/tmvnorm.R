@@ -164,9 +164,9 @@ rtmvnorm <- function(n, mu, sigma, lb, ub){
     ub <- rep(Inf, d) 
   }
   if(n == 1){
-    as.vector(mvrandn(l = lb, u = ub, Sig = sigma, n = n, mu = mu)) + mu
+    as.vector(mvrandn(l = lb, u = ub, Sig = sigma, n = n, mu = mu)) 
   } else{
-    t(mvrandn(l = lb, u = ub, Sig = sigma, n = n, mu = mu) + mu)
+    t(mvrandn(l = lb, u = ub, Sig = sigma, n = n, mu = mu))
   }
 }
 
