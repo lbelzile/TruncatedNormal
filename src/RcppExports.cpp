@@ -21,7 +21,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // dmvt_arma
-arma::vec dmvt_arma(arma::mat x, arma::rowvec mu, arma::mat sigma, double df, bool logd);
+arma::vec dmvt_arma(arma::mat x, arma::rowvec mu, arma::mat sigma, Rcpp::NumericVector df, bool logd);
 RcppExport SEXP _TruncatedNormal_dmvt_arma(SEXP xSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP dfSEXP, SEXP logdSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -29,7 +29,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
     Rcpp::traits::input_parameter< arma::rowvec >::type mu(muSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type sigma(sigmaSEXP);
-    Rcpp::traits::input_parameter< double >::type df(dfSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type df(dfSEXP);
     Rcpp::traits::input_parameter< bool >::type logd(logdSEXP);
     rcpp_result_gen = Rcpp::wrap(dmvt_arma(x, mu, sigma, df, logd));
     return rcpp_result_gen;

@@ -107,7 +107,7 @@ NumericVector varTN(NumericVector a, NumericVector b, bool check = false){
 //' @references Gibson G.J., Glasbey C.A. and D.A. Elton (1994).  Monte Carlo evaluation of multivariate normal integrals and sensitivity to variate ordering. In: Dimon et al., Advances in Numerical Methods and Applications, WSP, pp. 120-126.
 // [[Rcpp::export('.cholpermGB')]]
 List cholpermGB(arma::mat Sigma, NumericVector l, NumericVector u){
-  if(Sigma.n_cols != l.size() || Sigma.n_cols != u.size()){
+  if(Sigma.n_cols != static_cast<unsigned int>(l.size()) || Sigma.n_cols != static_cast<unsigned int>(u.size())){
     Rcpp::stop("Non conformal size for `l`, `u` and `Sigma`. Check input arguments");
   }
   int d = Sigma.n_cols;
@@ -218,7 +218,7 @@ List cholpermGB(arma::mat Sigma, NumericVector l, NumericVector u){
 //' @references Gibson G.J., Glasbey C.A. and D.A. Elton (1994).  Monte Carlo evaluation of multivariate normal integrals and sensitivity to variate ordering. In: Dimon et al., Advances in Numerical Methods and Applications, WSP, pp. 120-126.
 // [[Rcpp::export('.cholpermGGE')]]
 List cholperm(arma::mat Sigma, NumericVector l, NumericVector u){
-  if(Sigma.n_cols != l.size() || Sigma.n_cols != u.size()){
+  if(Sigma.n_cols != static_cast<unsigned int>(l.size()) || Sigma.n_cols != static_cast<unsigned int>(u.size())){
     Rcpp::stop("Non conformal size for `l`, `u` and `Sigma`. Check input arguments");
   }
   int d = Sigma.n_cols;

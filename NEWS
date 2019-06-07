@@ -1,0 +1,20 @@
+TruncatedNormal changelog
+
+version 2.0
+
+* Can specify mean vector directly in the functions
+* Functions for multivariate Student simulation ported from Matlab
+* Change to the interface
+* Many functions now internal (documented)
+* Cholesky matrix permutation (GGB and GE reordering now supported)
+* Selected code rewritten in Rcpp
+* New vignette
+* Removed random seed
+* Change to the Sobol sequence because previously used package is unmaintained (no more scrambling for QMC)
+* Throw error if NaN in bounds
+* Handle univariate cases in mvrandt and mvrandn
+* Use nleq solver to solve convex program (also check KKT conditions)
+
+version 1.0
+
+*Initial release

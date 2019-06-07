@@ -57,18 +57,18 @@ arma::vec dmvnorm_arma(arma::mat x,
 arma::vec dmvt_arma(arma::mat x,
                     arma::rowvec mu,
                     arma::mat sigma,
-  		              double df,
+                    Rcpp::NumericVector df,
                     bool logd = false) {
   int n = x.n_rows;
   double xdim = static_cast<double>(x.n_cols);
   arma::vec out(n);
   arma::mat rooti = arma::trans(arma::inv(trimatu(arma::chol(sigma))));
   double rootisum = arma::sum(log(rooti.diag())); // log-determinant
-  double constants = -0.5 * xdim * (std::log(df) + std::log(M_PI)) + std::lgamma(0.5 * (xdim + df)) - std::lgamma(0.5 * df);
+  double constants = -0.5 * xdim * (log(df)[0] + std::log(M_PI)) + Rcpp::lgamma(0.5 * (xdim + df))[0] - Rcpp::lgamma(0.5 * df)[0];
 
   for (int i=0; i < n; i++) {
     arma::vec z = rooti * arma::trans( x.row(i) - mu) ;
-    out(i)      = constants - 0.5 * (df + xdim) * log(1.0 + arma::sum(z%z) / df) + rootisum;
+    out(i)      = constants - 0.5 * (df[0] + xdim) * log(1.0 + arma::sum(z%z) / df[0]) + rootisum;
   }
 
   if (logd == false) {
