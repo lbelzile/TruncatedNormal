@@ -170,7 +170,7 @@ The lower truncation is then $\nu^{1/2}\widehat{\boldsymbol{y}}_c/s_u$.
 ```{r tobit}
 
 #Censored observations denote Yc, Yu for uncensored
-women <- read.csv("http://www.stern.nyu.edu/~wgreene/Text/Edition7/TableF5-1.csv", 
+women <- read.csv("https://www.stern.nyu.edu/~wgreene/Text/Edition7/TableF5-1.csv", 
                    header = TRUE)[,c(2:7,19)]
 Y <- women[,"WHRS"]
 X <- cbind(1, as.matrix(women[,-1]), I(women[,"AX"]^2))
