@@ -88,7 +88,7 @@ mvrandn <-  function(l, u, Sig, n, mu = NULL){
       }
     }
     # Cholesky decomposition of matrix
-    out <- cholperm(Sig,l,u);
+    out <- cholperm(as.matrix(Sig), as.numeric(l), as.numeric(u));
     Lfull <- out$L;
     l <- out$l;
     u <- out$u;

@@ -19,7 +19,7 @@ using namespace Rcpp;
 //' @importFrom Rcpp evalCpp
 //' @export
 // [[Rcpp::export]]
-NumericVector lnNpr(NumericVector a, NumericVector b, bool check = false){
+NumericVector lnNpr(NumericVector a, NumericVector b, bool check = true){
   if(check){
     //Sanity checks
     if(a.size() != b.size()){
@@ -69,10 +69,15 @@ NumericVector lnNpr(NumericVector a, NumericVector b, bool check = false){
 // @param b vector of upper bound
 // @param check logical; should checks be performed? 
 // @return vector of variances
-NumericVector varTN(NumericVector a, NumericVector b, bool check = false){
+NumericVector varTN(NumericVector a, NumericVector b, bool check = true){
   //Sanity checks
-  if(a.size() != b.size()){
-    Rcpp::stop("In function `varTN`, vectors `a` and `b` do not have the same size."); 
+  if(check){
+    if(a.size() != b.size()){
+      Rcpp::stop("In function `varTN`, vectors `a` and `b` do not have the same size."); 
+    }
+    if(is_true(any(a >= b))){
+      Rcpp::stop("In function `varTN`, inequality `a < b` not fulfilled for some component.");  
+    }
   }
   NumericVector phia = Rcpp::dnorm(a);
   NumericVector phib = Rcpp::dnorm(b);
