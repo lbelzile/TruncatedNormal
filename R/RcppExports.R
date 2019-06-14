@@ -50,7 +50,7 @@
 #' @useDynLib TruncatedNormal, .registration = TRUE
 #' @importFrom Rcpp evalCpp
 #' @export
-lnNpr <- function(a, b, check = FALSE) {
+lnNpr <- function(a, b, check = TRUE) {
     .Call(`_TruncatedNormal_lnNpr`, a, b, check)
 }
 

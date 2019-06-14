@@ -163,10 +163,35 @@ rtmvnorm <- function(n, mu, sigma, lb, ub){
   if(missing(ub)){
     ub <- rep(Inf, d) 
   }
-  if(n == 1){
-    as.vector(mvrandn(l = lb, u = ub, Sig = sigma, n = n, mu = mu)) 
+  stopifnot(length(lb) == length(ub), length(lb) == d, lb <= ub)
+  if(!any((ub - lb) < 1e-10)){
+    if(n == 1){
+      as.vector(mvrandn(l = lb, u = ub, Sig = sigma, n = n, mu = mu)) 
+    } else{
+      t(mvrandn(l = lb, u = ub, Sig = sigma, n = n, mu = mu))
+    }
   } else{
-    t(mvrandn(l = lb, u = ub, Sig = sigma, n = n, mu = mu))
+    warning("Some variables have a degenerate distribution.")
+    ind <- which((ub - lb) >= 1e-10)
+    # check covariance matrix
+    stopifnot(isSymmetric(sigma), all(eigen(sigma, only.values = TRUE)$value > 0))
+    # compute conditional Gaussian
+      schurcomp <- function(sigma, ind) {
+        stopifnot(c(length(ind) > 0, ncol(sigma) - length(ind) > 0))
+        sigma[ind, ind, drop = FALSE] - sigma[ind, -ind, drop = FALSE] %*%
+          solve(sigma[-ind, -ind, drop = FALSE]) %*% sigma[-ind, ind, drop = FALSE]
+      }  
+      sigmap <- schurcomp(sigma, ind)
+      mup <- c(mu[ind] + sigma[ind, -ind, drop = FALSE] %*% solve(sigma[-ind, -ind, drop = FALSE]) %*% (lb[-ind] - mu[-ind]))
+      #
+      res <- matrix(0, nrow = n, ncol = d)
+      res[, -ind] <- rep(lb[-ind], each = n)
+    if(n == 1){
+      res[, ind] <- as.vector(mvrandn(l = lb[ind], u = ub[ind], Sig = sigmap, n = n, mu = mup)) 
+      return(as.vector(res))
+    } else{
+      res[, ind] <- t(mvrandn(l = lb[ind], u = ub[ind], Sig = sigmap, n = n, mu = mup))
+    }
   }
 }
 

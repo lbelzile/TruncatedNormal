@@ -1,5 +1,9 @@
 TruncatedNormal changelog
 
+version 2.1
+
+* bug fix: Cholesky decomposition with permutation now checks the arguments to ensure lb less than ub, to avoid segfault errors. In case of degenerate bounds, the conditional distribution is used with fixed components for the degenerate variables (issue #2)
+
 version 2.0
 
 * Can specify mean vector directly in the functions

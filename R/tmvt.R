@@ -187,10 +187,39 @@ rtmvt <- function(n, mu, sigma, df, lb, ub){
   if(missing(ub)){
     ub <- rep(Inf, d) 
   }
-  if(n == 1){
-    as.vector(mvrandt(l = lb, u = ub, Sig = sigma, df = df, n = n, mu = mu))
+  stopifnot(length(lb) == length(ub), length(lb) == d, lb <= ub)
+  if(!any((ub - lb) < 1e-10)){
+    
+    if(n == 1){
+      as.vector(mvrandt(l = lb, u = ub, Sig = sigma, df = df, n = n, mu = mu))
+    } else{
+      t(mvrandt(l = lb, u = ub, Sig = sigma, df = df, n = n, mu = mu))
+    }
   } else{
-    t(mvrandt(l = lb, u = ub, Sig = sigma, df = df, n = n, mu = mu))
+    warning("Some variables have a degenerate distribution.")
+    ind <- which((ub - lb) >= 1e-10)
+    # check covariance matrix
+    stopifnot(isSymmetric(sigma), all(eigen(sigma, only.values = TRUE)$value > 0))
+    # compute conditional Gaussian
+    schurcomp <- function(sigma, ind) {
+      stopifnot(c(length(ind) > 0, ncol(sigma) - length(ind) > 0))
+      sigma[ind, ind, drop = FALSE] - sigma[ind, -ind, drop = FALSE] %*%
+        solve(sigma[-ind, -ind, drop = FALSE]) %*% sigma[-ind, ind, drop = FALSE]
+    }  
+    sigmap <- c(df + t(lb[-ind] - mu[-ind]) %*% solve(sigma[-ind, -ind, drop = FALSE]) %*% (lb[-ind] - mu[-ind])) /
+      (df + d - length(ind)) * schurcomp(sigma, ind)
+    mup <- c(mu[ind] + sigma[ind, -ind, drop = FALSE] %*% solve(sigma[-ind, -ind, drop = FALSE]) %*% (lb[-ind] - mu[-ind]))
+    # matrix to store results
+    res <- matrix(0, nrow = n, ncol = d)
+    res[, -ind] <- rep(lb[-ind], each = n)
+    if(n == 1){
+      res[, ind] <-  as.vector(mvrandt(l = lb[ind], u = ub[ind], Sig = sigmap, 
+                                       df = df + d - length(ind), n = n, mu = mup))
+      res <- as.vector(res)
+    } else{
+      res[, ind] <- t(mvrandt(l = lb[ind], u = ub[ind], Sig = sigmap, df = df + d - length(ind), n = n, mu = mup))
+    }
+  return(res)
   }
 }
 
