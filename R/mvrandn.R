@@ -38,11 +38,11 @@
 #'  mu <- c(-3,0); l <- c(-Inf,-Inf); u <- c(-6,Inf);
 #'  A <- matrix(c(1,0,-1,1),2,2);
 #'  n <- 1e3; # number of sampled vectors
-#'  Y <-mvrandn(l - A %*% mu, u - A %*% mu, A %*% Sig %*% t(A), n);
+#'  Y <- mvrandn(l - A %*% mu, u - A %*% mu, A %*% Sig %*% t(A), n);
 #'  X <- rep(mu, n) + solve(A, diag(2)) %*% Y;
 #'  # now apply the inverse map as explained above
 #'  plot(X[1,], X[2,]) # provide a scatterplot of exactly simulated points
-#'  \dontrun{
+#' \dontrun{
 #' # Exact Bayesian Posterior Simulation Example.
 #'
 #' data("lupus"); # load lupus data

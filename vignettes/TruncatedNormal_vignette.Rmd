@@ -25,7 +25,7 @@ set.seed(0)
 
 The `TruncatedNormal` package provides numerical routines to estimate the  probability that Gaussian and Student random vectors fall in a hyperrectangle of the form $[\boldsymbol{l}, \boldsymbol{u}]$, namely $\Pr(\boldsymbol{l} \leq \boldsymbol{X} \leq \boldsymbol{u})$ for $\boldsymbol{X} \sim \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma})$ or$\boldsymbol{X} \sim \mathcal{T}_{\nu}(\boldsymbol{\mu}, \boldsymbol{\Sigma})$, where $\boldsymbol{\mu}$ is a location vector, $\boldsymbol{\Sigma}$ is a scale matrix and $\nu$ is the degree of freedom of the Student vector.
 
-The minimax exponential tilting method is an alternative to the separation of variables estimator implemented in the package `mvtnorm`; the package `mvPot` also implements the separation of variables method and uses quasi Monte Carlo, but is restricted to  $[\boldsymbol{\infty}_D, \boldsymbol{u}]$. 
+The minimax exponential tilting method is an alternative to the separation of variables estimator implemented in the package `mvtnorm`; the package `mvPot` also implements the separation of variables method and uses quasi Monte Carlo, but is restricted to integrals of the form $[-\boldsymbol{\infty}_D, \boldsymbol{u}]$. 
 
 ### Example 1: Simulation of Gaussian variables subject to linear restrictions
 
@@ -96,7 +96,7 @@ colMeans(timing)
 
 ### Example 5: Probit regression
 
-The example uses the _extramarital affairs dataset from _Lupus nephritis_ dataset from 
+The example uses the extramarital affairs dataset from _Lupus nephritis_ dataset from 
 
 > D. A. van Dyk and X.-L. Meng (2001). *The art of data augmentation (with discussion)*. Journal of Computational and Graphical Statistics, **10**(1), pp. 1-50.
 
@@ -124,7 +124,7 @@ nusq <- 10000; # prior scale parameter
 C <- solve(diag(d)/nusq + crossprod(X))
 sigma <- diag(n) + nusq*tcrossprod(X) # this is covariance of Z given beta
 est <- pmvnorm(sigma = sigma, lb = 0) 
-# estimate acceptance probability of Crude Monte Carlo
+# estimate acceptance probability of crude Monte Carlo
 print(attributes(est)$upbnd/est[1])
 # reciprocal of acceptance probability
 Z <- rtmvnorm(sigma = sigma, n = 1e3, lb = rep(0, n))
