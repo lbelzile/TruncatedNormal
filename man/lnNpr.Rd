@@ -4,7 +4,7 @@
 \alias{lnNpr}
 \title{Calculate log of Gaussian distribution function accurately}
 \usage{
-lnNpr(a, b, check = FALSE)
+lnNpr(a, b, check = TRUE)
 }
 \arguments{
 \item{a}{vector of lower bound}

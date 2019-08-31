@@ -45,6 +45,31 @@ sigma <- matrix(0.5, d, d) + diag(0.5, d)
 samp <- rtmvnorm(n = 10, mu = mu, sigma = sigma, lb = lb)
 loglik <- dtmvnorm(samp, mu = mu, sigma = sigma, lb = lb, log = TRUE)
 cdf <- ptmvnorm(samp, mu = mu, sigma = sigma, lb = lb, log = TRUE, type = "q")
+
+# Exact Bayesian Posterior Simulation Example
+# Vignette, example 5
+\dontrun{
+data("lupus"); # load lupus data
+Y <- lupus[,1]; # response data
+X <- as.matrix(lupus[,-1])  # construct design matrix
+n <- nrow(X)
+d <- ncol(X)
+X <- diag(2*Y-1) \%*\% X; # incorporate response into design matrix
+nusq <- 10000; # prior scale parameter
+C <- solve(diag(d)/nusq + crossprod(X))
+sigma <- diag(n) + nusq*tcrossprod(X) # this is covariance of Z given beta
+est <- pmvnorm(sigma = sigma, lb = 0) 
+# estimate acceptance probability of crude Monte Carlo
+print(attributes(est)$upbnd/est[1])
+# reciprocal of acceptance probability
+Z <- rtmvnorm(sigma = sigma, n = 1e3, lb = rep(0, n))
+# sample exactly from auxiliary distribution
+beta <- rtmvnorm(n = nrow(Z), sigma = C) + Z \%*\% X \%*\% C
+# simulate beta given Z and plot boxplots of marginals
+boxplot(beta, ylab = expression(beta))
+# output the posterior means
+colMeans(beta)
+}
 }
 \references{
 Z. I. Botev (2017), \emph{The normal law under linear restrictions:

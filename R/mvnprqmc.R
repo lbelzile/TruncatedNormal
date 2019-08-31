@@ -6,10 +6,12 @@ mvnprqmc <- function(n, L, l, u, mu){
     d <- length(l) # Initialization
     Z <- matrix(0, d, n) # create array for variables
     # QMC pointset - 1 is Owen's scrambling
-    # x <- randtoolbox::sobol(n, dim = d-1, init =TRUE, scrambling = 1, seed=ceiling(1e6*runif(1)))
-    ## ORPHANED PACKAGE at current, allows for scrambling (qrng does not)
+    if(n*(d-1) > 2e7){
+      warning("High memory requirements for storage of QMC sequence\nConsider reducing n")
+    }
+    x <- as.matrix(randtoolbox::sobol(n, dim = d-1, init =TRUE, scrambling = 1, seed=ceiling(1e6*runif(1))))
     ## Similar option in fOptions package. Problem: sobol sequence can overflow (values above 1).
-    x <- qrng::sobol(n = n, d = d - 1, randomize = TRUE)
+    # x <- qrng::sobol(n = n, d = d - 1, randomize = TRUE)
     p <- 0
     for (k in 1:(d-1)){
       # compute matrix multiplication L*Z

@@ -3,6 +3,8 @@ TruncatedNormal changelog
 version 2.1
 
 * bug fix: Cholesky decomposition with permutation now checks the arguments to ensure lb less than ub, to avoid segfault errors. In case of degenerate bounds, the conditional distribution is used with fixed components for the degenerate variables (issue #2)
+* Moved back probit example in documentation
+* change back to randtoolbox package
 
 version 2.0
 
@@ -14,7 +16,7 @@ version 2.0
 * Selected code rewritten in Rcpp
 * New vignette
 * Removed random seed
-* Change to the Sobol sequence because previously used package is unmaintained (no more scrambling for QMC)
+* Change to qrng package for QRN generation of the Sobol s (randtoolbox package unmaintained) - the sequence is not scrambled
 * Throw error if NaN in bounds
 * Handle univariate cases in mvrandt and mvrandn
 * Use nleq solver to solve convex program (also check KKT conditions)

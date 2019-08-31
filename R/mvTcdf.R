@@ -42,7 +42,7 @@
 #' @export
 #' @keywords internal
 #' @author \code{Matlab} code by Zdravko Botev, \code{R} port by Leo Belzile
-#' @importFrom qrng sobol
+#' @importFrom randtoolbox sobol
 mvTcdf <- function(l, u, Sig, df, n = 1e5){
   d <- length(l)
   if (length(u) != d | d != sqrt(length(Sig)) | any(l > u)) {
