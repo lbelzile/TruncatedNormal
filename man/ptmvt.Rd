@@ -4,8 +4,7 @@
 \alias{ptmvt}
 \title{Cumulative distribution function of the truncated multivariate Student distribution.}
 \usage{
-ptmvt(q, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE,
-  B = 10000)
+ptmvt(q, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, B = 10000)
 }
 \arguments{
 \item{q}{vector or matrix of quantiles}
@@ -22,7 +21,7 @@ ptmvt(q, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE,
 
 \item{type}{string, either of \code{mc} or \code{qmc} for Monte Carlo and quasi Monte Carlo, respectively}
 
-\item{log}{logical; if \code{TRUE}, probabilites and density are given on the log scale.}
+\item{log}{logical; if \code{TRUE}, probabilities and density are given on the log scale.}
 
 \item{B}{number of replications for the (quasi)-Monte Carlo scheme}
 }

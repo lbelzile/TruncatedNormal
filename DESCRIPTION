@@ -1,15 +1,16 @@
 Package: TruncatedNormal
 Type: Package
 Title: Truncated Multivariate Normal and Student Distributions
-Version: 2.1
-Date: 2019-08-30
+Version: 2.1.1
+Date: 2019-12-17
 Authors@R: c(person(given="Zdravko", family="Botev", role = "aut", email = "botev@unsw.edu.au", comment = c(ORCID = "0000-0001-9054-3452")), person(given="Leo", family="Belzile", role = c("aut", "cre"), email = "belzilel@gmail.com", comment = c(ORCID = "0000-0002-9135-014X")))
 Description: A collection of functions to deal with the truncated univariate and multivariate normal and Student distributions, described in Botev (2017) <doi:10.1111/rssb.12162> and Botev and L'Ecuyer (2015) <doi:10.1109/WSC.2015.7408180>.
 License: GPL-3
 BugReports: https://github.com/lbelzile/TruncatedNormal/issues
+Depends: R (>= 2.10)
 Imports: nleqslv, randtoolbox, Rcpp (>= 0.12.16)
 LinkingTo: Rcpp, RcppArmadillo
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 VignetteBuilder: knitr
 Encoding: UTF-8
 Suggests: 

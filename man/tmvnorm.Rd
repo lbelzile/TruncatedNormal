@@ -10,7 +10,7 @@
 
 \item{B}{number of replications for the (quasi)-Monte Carlo scheme}
 
-\item{log}{logical; if \code{TRUE}, probabilites and density are given on the log scale.}
+\item{log}{logical; if \code{TRUE}, probabilities and density are given on the log scale.}
 
 \item{mu}{vector of location parameters}
 

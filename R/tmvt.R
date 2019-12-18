@@ -25,7 +25,7 @@
 #' @param n number of observations
 #' @param x,q vector or matrix of quantiles
 #' @param B number of replications for the (quasi)-Monte Carlo scheme
-#' @param log logical; if \code{TRUE}, probabilites and density are given on the log scale.
+#' @param log logical; if \code{TRUE}, probabilities and density are given on the log scale.
 #' @param mu vector of location parameters
 #' @param sigma scale matrix
 #' @param df degrees of freedom

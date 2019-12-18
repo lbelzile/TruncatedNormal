@@ -4,8 +4,7 @@
 \alias{dtmvt}
 \title{Density function for the truncated multivariate Student distribution}
 \usage{
-dtmvt(x, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE,
-  B = 10000)
+dtmvt(x, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, B = 10000)
 }
 \arguments{
 \item{x}{vector or matrix of quantiles}
@@ -22,7 +21,7 @@ dtmvt(x, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE,
 
 \item{type}{string, either of \code{mc} or \code{qmc} for Monte Carlo and quasi Monte Carlo, respectively}
 
-\item{log}{logical; if \code{TRUE}, probabilites and density are given on the log scale.}
+\item{log}{logical; if \code{TRUE}, probabilities and density are given on the log scale.}
 
 \item{B}{number of replications for the (quasi)-Monte Carlo scheme}
 }
