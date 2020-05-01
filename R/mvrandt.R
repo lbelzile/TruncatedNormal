@@ -134,7 +134,7 @@ mvrandt <- function (l, u, Sig, df, n, mu = NULL)
   Z = Z[order, ]
   #Add back mean only if non-zero
   if(!is.null(mu)){
-    return(t(sqrt(df)*t(Z)/R + mu))
+    return(t(sqrt(df)*t(Z)/R) + mu)
   } else{
     return(t(sqrt(df)*t(Z)/R)) 
   }
