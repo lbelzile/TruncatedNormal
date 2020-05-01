@@ -142,7 +142,7 @@ ptmvt <- function(q, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, 
   
   for(i in 1:nrow(q)){
     if(any(q[i,] > ub) || any(q[i,] < lb)){
-      prob[i] <- NA
+      prob[i] <- 0
     } else{
       prob[i] <- switch(type,
                         mc = mvTcdf(l = lb - mu, u = q[i,] - mu, df = df, Sig = sigma, n = B)$prob,

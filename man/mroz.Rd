@@ -4,7 +4,8 @@
 \name{mroz}
 \alias{mroz}
 \title{Women wage dataset from Mroz (1987)}
-\format{a data frame containing the following variables:
+\format{
+a data frame containing the following variables:
 \itemize{
 \item \code{whrs}: hours of work
 \item \code{kidslt6}: number of children aged 5 and below years old in household
@@ -13,7 +14,8 @@
 \item \code{educ}: number of years in school
 \item \code{hearn}: hourly earnings
 \item \code{exp}: years of previous labor market experience
-}}
+}
+}
 \source{
 W. Greene's website, accessed 17.12.2019 at <http://www.stern.nyu.edu/~wgreene/Text/Edition7/TableF5-1.csv>.
 }

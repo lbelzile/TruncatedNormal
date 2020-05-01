@@ -4,7 +4,9 @@
 \name{lupus}
 \alias{lupus}
 \title{Latent membranous Lupus Nephritis dataset}
-\format{a data frame with columns "response", "const", "x1" and "x2"}
+\format{
+a data frame with columns "response", "const", "x1" and "x2"
+}
 \source{
 The data were transcribed from Table 1, page 22, of Dyk and Meng (2001).
 }

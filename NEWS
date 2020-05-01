@@ -1,5 +1,9 @@
 TruncatedNormal changelog
 
+version 2.1.x
+
+* pmvnorm and pmvt return 0 for points outside the truncated region instead of NA (thanks to Adelchi Azzalini)
+
 version 2.1
 
 * bug fix: Cholesky decomposition with permutation now checks the arguments to ensure lb less than ub, to avoid segfault errors. In case of degenerate bounds, the conditional distribution is used with fixed components for the degenerate variables (issue #2)

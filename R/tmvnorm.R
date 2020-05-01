@@ -147,7 +147,7 @@ ptmvnorm <- function(q, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B
   
   for(i in 1:nrow(q)){
     if(any(q[i,] > ub) || any(q[i,] < lb)){
-      prob[i] <- NA
+      prob[i] <- 0
     } else{
       prob[i] <- switch(type,
                         mc = mvNcdf(l = lb - mu, u = q[i,] - mu, Sig = sigma, n = B)$prob,
