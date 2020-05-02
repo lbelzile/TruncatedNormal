@@ -141,7 +141,9 @@ ptmvt <- function(q, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, 
   prob <- rep(0, nrow(q))
   
   for(i in 1:nrow(q)){
-    if(any(q[i,] > ub) || any(q[i,] < lb)){
+    if(all(q[i,] >= ub)){
+      prob[i] <- 1
+    } else if(any(q[i,] < lb)){
       prob[i] <- 0
     } else{
       prob[i] <- switch(type,
@@ -153,9 +155,9 @@ ptmvt <- function(q, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, 
                 mc = mvTcdf(l = lb - mu, u = ub - mu, df = df, Sig = sigma, n = B)$prob,
                 qmc = mvTqmc(l = lb - mu, u = ub - mu, df = df, Sig = sigma, n = B)$prob)
   if(log){
-    return(log(prob) - log(kst)) 
+    return(pmin(0, log(prob) - log(kst)))
   } else{
-    return(prob/kst)
+    return(pmin(1,pmax(0, prob/kst)))
   }
 }
 

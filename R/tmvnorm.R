@@ -146,7 +146,9 @@ ptmvnorm <- function(q, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B
   prob <- rep(0, nrow(q))
   
   for(i in 1:nrow(q)){
-    if(any(q[i,] > ub) || any(q[i,] < lb)){
+    if(all(q[i,] >= ub)){
+      prob[i] <- 1
+    } else if(any(q[i,] < lb)){
       prob[i] <- 0
     } else{
       prob[i] <- switch(type,
@@ -158,9 +160,9 @@ ptmvnorm <- function(q, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B
                 mc = mvNcdf(l = lb - mu, u = ub - mu, Sig = sigma, n = B)$prob,
                 qmc = mvNqmc(l = lb - mu, u = ub - mu, Sig = sigma, n = B)$prob)
   if(log){
-    return(log(prob) - log(kst)) 
+    return(pmin(0, log(prob) - log(kst)))
   } else{
-    return(prob/kst)
+    return(pmin(1, pmax(0, prob/kst)))
   }
 }
 

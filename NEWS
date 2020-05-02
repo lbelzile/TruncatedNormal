@@ -1,8 +1,15 @@
 TruncatedNormal changelog
 
 version 2.1.x
+* ptmvnorm and ptmvt now return 1 if all points exceed the upper bounds (incorrectly returned zero/NA in previous versions) (thanks to Adelchi Azzalini)
+* Probability estimates now capped at 0/1 in ptmvt/ptmvnorm
 
-* pmvnorm and pmvt return 0 for points outside the truncated region instead of NA (thanks to Adelchi Azzalini)
+
+version 2.1.2
+
+* ptmvtnorm and ptmvt return 0 for points outside the truncated region instead of NA (thanks to Adelchi Azzalini)
+* Fixed a bug in rtmvt that returned incorrect output (tranposed mean vector)
+
 
 version 2.1
 
