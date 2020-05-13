@@ -8,7 +8,7 @@ Description: A collection of functions to deal with the truncated univariate and
 License: GPL-3
 BugReports: https://github.com/lbelzile/TruncatedNormal/issues
 Depends: R (>= 2.10)
-Imports: nleqslv, randtoolbox, Rcpp (>= 0.12.16)
+Imports: nleqslv, randtoolbox, alabama, Rcpp (>= 0.12.16)
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.1.0
 VignetteBuilder: knitr

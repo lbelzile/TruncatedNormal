@@ -90,7 +90,23 @@ mvNqmc <- function(l, u, Sig, n = 1e5){
   }
   # If Powell dogleg method fails, try constrained convex solver
   if(!flag){
-    stop('Did not find a solution to the nonlinear system in `mvNqmc`!')
+    solvneqc <- alabama::auglag(par = xmu,
+                    fn = function(par, l=l, L=L, u=u){
+                      ps <- try(-psy(x = c(par[1:(d-1)],0), mu = c(par[d:(2*d-2)],0),
+                                     l = l, L = L, u = u))
+                      return(ifelse(is.character(ps), -1e10, ps))},
+                    gr = function(x, l=l, L=L, u=u){gradpsi(y=x, L=L,l=l, u=u)},
+                    L=L, l=l, u=u,
+                    # equality constraints d psi/d mu = 0
+                  heq = function(x, l, L, u){gradpsi(y = x, l=l, L=L, u = u)[d:(2*d-2)]},
+                  hin= function(par,...){c((out$u - out$L %*% c(par[1:(d-1)],0))[-d] > 0, (out$L %*% c(par[1:(d-1)],0) - out$l)[-d])},
+                  control.outer = list(trace = FALSE,method="nlminb"))
+    if(solvneqc$convergence == 0){
+      x <- solvneqc$par[1:(d-1)]
+      mu <- solvneqc$par[d:(2*d-2)] 
+    } else{
+      stop('Did not find a solution to the nonlinear system in `mvNqmc`!') 
+    }
   }
   p <- rep(0, 12)
   for (i in 1:12){ # repeat randomized QMC
