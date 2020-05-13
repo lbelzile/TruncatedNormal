@@ -70,6 +70,8 @@ mvNcdf <-  function(l, u, Sig, n = 1e5){
     if(!(exitflag %in% 1:2) || !isTRUE(all.equal(solvneq$fvec, rep(0, length(x0)), tolerance = 1e-6))){
       flag <- FALSE
     }
+    x <- xmu[1:(d-1)]
+    mu <- xmu[d:(2*d-2)] # assign saddlepoint x* and mu*
     if(any((out$L %*% c(x,0) - out$u)[-d] > 0, (-out$L %*% c(x,0) + out$l)[-d] > 0)){
       warning("Solution to exponential tilting problem using Powell's dogleg method \n  does not lie in convex set l < Lx < u.")
       flag <- FALSE
@@ -78,8 +80,6 @@ mvNcdf <-  function(l, u, Sig, n = 1e5){
     if(!flag){
       stop('Did not find a solution to the nonlinear system in `mvrandn`!')
     }
-    x <- xmu[1:(d-1)]
-    mu <- xmu[d:(2*d-2)] # assign saddlepoint x* and mu*
     est <- mvnpr(n, L, l, u, mu)
     # compute psi star
     est$upbnd <- exp(psy(x, L, l, u, mu))
