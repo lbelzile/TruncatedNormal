@@ -1,6 +1,6 @@
 gradpsi <-  function(y, L, l, u){ 
     # implements grad_psi(x) to find optimal exponential twisting;
-    # assume scaled 'L' with zero diagonal;
+    # assumes scaled 'L' with zero diagonal;
     d <- length(u);
     cv <- rep(0,d);
     x <- cv; 

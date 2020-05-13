@@ -71,8 +71,8 @@ mvTqmc <- function(l, u, Sig, df, n = 1e5){
   soln <- solvneq$x
   #fval <- solvneq$fvec
   exitflag <- solvneq$termcd
-  if(!(exitflag %in% 1:2) || !all.equal(solvneq$fvec, rep(0, length(x0)))){
-    warning('Method may fail as covariance matrix is close to singular!')
+  if(!(exitflag %in% c(1,2)) || !all.equal(solvneq$fvec, rep(0, length(x0)))){
+    warning('Did not find a solution to the nonlinear system in `mvTqmc`!')
   }
   # assign saddlepoint x* and mu*
   soln[d] <- exp(soln[d])

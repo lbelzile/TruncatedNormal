@@ -108,7 +108,7 @@ mvrandn <-  function(l, u, Sig, n, mu = NULL){
                                 control = list(maxit = 500L))
     xmu <- solvneq$x
     exitflag <- solvneq$termcd
-    if(!(exitflag %in% 1:2) || !isTRUE(all.equal(solvneq$fvec, rep(0, length(x0)), tolerance = 1e-6))){
+    if(!(exitflag %in% c(1,2)) || !isTRUE(all.equal(solvneq$fvec, rep(0, length(x0)), tolerance = 1e-6))){
       warning('Did not find a solution to the nonlinear system in `mvrandn`!')
     }
     #xmu <- nleq(l,u,L) # nonlinear equation solver (not used, 40 times slower!)

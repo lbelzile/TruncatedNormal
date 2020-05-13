@@ -80,7 +80,7 @@ mvrandt <- function (l, u, Sig, df, n, mu = NULL)
   soln <- solvneq$x
   #fval <- solvneq$fvec
   exitflag <- solvneq$termcd
-  if(!(exitflag %in% 1:2) || !isTRUE(all.equal(solvneq$fvec, rep(0, length(x0)), tolerance = 1e-6))){
+  if(!(exitflag %in% c(1,2)) || !isTRUE(all.equal(solvneq$fvec, rep(0, length(x0)), tolerance = 1e-6))){
     warning('Did not find a solution to the nonlinear system in `mvrandt`!')
   }
   # assign saddlepoint x* and mu*

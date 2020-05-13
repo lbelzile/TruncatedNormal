@@ -3,7 +3,7 @@ TruncatedNormal changelog
 version 2.1.x
 * ptmvnorm and ptmvt now return 1 if all points exceed the upper bounds (incorrectly returned zero/NA in previous versions) (thanks to Adelchi Azzalini)
 * Probability estimates now capped at 0/1 in ptmvt/ptmvnorm
-
+* Check for solution to saddlepoint problem now omits zero variable.
 
 version 2.1.2
 

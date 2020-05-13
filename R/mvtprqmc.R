@@ -33,7 +33,6 @@ mvtprqmc <- function(n, L, l, u, nu, mu){
     # update likelihood ratio
     p <- p + lnNpr(tl,tu)  + .5*mu[k]^2-mu[k]*Z[k,];
   }
-  #browser()
   # deal with final Z(d) which need not be simulated
   col <- c(L[d,] %*% Z);
   tl <- R * l[d] - col
