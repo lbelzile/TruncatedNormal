@@ -96,7 +96,7 @@ colMeans(timing)
 
 ### Example 5: Probit regression
 
-The example uses the extramarital affairs dataset from _Lupus nephritis_ dataset from 
+The example uses the _Lupus nephritis_ dataset from 
 
 > D. A. van Dyk and X.-L. Meng (2001). *The art of data augmentation (with discussion)*. Journal of Computational and Graphical Statistics, **10**(1), pp. 1-50.
 

@@ -49,7 +49,7 @@ mvTcdf <- function(l, u, Sig, df, n = 1e5){
     stop("The dimensions of l, u, and Sig have to match and u > l")
   }
   if(d == 1L){
-    warning("Univariate problem not handled; using `pt`.")
+    #warning("Univariate problem not handled; using `pt`.")
     return(list(prob = pt(q = u/sqrt(Sig[1]), df = df) - pt(q = l/sqrt(Sig[1]), df = df), err = NA, relErr = NA, upbnd = NA))
   }
   out <- cholperm(Sig, l, u)

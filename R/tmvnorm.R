@@ -143,27 +143,24 @@ ptmvnorm <- function(q, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B
   if(missing(ub)){
     ub <- rep(Inf, d) 
   }
+  stopifnot(all(lb < ub))
   prob <- rep(0, nrow(q))
-  
-  for(i in 1:nrow(q)){
-    if(all(q[i,] >= ub)){
-      prob[i] <- 1
-    } else if(any(q[i,] < lb)){
-      prob[i] <- 0
-    } else{
-      prob[i] <- switch(type,
-                        mc = mvNcdf(l = lb - mu, u = q[i,] - mu, Sig = sigma, n = B)$prob,
-                        qmc = mvNqmc(l = lb - mu, u = q[i,] - mu, Sig = sigma, n = B)$prob)
-    }
-  }
   kst <- switch(type,
                 mc = mvNcdf(l = lb - mu, u = ub - mu, Sig = sigma, n = B)$prob,
                 qmc = mvNqmc(l = lb - mu, u = ub - mu, Sig = sigma, n = B)$prob)
-  if(log){
-    return(pmin(0, log(prob) - log(kst)))
-  } else{
-    return(pmin(1, pmax(0, prob/kst)))
+  for(i in 1:nrow(q)){
+    if(all(q[i,] >= ub)){
+      prob[i] <- ifelse(log, 0, 1)
+    } else if(any(q[i,] <= lb)){
+      prob[i] <- ifelse(log, -Inf, 0)
+    } else{
+      pb <- switch(type,
+                        mc = mvNcdf(l = lb - mu, u = pmin(ub, q[i,]) - mu, Sig = sigma, n = B)$prob,
+                        qmc = mvNqmc(l = lb - mu, u = pmin(ub, q[i,]) - mu, Sig = sigma, n = B)$prob)
+      prob[i] <- ifelse(log, pmin(0, log(prob[i]) - log(kst)), pmin(1, pmax(0, prob[i]/kst)))
+    }
   }
+  return(prob)
 }
 
 #' Random number generator for the truncated multivariate normal distribution.
