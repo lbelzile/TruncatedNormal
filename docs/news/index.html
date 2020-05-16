@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Random number generator for the truncated multivariate Student distribution. — rtmvt • TruncatedNormal</title>
+<title>Changelog • TruncatedNormal</title>
 
 
 <!-- jquery -->
@@ -39,11 +39,10 @@
 
 
 
-<meta property="og:title" content="Random number generator for the truncated multivariate Student distribution. — rtmvt" />
-<meta property="og:description" content="This function returns a matrix of draws from a multivariate Student distribution truncated on the interval [lb, ub]." />
+<meta property="og:title" content="Changelog" />
 
 
-<meta name="robots" content="noindex">
+
 
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
@@ -59,7 +58,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -72,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TruncatedNormal</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">2.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.4</span>
       </span>
     </div>
 
@@ -99,6 +98,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -120,56 +122,100 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Random number generator for the truncated multivariate Student distribution.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/lbelzile/TruncatedNormal/blob/master/R/tmvt.R'><code>R/tmvt.R</code></a></small>
-    <div class="hidden name"><code>rtmvt.Rd</code></div>
+      <h1 data-toc-skip>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/lbelzile/TruncatedNormal/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="ref-description">
-    <p>This function returns a matrix of draws from a multivariate Student distribution truncated on the interval [<code>lb</code>, <code>ub</code>].</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>rtmvt</span>(<span class='no'>n</span>, <span class='no'>mu</span>, <span class='no'>sigma</span>, <span class='no'>df</span>, <span class='no'>lb</span>, <span class='no'>ub</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>n</th>
-      <td><p>number of observations</p></td>
-    </tr>
-    <tr>
-      <th>mu</th>
-      <td><p>vector of location parameters</p></td>
-    </tr>
-    <tr>
-      <th>sigma</th>
-      <td><p>scale matrix</p></td>
-    </tr>
-    <tr>
-      <th>df</th>
-      <td><p>degrees of freedom</p></td>
-    </tr>
-    <tr>
-      <th>lb</th>
-      <td><p>vector of lower truncation limits</p></td>
-    </tr>
-    <tr>
-      <th>ub</th>
-      <td><p>vector of upper truncation limits</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='tmvt.html'>tmvt</a></code></p></div>
-
+    <div id="version-2-1-4" class="section level2">
+<h2 class="hasAnchor">
+<a href="#version-2-1-4" class="anchor"></a>Version 2.1.4</h2>
+<div id="bug-fixes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h3>
+<ul>
+<li>
+<code>ptmvnorm</code> and <code>ptmvt</code> now return 1 if all points exceed the upper bounds (incorrectly returned zero in v2.1.2 and <code>NA</code> in previous versions) (thanks to Adelchi Azzalini).</li>
+<li>Probability estimates now capped at 0/1 in ptmvt/ptmvnorm.</li>
+<li>Check for solution to saddlepoint problem; the code now considers convex constrained optimization program for normal samples (QMC or MC).</li>
+</ul>
+</div>
+<div id="changes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#changes" class="anchor"></a>Changes</h3>
+<ul>
+<li>No more warning for univariate Student distribution function evaluation.</li>
+<li>Unit testing for wrappers.</li>
+</ul>
+</div>
+</div>
+    <div id="version-2-1-2" class="section level2">
+<h2 class="hasAnchor">
+<a href="#version-2-1-2" class="anchor"></a>Version 2.1.2</h2>
+<div id="bug-fixes-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h3>
+<ul>
+<li>
+<code>ptmvtnorm</code> and <code>ptmvt</code> return 0 for points outside the truncated region instead of <code>NA</code> (thanks to Adelchi Azzalini)</li>
+<li>Fixed a bug in <code>rtmvt</code> that returned incorrect output (tranposed mean vector)</li>
+</ul>
+</div>
+</div>
+    <div id="version-2-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#version-2-1" class="anchor"></a>Version 2.1</h2>
+<div id="bug-fixes-2" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h3>
+<ul>
+<li>Cholesky decomposition with permutation now checks the arguments to ensure <code>lb</code> less than <code>ub</code>, to avoid segfault errors. In case of degenerate bounds, the conditional distribution is used with fixed components for the degenerate variables (issue <a href='https://github.com/lbelzile/TruncatedNormal/issues/2'>#2</a>)</li>
+</ul>
+</div>
+</div>
+    <div id="version-2-0" class="section level2">
+<h2 class="hasAnchor">
+<a href="#version-2-0" class="anchor"></a>Version 2.0</h2>
+<div id="bug-fixes-3" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h3>
+<ul>
+<li>Throw error if <code>NaN</code> in bounds</li>
+<li>Handle univariate cases in <code>mvrandt</code> and <code>mvrandn</code>
+</li>
+</ul>
+</div>
+<div id="changes-2" class="section level3">
+<h3 class="hasAnchor">
+<a href="#changes-2" class="anchor"></a>Changes</h3>
+<ul>
+<li>Can specify mean vector directly in the functions</li>
+<li>Functions for multivariate Student simulation ported from Matlab</li>
+<li>Change to the interface</li>
+<li>Many functions now internal (documented)</li>
+<li>Cholesky matrix permutation (GGB and GE reordering now supported)</li>
+<li>Selected code rewritten in Rcpp</li>
+<li>New vignette</li>
+<li>Removed random seed</li>
+<li>Change to qrng package for QRN generation of the Sobol sequence (<code>randtoolbox</code> package unmaintained), but the sequence is not scrambled</li>
+<li>Use <code>nleq</code> solver to solve convex program (also check KKT conditions).</li>
+</ul>
+</div>
+</div>
+    <div id="version-1-0" class="section level2">
+<h2 class="hasAnchor">
+<a href="#version-1-0" class="anchor"></a>Version 1.0</h2>
+<ul>
+<li>Initial release</li>
+</ul>
+</div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
+
 </div>
 
 
