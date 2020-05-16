@@ -6,7 +6,7 @@
 
 ## Truncated multivariate Normal and Student distributions
 
-A collection of functions to deal with the truncated univariate and multivariate normal and Student distributions. 
+A collection of functions to deal with the truncated univariate and multivariate normal and Student distributions, described in [Botev (2017)](https://doi.org/10.1111/rssb.12162) and [Botev and L'Ecuyer (2015)](https://doi.org/10.1109/WSC.2015.7408180).
 
 Main features are
 
