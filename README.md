@@ -9,15 +9,18 @@
 A collection of functions to deal with the truncated univariate and multivariate normal and Student distributions. 
 
 Main features are
-- simulation from multivariate truncated distribution and 
-- (quasi) Monte-Carlo estimation of the distribution function using separation-of-variables together with exponential tilting for theoretical upper bounds on the error.
+
+- simulation from multivariate truncated Normal and student distributions using an accept-reject algorithm based on minimax exponential tilting.
+- (quasi) Monte-Carlo estimation of the distribution function using separation-of-variables together with exponential tilting for provable performances and theoretical upper bound on the error.
 - Cholesky decomposition using the reordering algorithm of Gibson, Glasbey and Elston (1994).
 
-
-To install from Github, use 
+To install the latest version from **CRAN**, use 
+```R
+install.packages("TruncatedNormal")
+```
+or else install the latest development from Github via
 
 ```R
 devtools::install_github("lbelzile/TruncatedNormal")
 ```
 
-after installing `devtools`.
