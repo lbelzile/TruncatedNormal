@@ -8,7 +8,7 @@ df2 <- 300
 x = c(100, 50)
 
 testthat::test_that("Truncated normal DF (MC versus QMC) give similar answers", {
-  skip_on_cran()
+  testthat::skip_on_cran()
   testthat::expect_equal(ptmvnorm(x, mu=mu, sigma=sigma, lb=lb, ub=ub, log=FALSE, type="qmc"),
                          ptmvnorm(x, mu=mu, sigma=sigma, lb=lb, ub=ub, log=FALSE, type="mc"), 
                          tolerance = 1e-4)
@@ -18,7 +18,7 @@ testthat::test_that("Truncated normal DF (MC versus QMC) give similar answers", 
 })
 
 testthat::test_that("Student with large df gives same answer as normal", {
-  skip_on_cran()
+  testthat::skip_on_cran()
   testthat::expect_equal(ptmvnorm(x, B = 1e6, sigma=sigma, lb=lb, ub=ub, log=FALSE, type="qmc"),
                          ptmvt(x, B = 1e6, sigma=sigma, lb=lb, ub=ub, df = 300, log=FALSE, type="qmc"), 
                          tolerance = 2e-3)
@@ -55,7 +55,7 @@ D <- 10
 muV <- 1:D
 Smat <- diag(0.5, D) + matrix(0.5, D, D)
 testthat::test_that("Expectation of (truncated) elliptical distributions", {
-  skip_on_cran()
+  testthat::skip_on_cran()
   testthat::expect_equal(colMeans(rtmvnorm(n = B, sigma = Smat)),
                          rep(0, D), tolerance = 5/sqrt(B))
   testthat::expect_equal(colMeans(rtmvnorm(n = B, mu = muV, sigma = Smat)),
@@ -72,7 +72,7 @@ testthat::test_that("Expectation of (truncated) elliptical distributions", {
 lb <- rnorm(n = D, mean = 0, sd = 10)
 ub <- lb + rgamma(D, shape = 4, rate = 1)
 testthat::test_that("Bounds of simulated variables", {
-  skip_on_cran()
+  testthat::skip_on_cran()
   testthat::expect_true(isTRUE(all(apply(rtmvnorm(n = 1e4, lb = lb, ub = ub, mu = muV, 100*Smat), 2, min) > lb)))
   testthat::expect_true(isTRUE(all(apply(rtmvnorm(n = 1e4, lb = lb, ub = ub, mu = muV, 100*Smat), 2, min) < ub)))
   testthat::expect_true(isTRUE(all(apply(rtmvt(n = 1e4, df = 3, lb = lb, ub = ub, mu = muV, 100*Smat), 2, min) > lb)))
@@ -107,7 +107,7 @@ testthat::test_that("Untruncated density agrees with that in the mvtnorm package
 d <- 15
 sigma <- 0.5 * (diag(d) + matrix(1, d, d))
 testthat::test_that("Known probability", {
-  skip_on_cran()
+  testthat::skip_on_cran()
   testthat::expect_equivalent((d+1)*pmvnorm(sigma = sigma, lb = rep(0, d), type = "qmc", B = B),
   1, tolerance = 1/sqrt(B))
   })

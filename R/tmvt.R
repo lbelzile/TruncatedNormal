@@ -140,26 +140,22 @@ ptmvt <- function(q, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, 
   }
   stopifnot(all(lb < ub))
   prob <- rep(0, nrow(q))
-  
-  for(i in 1:nrow(q)){
-    if(all(q[i,] >= ub)){
-      prob[i] <- 1
-    } else if(any(q[i,] <= lb)){
-      prob[i] <- 0
-    } else{
-      prob[i] <- switch(type,
-                        mc = mvTcdf(l = lb - mu, u = pmin(ub, q[i,]) - mu, df = df, Sig = sigma, n = B)$prob,
-                        qmc = mvTqmc(l = lb - mu, u = pmin(ub, q[i,]) - mu, df = df, Sig = sigma, n = B)$prob)
-    }
-  }
   kst <- switch(type,
                 mc = mvTcdf(l = lb - mu, u = ub - mu, df = df, Sig = sigma, n = B)$prob,
                 qmc = mvTqmc(l = lb - mu, u = ub - mu, df = df, Sig = sigma, n = B)$prob)
-  if(log){
-    return(pmin(0, log(prob) - log(kst)))
-  } else{
-    return(pmin(1,pmax(0, prob/kst)))
+  for(i in 1:nrow(q)){
+    if(all(q[i,] >= ub)){
+      prob[i] <- ifelse(log, 0, 1)
+    } else if(any(q[i,] <= lb)){
+      prob[i] <- ifelse(log, -Inf, 0)
+    } else{
+      pb <- switch(type,
+                   mc = mvTcdf(l = lb - mu, u = pmin(ub, q[i,]) - mu, df = df, Sig = sigma, n = B)$prob,
+                   qmc = mvTqmc(l = lb - mu, u = pmin(ub, q[i,]) - mu, df = df, Sig = sigma, n = B)$prob)
+      prob[i] <- ifelse(log, pmin(0, log(pb) - log(kst)), pmin(1, pb/kst))
+    }
   }
+  return(prob)
 }
 
 #' Random number generator for the truncated multivariate Student distribution.

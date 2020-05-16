@@ -157,7 +157,7 @@ ptmvnorm <- function(q, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B
       pb <- switch(type,
                         mc = mvNcdf(l = lb - mu, u = pmin(ub, q[i,]) - mu, Sig = sigma, n = B)$prob,
                         qmc = mvNqmc(l = lb - mu, u = pmin(ub, q[i,]) - mu, Sig = sigma, n = B)$prob)
-      prob[i] <- ifelse(log, pmin(0, log(prob[i]) - log(kst)), pmin(1, pmax(0, prob[i]/kst)))
+      prob[i] <- ifelse(log, pmin(0, log(pb) - log(kst)), pmin(1, pb/kst))
     }
   }
   return(prob)
