@@ -1,4 +1,4 @@
-## Version 2.1.4
+## Version 2.2
 
 ### Bug fixes
 
