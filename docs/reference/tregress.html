@@ -75,7 +75,7 @@ sigma, conditional on \(l&amp;lt;X&amp;lt;u\)," />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">TruncatedNormal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.2</span>
       </span>
     </div>
 
@@ -182,21 +182,21 @@ Proceedings of the 2015 Winter Simulation Conference, pp. 380-391,</p>
     <pre class="examples"><div class='input'><span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fl'>5</span>
 <span class='fu'>tregress</span>(<span class='kw'>lb</span> <span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(-<span class='fl'>2</span>, <span class='no'>d</span>), <span class='kw'>ub</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>2</span>, <span class='no'>d</span>), <span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>10</span>,
   <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span>(<span class='fl'>0.5</span>, <span class='no'>d</span>) + <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>1</span>, <span class='no'>d</span>, <span class='no'>d</span>))</div><div class='output co'>#&gt; $R
-#&gt;  [1] 1.071612 2.344088 1.270925 1.808098 2.639129 2.498977 3.356397 1.932050
-#&gt;  [9] 2.348136 1.527008
+#&gt;  [1] 1.091621 1.985454 1.924308 2.038754 1.591299 1.729790 1.765749 1.735859
+#&gt;  [9] 2.729171 1.778877
 #&gt; 
 #&gt; $Z
-#&gt;              [,1]       [,2]        [,3]        [,4]        [,5]
-#&gt;  [1,] -1.17654719 -1.1040449  0.47430205  0.03901914 -0.44781399
-#&gt;  [2,] -0.54471964 -0.6695404 -0.49242726 -1.05774429 -0.57148252
-#&gt;  [3,] -0.15231088  0.1927448 -0.58268282  1.36553250 -0.55947736
-#&gt;  [4,]  0.01145336  1.1024657 -0.07931285  0.69766128  1.80972542
-#&gt;  [5,]  0.56833660  0.2521940 -0.27675694 -0.21858568 -0.38443974
-#&gt;  [6,] -1.01069117 -0.9707488 -1.61277213 -0.56507086 -0.86294295
-#&gt;  [7,]  1.30670236  0.6715204  1.52583586  2.69133045  0.36763386
-#&gt;  [8,]  0.22642401 -0.5874128 -2.08483654 -1.38759995 -0.03207499
-#&gt;  [9,]  1.55534299  0.3327452  0.28419578  0.16555135  0.87146229
-#&gt; [10,] -0.37318742  1.1344740 -0.06273786 -1.55176737 -1.06284311
+#&gt;             [,1]       [,2]        [,3]        [,4]       [,5]
+#&gt;  [1,] -0.6758494 -0.4119034 -1.01023148  0.04240809  0.6892162
+#&gt;  [2,] -1.2148716 -2.1112704 -1.33718004 -1.91212867 -1.5162984
+#&gt;  [3,] -0.4317419 -0.4487589  0.35115041 -0.64842553 -0.2188923
+#&gt;  [4,]  0.2261569 -0.2999287 -0.08212145  0.57409001  1.5177097
+#&gt;  [5,]  1.2439582 -1.0904283 -1.44418026 -1.45235922 -0.2535841
+#&gt;  [6,] -0.9776324  0.1335521  1.04890677 -1.65683327  1.0631266
+#&gt;  [7,] -1.1206467  1.5654014 -0.21995049  0.44254103  1.4139640
+#&gt;  [8,] -0.3793248 -1.1247627  0.82225738 -0.22067044  0.9058845
+#&gt;  [9,]  0.4965089 -0.4627494  0.12161087 -0.63571020  0.8978638
+#&gt; [10,]  0.1621694  0.8973604  1.17407636  0.58679919 -0.8615315
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
