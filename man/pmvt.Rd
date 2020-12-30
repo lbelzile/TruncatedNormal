@@ -4,16 +4,7 @@
 \alias{pmvt}
 \title{Distribution function of the multivariate Student distribution for arbitrary limits}
 \usage{
-pmvt(
-  mu,
-  sigma,
-  df,
-  lb = -Inf,
-  ub = Inf,
-  type = c("mc", "qmc"),
-  log = FALSE,
-  B = 10000
-)
+pmvt(mu, sigma, df, lb = -Inf, ub = Inf, type = c("mc", "qmc"), B = 10000, ...)
 }
 \arguments{
 \item{mu}{vector of location parameters}
@@ -28,9 +19,9 @@ pmvt(
 
 \item{type}{string, either of \code{mc} or \code{qmc} for Monte Carlo and quasi Monte Carlo, respectively}
 
-\item{log}{logical; if \code{TRUE}, probabilities and density are given on the log scale.}
-
 \item{B}{number of replications for the (quasi)-Monte Carlo scheme}
+
+\item{...}{additional arguments, currently ignored.}
 }
 \description{
 This function computes the distribution function of a multivariate normal distribution vector for an arbitrary rectangular region [\code{lb}, \code{ub}].

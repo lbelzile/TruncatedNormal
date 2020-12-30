@@ -19,7 +19,7 @@
 #' dtmvt(x, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, B = 1e4)
 #' ptmvt(q, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, B = 1e4)
 #' rtmvt(n, mu, sigma, df, lb, ub)
-#' pmvt(mu, sigma, df, lb = -Inf, ub = Inf, type = c("mc", "qmc"), log = FALSE, B = 1e4)}
+#' pmvt(mu, sigma, df, lb = -Inf, ub = Inf, type = c("mc", "qmc"), B = 1e4)}
 #'    
 #' @name tmvt
 #' @param n number of observations
@@ -233,6 +233,7 @@ rtmvt <- function(n, mu, sigma, df, lb, ub){
 #' @export
 #' @author \code{Matlab} code by Zdravko I. Botev, \code{R} port by Leo Belzile
 #' @inheritParams tmvt
+#' @param ... additional arguments, currently ignored.
 #' @export
 #' @examples
 #' d <- 15; nu <- 30;
@@ -246,7 +247,12 @@ rtmvt <- function(n, mu, sigma, df, lb, ub){
 #' # mvtnorm::pmvt(lower = rep(-1,d), upper = rep(Inf, d), df = 10, sigma = sigma)[1]
 #' pmvt(lb = rep(-1, d), ub = rep(Inf, d), sigma = sigma, df = 10)
 #' }
-pmvt  <- function(mu, sigma, df, lb = -Inf, ub = Inf, type = c("mc", "qmc"), log = FALSE, B = 1e4){
+pmvt  <- function(mu, sigma, df, lb = -Inf, ub = Inf, type = c("mc", "qmc"), B = 1e4, ...){
+  #Dec 30, 2020 - remove argument log that is ignored.
+  args <- list(...)
+  if(!is.null(args$log)){
+    warning("Argument `log` discontinued: the option is currently ignored")
+  }
   type <- match.arg(type)
   if(any(missing(df), missing(sigma))){
     stop("Missing arguments in `pmvt`")

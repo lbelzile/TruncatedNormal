@@ -229,6 +229,7 @@ rtmvnorm <- function(n, mu, sigma, lb, ub){
 #' Statistical Society, Series B, \bold{79} (1), pp. 1--24.
 #' @inheritParams tmvnorm
 #' @seealso \code{\link[mvtnorm]{pmvnorm}}
+#' @param ... additional arguments, currently ignored.
 #' @export
 #' @examples 
 #' #From mvtnorm
@@ -238,7 +239,12 @@ rtmvnorm <- function(n, mu, sigma, lb, ub){
 #' corr <- matrix(0.5, 5, 5) + diag(0.5, 5)
 #' prob <- pmvnorm(lb = lower, ub = upper, mu = mean, sigma = corr)
 #' stopifnot(pmvnorm(lb = -Inf, ub = 3, mu = 0, sigma = 1) == pnorm(3))
-pmvnorm <- function(mu, sigma, lb = -Inf, ub = Inf, B = 1e4, type = c("mc", "qmc"), log = FALSE){
+pmvnorm <- function(mu, sigma, lb = -Inf, ub = Inf, B = 1e4, type = c("mc", "qmc"), ...){
+  #Dec 30, 2020 - remove argument log that is ignored.
+  args <- list(...)
+  if(!is.null(args$log)){
+    warning("Argument `log` discontinued: the option is currently ignored")
+  }
   type <- match.arg(type)
   sigma <- as.matrix(sigma)
   if(missing(sigma)){

@@ -4,15 +4,7 @@
 \alias{pmvnorm}
 \title{Distribution function of the multivariate normal distribution for arbitrary limits}
 \usage{
-pmvnorm(
-  mu,
-  sigma,
-  lb = -Inf,
-  ub = Inf,
-  B = 10000,
-  type = c("mc", "qmc"),
-  log = FALSE
-)
+pmvnorm(mu, sigma, lb = -Inf, ub = Inf, B = 10000, type = c("mc", "qmc"), ...)
 }
 \arguments{
 \item{mu}{vector of location parameters}
@@ -27,7 +19,7 @@ pmvnorm(
 
 \item{type}{string, either of \code{mc} or \code{qmc} for Monte Carlo and quasi Monte Carlo, respectively}
 
-\item{log}{logical; if \code{TRUE}, probabilities and density are given on the log scale.}
+\item{...}{additional arguments, currently ignored.}
 }
 \description{
 This function computes the distribution function of a multivariate normal distribution vector for an arbitrary rectangular region [\code{lb}, \code{ub}].

@@ -1,3 +1,9 @@
+## Version 2.3
+
+### Bug fixes
+
+- Remove ghost argument `log` (never implemented) from functions `pmvnorm` and `pmvt`; these now return a warning (thanks to Elysée Aristide)
+
 ## Version 2.2
 
 ### Bug fixes

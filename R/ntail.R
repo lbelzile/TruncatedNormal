@@ -9,7 +9,8 @@ ntail <-
     c=l^2/2;n=length(l);f=expm1(c-u^2/2)
     x=c-log(1+runif(n)*f); # sample using Rayleigh
     # keep list of rejected
-    I=which(runif(n)^2*x>c);d=length(I)
+    I=which(runif(n)^2*x>c);
+    d=length(I)
     while (d>0) { # while there are rejections
       cy=c[I] # find the thresholds of rejected
       y=cy-log(1+runif(d)*f[I])

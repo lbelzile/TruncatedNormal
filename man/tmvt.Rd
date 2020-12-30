@@ -44,7 +44,7 @@ Infinite values for vectors \eqn{u} and \eqn{l} are accepted. The Monte Carlo me
 dtmvt(x, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, B = 1e4)
 ptmvt(q, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, B = 1e4)
 rtmvt(n, mu, sigma, df, lb, ub)
-pmvt(mu, sigma, df, lb = -Inf, ub = Inf, type = c("mc", "qmc"), log = FALSE, B = 1e4)}
+pmvt(mu, sigma, df, lb = -Inf, ub = Inf, type = c("mc", "qmc"), B = 1e4)}
 }
 
 \examples{
