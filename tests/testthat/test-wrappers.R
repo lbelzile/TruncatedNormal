@@ -33,6 +33,7 @@ prob <- pmvnorm(lb = lower, ub = upper, mu = mean, sigma = corr)
 
 
 testthat::test_that("Univariate probabilities",{
+  testthat::skip_on_cran()
   expect_equivalent(pmvnorm(lb = -Inf, ub = 3, mu = 2, sigma = 1), pnorm(3, mean = 2))
   expect_equivalent(pmvt(lb = -Inf, ub = 3, df = 2, mu = 0, sigma = 1), pt(3, 2))
 })
@@ -81,6 +82,7 @@ testthat::test_that("Bounds of simulated variables", {
 })
 
 testthat::test_that("Bounds on distribution function beyond truncation points", {
+  testthat::skip_on_cran()
   testthat::expect_equal(ptmvnorm(q = ub + runif(D), lb = lb, ub = ub, mu = muV, Smat), 1)
   testthat::expect_equal(ptmvt(q = ub + runif(D), df = 2, lb = lb, ub = ub, mu = muV, Smat), 1)
   testthat::expect_equal(ptmvnorm(q = lb + c(-1, runif(D-1)), lb = lb, ub = ub, mu = muV/D, Smat), 0)
@@ -89,6 +91,7 @@ testthat::test_that("Bounds on distribution function beyond truncation points", 
 
 pt <- rnorm(D)
 testthat::test_that("Untruncated density agrees with that in the mvtnorm package", {
+  testthat::skip_on_cran()
   testthat::expect_equal(mvtnorm::dmvnorm(x = pt, mean = muV, sigma = Smat, log = TRUE), 
                          TruncatedNormal::dtmvnorm(x = pt, mu = muV, lb = rep(-Inf, D), ub = rep(Inf, D), sigma = Smat, log = TRUE))
   testthat::expect_equal(mvtnorm::dmvt(x = pt, df = 2, delta = muV, sigma = Smat, log = TRUE), 
@@ -98,6 +101,7 @@ testthat::test_that("Untruncated density agrees with that in the mvtnorm package
 
 pt <- rnorm(D)
 testthat::test_that("Untruncated density agrees with that in the mvtnorm package", {
+  testthat::skip_on_cran()
   testthat::expect_equal(mvtnorm::dmvnorm(x = pt, mean = muV, sigma = Smat, log = TRUE), 
                          TruncatedNormal::dtmvnorm(x = pt, mu = muV, lb = rep(-Inf, D), ub = rep(Inf, D), sigma = Smat, log = TRUE))
   testthat::expect_equal(mvtnorm::dmvt(x = pt, df = 2, delta = muV, sigma = Smat, log = TRUE), 
