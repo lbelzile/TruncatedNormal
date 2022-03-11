@@ -25,21 +25,45 @@ NULL
 #' @seealso \code{\link{tnorm}}
 #' @export
 #' @keywords internal
-rtnorm <- function(n, mu, sd, lb, ub, method = c("fast","invtransfo")){
-  if(any(missing(lb), missing(ub), length(lb) != length(ub))){
-    stop("Invalid input in rtnorm")
-    }
+rtnorm <- function(n, 
+                   mu, 
+                   sd, 
+                   lb, 
+                   ub, 
+                   method = c("fast","invtransfo")){
   method <- match.arg(method)
-  d <- length(lb)
+  n <- as.integer(n)
+  stopifnot(n > 0)
   if(missing(mu)){
     mu <- 0 
   }
   if(missing(sd)){
     sd <- 1 
   }
-  mu <- rep(mu, length.out = d)
-  sd <- rep(sd, length.out = d)
-  #To achieve this, first compute X=norminvp(runif(1),(lb-mu)/sig,(ub-mu)/sig) and then set Z=mu+sig*X
+  if(missing(lb)){
+    lb <- -Inf
+  }
+  if(missing(ub)){
+    ub <- Inf
+  }
+  if(any(length(lb) != length(ub))){
+    stop("Invalid input in `rtnorm`: lower and upper truncation bounds must be the same length.")
+  }
+  stopifnot(isTRUE(all(lb < ub)))
+  d <- pmax(length(mu), length(sd), length(lb), length(ub))
+  if(length(mu) != 1 & length(mu) != d){
+    stop("Invalid `mu` vector: must be length 1 or same length as longest argument.")
+  }
+  if(length(sd) != 1 & length(sd) != d){
+    stop("Invalid `sd` vector: must be length 1 or same length as longest argument.")
+  }
+  if(length(lb) != 1 & length(lb) != d){
+    stop("Invalid `lb` vector: must be length 1 or same length as longest argument.")
+  }
+  if(length(ub) != 1 & length(ub) != d){
+    stop("Invalid `ub` vector: must be length 1 or same length as longest argument.")
+  }
+  #To achieve this, first compute X=norminvp(runif(1),(lb-mu)/sig, (ub-mu)/sig) and then set Z=mu+sig*X
   lb <- (lb - mu) / sd
   ub <- (ub - mu) / sd
   if(d == 1L && n > 1){

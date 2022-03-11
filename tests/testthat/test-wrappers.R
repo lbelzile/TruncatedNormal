@@ -6,6 +6,7 @@ sigma <- matrix(c(36407.0005966, -1167.50805662, -1167.50805662, 290.76915744), 
 df1 <- 3
 df2 <- 300
 x = c(100, 50)
+set.seed(1234)
 
 testthat::test_that("Truncated normal DF (MC versus QMC) give similar answers", {
   testthat::skip_on_cran()
@@ -34,8 +35,8 @@ prob <- pmvnorm(lb = lower, ub = upper, mu = mean, sigma = corr)
 
 testthat::test_that("Univariate probabilities",{
   testthat::skip_on_cran()
-  expect_equivalent(pmvnorm(lb = -Inf, ub = 3, mu = 2, sigma = 1), pnorm(3, mean = 2))
-  expect_equivalent(pmvt(lb = -Inf, ub = 3, df = 2, mu = 0, sigma = 1), pt(3, 2))
+  testthat::expect_equivalent(pmvnorm(lb = -Inf, ub = 3, mu = 2, sigma = 1), pnorm(3, mean = 2))
+  testthat::expect_equivalent(pmvt(lb = -Inf, ub = 3, df = 2, mu = 0, sigma = 1), pt(3, 2))
 })
 
 mean_tnorm <- function(lb, ub, mu, sigma){

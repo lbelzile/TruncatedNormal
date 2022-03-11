@@ -1,8 +1,13 @@
 ## Version 2.3
 
+- `rtnorm` now checks arguments length and throw an error rather than try to recycle mean and standard deviation vectors.
+
+## Version 2.2.2
+
 ### Bug fixes
 
 - Remove ghost argument `log` (never implemented) from functions `pmvnorm` and `pmvt`; these now return a warning (thanks to Elysée Aristide)
+
 
 ## Version 2.2
 
