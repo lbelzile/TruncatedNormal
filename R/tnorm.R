@@ -46,9 +46,11 @@ rtnorm <- function(n,
   if(missing(ub)){
     ub <- Inf
   }
-  if(any(length(lb) != length(ub))){
-    stop("Invalid input in `rtnorm`: lower and upper truncation bounds must be the same length.")
-  }
+  len_bound <- max(length(lb), length(ub))
+  if(any(! length(lb) %in% c(1L, len_bound),
+         ! length(ub) %in% c(1L, len_bound))){
+    stop("Invalid input in \"rtnorm\": lower and upper truncation bounds must be the same length.")
+   }
   stopifnot(isTRUE(all(lb < ub)))
   d <- pmax(length(mu), length(sd), length(lb), length(ub))
   if(length(mu) != 1 & length(mu) != d){
