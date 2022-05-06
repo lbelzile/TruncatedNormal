@@ -32,6 +32,8 @@
 #' @param lb vector of lower truncation limits
 #' @param ub vector of upper truncation limits
 #' @param type string, either of \code{mc} or \code{qmc} for Monte Carlo and quasi Monte Carlo, respectively
+#' @param check logical, if \code{TRUE} (default), check that the scale matrix \code{sigma} is positive definite and symmetric.
+#' @param ... additional arguments, currently ignored
 #' @return \code{dtmvt} gives the density, \code{ptmvt} gives the distribution function, \code{rtmvt} generate random deviates. 
 #' @examples
 #' d <- 4; lb <- rep(0, d)
@@ -50,7 +52,7 @@ NULL
 #' @export
 #' @inheritParams tmvt
 #' @keywords internal
-dtmvt <- function(x, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, B = 1e4){
+dtmvt <- function(x, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, B = 1e4, check = TRUE, ...){
   if (any(missing(x), missing(sigma), missing(df))) {
     stop("Arguments missing in function call to `dtmvnorm`")
   }
@@ -65,6 +67,17 @@ dtmvt <- function(x, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, 
     return(dtmvnorm(x = x, mu = mu, sigma = sigma, lb = lb, ub = ub, B = B, log = log, type = type)) 
   }
   stopifnot(df > 0, length(mu) == ncol(sigma), nrow(sigma) == ncol(sigma), is.logical(log))
+  if(isTRUE(check)){
+   if(!isSymmetric(sigma)){
+   stop("Covariance matrix \"sigma\" must be symmetric")
+  }
+  if(isTRUE(any(diag(sigma) <= 0))){
+  stop("Degenerate covariance matrix \"sigma\": marginal variances should be positive.")
+  }
+  if(isTRUE(any(eigen(sigma, only.values = TRUE)$values <= 0))){
+   stop("Covariance matrix \"sigma\" is not positive definite.") 
+   }
+  }
   if (is.vector(x)) {
     stopifnot(length(x) == length(mu))
     x <- matrix(x, nrow = 1, ncol = length(x))
@@ -119,6 +132,17 @@ ptmvt <- function(q, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, 
   if(missing(ub)){
     ub <- rep(Inf, d) 
   }
+  if(isTRUE(check)){
+   if(!isSymmetric(sigma)){
+   stop("Covariance matrix \"sigma\" must be symmetric")
+  }
+  if(isTRUE(any(diag(sigma) <= 0))){
+  stop("Degenerate covariance matrix \"sigma\": marginal variances should be positive.")
+  }
+  if(isTRUE(any(eigen(sigma, only.values = TRUE)$values <= 0))){
+   stop("Covariance matrix \"sigma\" is not positive definite.") 
+   }
+  }
   type <- match.arg(type)
   df <- as.vector(df)[1]
   if(isTRUE(all.equal(df, 0)) || isTRUE(all.equal(df, Inf))){
@@ -161,12 +185,13 @@ ptmvt <- function(q, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, 
 #' Random number generator for the truncated multivariate Student distribution.
 #' 
 #' This function returns a matrix of draws from a multivariate Student distribution truncated on the interval [\code{lb}, \code{ub}].
-#' 
+#' @param check logical; if \code{TRUE} (default), the code checks that \code{sigma} is positive definite and symmetric
+#' @param ... additional arguments for the method, currently ignored
 #' @seealso \code{\link{tmvt}}
 #' @export
 #' @inheritParams tmvt
 #' @keywords internal
-rtmvt <- function(n, mu, sigma, df, lb, ub){
+rtmvt <- function(n, mu, sigma, df, lb, ub, check = TRUE, ...){
   if (any(missing(sigma), missing(df))) {
     stop("Arguments missing in function call to `rtmvt`")
   }
@@ -179,6 +204,17 @@ rtmvt <- function(n, mu, sigma, df, lb, ub){
     mu <- rep(0, ncol(sigma)) 
   }
   stopifnot(length(mu) == ncol(sigma), nrow(sigma) == ncol(sigma))
+  if(isTRUE(check)){
+   if(!isSymmetric(sigma)){
+   stop("Scale matrix \"sigma\" must be symmetric")
+  }
+  if(isTRUE(any(diag(sigma) <= 0))){
+  stop("Degenerate scale matrix \"sigma\": marginal variances should be positive.")
+  }
+  if(isTRUE(any(eigen(sigma, only.values = TRUE)$values <= 0))){
+   stop("Scale matrix \"sigma\" is not positive definite.") 
+   }
+   }
   d <- length(mu)
   if(missing(lb)){
     lb <- rep(-Inf, d) 
@@ -247,7 +283,7 @@ rtmvt <- function(n, mu, sigma, df, lb, ub){
 #' # mvtnorm::pmvt(lower = rep(-1,d), upper = rep(Inf, d), df = 10, sigma = sigma)[1]
 #' pmvt(lb = rep(-1, d), ub = rep(Inf, d), sigma = sigma, df = 10)
 #' }
-pmvt  <- function(mu, sigma, df, lb = -Inf, ub = Inf, type = c("mc", "qmc"), B = 1e4, ...){
+pmvt  <- function(mu, sigma, df, lb = -Inf, ub = Inf, type = c("mc", "qmc"), B = 1e4, check = TRUE, ...){
   #Dec 30, 2020 - remove argument log that is ignored.
   args <- list(...)
   if(!is.null(args$log)){
@@ -265,6 +301,17 @@ pmvt  <- function(mu, sigma, df, lb = -Inf, ub = Inf, type = c("mc", "qmc"), B =
     stopifnot(length(mu) == length(lb))
     lb <- lb - mu
     ub <- ub - mu
+  }
+  if(isTRUE(check)){
+   if(!isSymmetric(sigma)){
+   stop("Covariance matrix \"sigma\" must be symmetric")
+  }
+  if(isTRUE(any(diag(sigma) <= 0))){
+  stop("Degenerate covariance matrix \"sigma\": marginal variances should be positive.")
+  }
+  if(isTRUE(any(eigen(sigma, only.values = TRUE)$values <= 0))){
+   stop("Covariance matrix \"sigma\" is not positive definite.") 
+   }
   }
   integ <- switch(type,
                   mc = mvTcdf(l = lb, u = ub, Sig = sigma, df = df, n = B),

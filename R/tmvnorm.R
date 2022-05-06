@@ -28,8 +28,11 @@
 #' @param sigma covariance matrix
 #' @param lb vector of lower truncation limits
 #' @param ub vector of upper truncation limits
+#' @param check logical; if \code{TRUE} (default), the code checks that the scale matrix \code{sigma} is positive definite and symmetric
+
 #' @param type string, either of \code{mc} or \code{qmc} for Monte Carlo and quasi Monte Carlo, respectively
 #' @return \code{dtmvnorm} gives the density, \code{ptmvnorm} and \code{pmvnorm} give the distribution function of respectively the truncated and multivariate Gaussian distribution and \code{rtmvnorm} generate random deviates. 
+
 #' @examples 
 #' d <- 4; lb <- rep(0, d)
 #' mu <- runif(d)
@@ -71,7 +74,7 @@ NULL
 #' @seealso \code{\link{tmvnorm}}
 #' @export
 #' @keywords internal
-dtmvnorm <- function(x, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B = 1e4){
+dtmvnorm <- function(x, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B = 1e4, check = TRUE, ...){
   if (any(missing(x), missing(mu), missing(sigma))) {
     stop("Arguments missing in function call to `dtmvnorm`")
   }
@@ -82,6 +85,17 @@ dtmvnorm <- function(x, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B
   }
   d <- length(mu)
   stopifnot(d == ncol(sigma), d == ncol(sigma), is.logical(log))
+  if(isTRUE(check)){
+   if(!isSymmetric(sigma)){
+   stop("Covariance matrix \"sigma\" must be symmetric")
+  }
+  if(isTRUE(any(diag(sigma) <= 0))){
+  stop("Degenerate covariance matrix \"sigma\": marginal variances should be positive.")
+  }
+  if(isTRUE(any(eigen(sigma, only.values = TRUE)$values <= 0))){
+   stop("Covariance matrix \"sigma\" is not positive definite.") 
+   }
+  }
   if (is.vector(x)) {
     stopifnot(length(x) == length(mu))
     x <- matrix(x, nrow = 1, ncol = length(x))
@@ -120,7 +134,7 @@ dtmvnorm <- function(x, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B
 #' @seealso \code{\link{tmvnorm}}
 #' @export
 #' @keywords internal
-ptmvnorm <- function(q, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B = 1e4){
+ptmvnorm <- function(q, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B = 1e4, check = TRUE, ...){
   if (any(missing(q), missing(sigma))) {
     stop("Arguments missing in function call to `ptmvnorm`")
   }
@@ -131,6 +145,17 @@ ptmvnorm <- function(q, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B
   }
   d <- length(mu)
   stopifnot(length(mu) == ncol(sigma), nrow(sigma) == ncol(sigma), is.logical(log))
+  if(isTRUE(check)){
+   if(!isSymmetric(sigma)){
+   stop("Covariance matrix \"sigma\" must be symmetric")
+  }
+  if(isTRUE(any(diag(sigma) <= 0))){
+  stop("Degenerate covariance matrix \"sigma\": marginal variances should be positive.")
+  }
+  if(isTRUE(any(eigen(sigma, only.values = TRUE)$values <= 0))){
+   stop("Covariance matrix \"sigma\" is not positive definite.") 
+   }
+  }
   if (is.vector(q)) {
     stopifnot(length(q) == length(mu))
     q <- matrix(q, nrow = 1, ncol = length(q))
@@ -170,7 +195,7 @@ ptmvnorm <- function(q, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B
 #' @seealso \code{\link{tmvnorm}}
 #' @export
 #' @keywords internal
-rtmvnorm <- function(n, mu, sigma, lb, ub){
+rtmvnorm <- function(n, mu, sigma, lb, ub, check = TRUE, ...){
   if (missing(sigma)) {
     stop("Arguments missing in function call to `rtmvnorm`")
   }
@@ -179,6 +204,18 @@ rtmvnorm <- function(n, mu, sigma, lb, ub){
     mu <- rep(0, ncol(sigma)) 
   }
   stopifnot(length(mu) == ncol(sigma), nrow(sigma) == ncol(sigma))
+  if(isTRUE(check)){
+   if(!isSymmetric(sigma)){
+   stop("Covariance matrix \"sigma\" must be symmetric")
+  }
+  if(isTRUE(any(diag(sigma) <= 0))){
+  stop("Degenerate covariance matrix \"sigma\": marginal variances should be positive.")
+  }
+  if(isTRUE(any(eigen(sigma, only.values = TRUE)$values <= 0))){
+   stop("Covariance matrix \"sigma\" is not positive definite.") 
+   }
+  }
+
   d <- length(mu)
   if(missing(lb)){
     lb <- rep(-Inf, d) 
@@ -239,7 +276,7 @@ rtmvnorm <- function(n, mu, sigma, lb, ub){
 #' corr <- matrix(0.5, 5, 5) + diag(0.5, 5)
 #' prob <- pmvnorm(lb = lower, ub = upper, mu = mean, sigma = corr)
 #' stopifnot(pmvnorm(lb = -Inf, ub = 3, mu = 0, sigma = 1) == pnorm(3))
-pmvnorm <- function(mu, sigma, lb = -Inf, ub = Inf, B = 1e4, type = c("mc", "qmc"), ...){
+pmvnorm <- function(mu, sigma, lb = -Inf, ub = Inf, B = 1e4, type = c("mc", "qmc"), check = TRUE, ...){
   #Dec 30, 2020 - remove argument log that is ignored.
   args <- list(...)
   if(!is.null(args$log)){
@@ -259,6 +296,16 @@ pmvnorm <- function(mu, sigma, lb = -Inf, ub = Inf, B = 1e4, type = c("mc", "qmc
   }
   if(missing(sigma)){
     sigma <- diag(1, length(lb)) 
+  } else if(isTRUE(check)){
+   if(!isSymmetric(sigma)){
+   stop("Covariance matrix \"sigma\" must be symmetric")
+  }
+  if(isTRUE(any(diag(sigma) <= 0))){
+  stop("Degenerate covariance matrix \"sigma\": marginal variances should be positive.")
+  }
+  if(isTRUE(any(eigen(sigma, only.values = TRUE)$values <= 0))){
+   stop("Covariance matrix \"sigma\" is not positive definite.") 
+   }
   }
   integ <- switch(type,
                   mc = mvNcdf(l = lb, u = ub, Sig = sigma, n = B),
