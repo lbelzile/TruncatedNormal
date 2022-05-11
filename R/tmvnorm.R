@@ -29,7 +29,7 @@
 #' @param lb vector of lower truncation limits
 #' @param ub vector of upper truncation limits
 #' @param check logical; if \code{TRUE} (default), the code checks that the scale matrix \code{sigma} is positive definite and symmetric
-
+#' @param ... additional arguments, currently ignored
 #' @param type string, either of \code{mc} or \code{qmc} for Monte Carlo and quasi Monte Carlo, respectively
 #' @return \code{dtmvnorm} gives the density, \code{ptmvnorm} and \code{pmvnorm} give the distribution function of respectively the truncated and multivariate Gaussian distribution and \code{rtmvnorm} generate random deviates. 
 

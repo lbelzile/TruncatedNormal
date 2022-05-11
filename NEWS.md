@@ -1,3 +1,7 @@
+## Version 2.4
+
+- `*tmvt` and `*tmvnorm` now check that the scale matrix `sigma` is symmetric, positive-definite and non-degenerate (issue #8)
+
 ## Version 2.3
 
 - `rtnorm` now checks arguments length and throw an error rather than try to recycle mean and standard deviation vectors.
