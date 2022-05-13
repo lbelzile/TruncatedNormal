@@ -1,6 +1,13 @@
 ## Version 2.4
 
+### Bug fixes
+
+- `rtnorm` recycles arguments when `ltrunc` or `rtrunc` are length 1.
 - `*tmvt` and `*tmvnorm` now check that the scale matrix `sigma` is symmetric, positive-definite and non-degenerate (issue #8)
+
+### Changes
+
+- The package uses `tinytest` rather than `testthat` for unit tests.
 
 ## Version 2.3
 

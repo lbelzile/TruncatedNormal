@@ -75,9 +75,14 @@ rtnorm <- function(n,
   } else{
   res <- matrix(0, ncol = d, nrow = n)
   for(i in 1:n){
-    res[i,] <- mu + sd * switch(method, 
-                      fast = trandn(l = lb, u = ub),
-                      invtransfo = norminvp(p = runif(d), l = lb, u = ub))
+    res[i,] <- mu + sd * 
+    switch(method, 
+           fast = trandn(l = rep(lb, length.out = d), 
+                         u = rep(ub, length.out = d)),
+           invtransfo = norminvp(p = runif(d), 
+                                 l = rep(lb, length.out = d), 
+                                 u = rep(ub, length.out = d))
+          )
   }
   if(d == 1L || n == 1L){
     res <- as.vector(res)
