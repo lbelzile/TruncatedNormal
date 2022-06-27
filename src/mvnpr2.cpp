@@ -17,80 +17,101 @@ List mvnpr2(int n, arma::mat L, NumericVector l, NumericVector u, NumericVector 
   int d = l.size();
   mu[d] = 0;
   int b = 100; // block size (set arbitrarily to 100)
+  int block;
+  int trials = n;
   arma::mat Z(d,b);
   Z.zeros();
-  arma::rowvec p(n);
+  arma::colvec p(n);
   
   //helper vectors
+  
   arma::colvec lvec;
   arma::colvec uvec;
   arma::colvec muvec;
   arma::colvec shiftvec;
   
   
-  arma::colvec col;
-  arma::colvec tl;
-  arma::colvec tu;
   
   arma::colvec armatrandn;
   arma::colvec armalnNpr;
+  
   Function lnNpr("lnNpr");
   Function trandn("trandn");
   
-  NumericVector blocks(std::ceil(n/b));
-  for(int i = 0; i < blocks.size(); i++){
-    if(n-b >= 0){
-      blocks[i] = b;
-    } else {
-      blocks[i] = n % b;
-    }
-    n -= b;
+  int quotient = std::floor(n/b);
+  
+  if(trials - b >= 0){
+    block = b;
+  } else {
+    block = trials%b;
   }
   
+  lvec.ones(block);
+  uvec.ones(block);
+  muvec.ones(block);
+  shiftvec.ones(block);
   
-  lvec.ones(blocks[0]);
-  uvec.ones(blocks[0]);
-  muvec.ones(blocks[0]);
-  shiftvec.ones(blocks[0]);
+    
+  arma::colvec col(block);
+  arma::colvec tl(block);
+  arma::colvec tu(block);
+  
+  //NumericVector test = L(0,_);
+    
+    //arma::colvec armatrandn(block);
+    //arma::colvec armalnNpr(block);
+    //Function lnNpr("lnNpr");
+    //Function trandn("trandn");
   
   
-  for(int j = 0; j < blocks.size();j++){
+  for(int j = 0; j < quotient; j++){
     
     for(int k = 0; k < d-1; k++){
       
+      //col = L(k, _)*Z( Range(0,k) , _ );
       
       if(k == 0){
-        col = trans(L(0,0) * Z.row(0).subvec(0,blocks[j]-1));
+        col = trans(L(0,0) * Z.row(0).subvec(0, block-1));
       } else {
-        col = trans(L.row(k).subvec(0,k) * Z.rows(0,k).cols(0,blocks[j]-1));
+        col = trans(L.row(k).subvec(0,k) * Z.rows(0,k).cols(0,block-1));
       }
       
-        
       lvec = l[k]*lvec;
       uvec = u[k]*uvec;
       muvec = mu[k]*muvec;
       
+      
+      //tl = col.for_each( [](colvec::elem_type& val) { val = l[k] - mu[k] - val; } );
+      //tu = col.for_each( [](colvec::elem_type& val) { val = u[k] - mu[k] - val; } );
       tl = lvec - muvec - col;
       tu = uvec - muvec - col;
+      //tl = l[k]-mu[k]-col;
+      //tu = u[k]-mu[k]-col;
       
       armatrandn = as<arma::colvec>(wrap(trandn(tl,tu)));
       armalnNpr = as<arma::colvec>(wrap(lnNpr(tl,tu)));
         
+      //Z.row(k) = trans(armatrandn.for_each( [](colvec::elem_type& val) { val = mu[k] + val; } ););
+      
       Z.row(k) = trans(muvec + armatrandn);
       
-      shiftvec = 0.5*std::pow(mu[k],2)*shiftvec;
-      p.subvec(b*j,b*j + blocks[j] - 1) = p.subvec(b*j,b*j + blocks[j] - 1) + trans(armalnNpr) + trans(shiftvec) - mu[k]*Z.row(k);
+      //Z(k,_) = mu[k]+trandn(tl,tu);
       
-      lvec.ones(blocks[j+1]);
-      uvec.ones(blocks[j+1]);
-      muvec.ones(blocks[j+1]);
-      shiftvec.ones(blocks[j+1]);
+      shiftvec = 0.5*std::pow(mu[k],2)*shiftvec;
+      p.subvec(b*j,b*j + block-1) = p.subvec(b*j,b*j + block - 1) + trans(shiftvec + armalnNpr) - mu[k]*Z.row(k);
+      
+      
+      lvec.ones(block);
+      uvec.ones(block);
+      muvec.ones(block);
+      shiftvec.ones(block);
+       
     }
   
-    col = trans(L.row(d-1)*Z.cols(0,blocks[blocks.size()-1]-1));
+    col = L.row(d-1)*Z;
     
-    lvec.ones(100);
-    uvec.ones(100);
+    lvec.ones(block);
+    uvec.ones(block);
     
     lvec = l[d-1]*lvec;
     uvec = u[d-1]*uvec;
@@ -98,24 +119,27 @@ List mvnpr2(int n, arma::mat L, NumericVector l, NumericVector u, NumericVector 
     tl = lvec - col;
     tu = uvec - col;
     
+    
+    //tl = col.for_each( [](colvec::elem_type& val) { val = l[k] - val; } );
+    //tu = col.for_each( [](colvec::elem_type& val) { val = u[k] - val; } );
+    
+    //tl = l[d-1]-col;
+    //tu = u[d-1]-col;
+    
     armalnNpr = as<arma::colvec>(wrap(lnNpr(tl,tu)));
-    p.subvec(b*j,b*j + blocks[j] - 1) = p.subvec(b*j,b*j + blocks[j] - 1) + trans(armalnNpr);
-  }
-  
-  for(int i = 0; i < n; i++){
-    p(i) = std::exp(p(i));
+    p.subvec(b*j,b*j + block - 1) = p.subvec(b*j,b*j + block - 1) + trans(armalnNpr);
+    
+    trials -= b;
+    if(trials - b >= 0){
+      block = b;
+    } else {
+      block = trials%b;
+    }
+    
   }
   
   p = exp(p);
-  
-  n = b*(blocks.size()-1) + blocks[blocks.size()-1];
-  
-  double prob = sum(p)/n;
-  double sd;
-  for(int i = 0; i < n; i++){
-    sd += std::pow((p(i)-prob),2);
-  }
-  sd = std::sqrt(sd/n);
-  double relErr = (sd/std::sqrt(n))/prob;
+  double prob = mean(p);
+  double relErr = (stddev(p)/sqrt(n))/prob;
   return Rcpp::List::create(Named("prob") = prob, Named("relErr") = relErr);
 }
