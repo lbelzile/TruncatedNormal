@@ -21,15 +21,13 @@ List mvnpr2(int n, arma::mat L, NumericVector l, NumericVector u, NumericVector 
   int trials = n;
   arma::mat Z(d,b);
   Z.zeros();
-  arma::colvec p(n);
+  arma::rowvec p(n);
   
   //helper vectors
-  
   arma::colvec lvec;
   arma::colvec uvec;
   arma::colvec muvec;
   arma::colvec shiftvec;
-  
   
   
   arma::colvec armatrandn;
@@ -51,24 +49,13 @@ List mvnpr2(int n, arma::mat L, NumericVector l, NumericVector u, NumericVector 
   muvec.ones(block);
   shiftvec.ones(block);
   
-    
-  arma::colvec col(block);
-  arma::colvec tl(block);
-  arma::colvec tu(block);
-  
-  //NumericVector test = L(0,_);
-    
-    //arma::colvec armatrandn(block);
-    //arma::colvec armalnNpr(block);
-    //Function lnNpr("lnNpr");
-    //Function trandn("trandn");
-  
+  arma::colvec col;
+  arma::colvec tl;
+  arma::colvec tu;
   
   for(int j = 0; j < quotient; j++){
     
     for(int k = 0; k < d-1; k++){
-      
-      //col = L(k, _)*Z( Range(0,k) , _ );
       
       if(k == 0){
         col = trans(L(0,0) * Z.row(0).subvec(0, block-1));
@@ -80,35 +67,24 @@ List mvnpr2(int n, arma::mat L, NumericVector l, NumericVector u, NumericVector 
       uvec = u[k]*uvec;
       muvec = mu[k]*muvec;
       
-      
-      //tl = col.for_each( [](colvec::elem_type& val) { val = l[k] - mu[k] - val; } );
-      //tu = col.for_each( [](colvec::elem_type& val) { val = u[k] - mu[k] - val; } );
       tl = lvec - muvec - col;
       tu = uvec - muvec - col;
-      //tl = l[k]-mu[k]-col;
-      //tu = u[k]-mu[k]-col;
       
       armatrandn = as<arma::colvec>(wrap(trandn(tl,tu)));
       armalnNpr = as<arma::colvec>(wrap(lnNpr(tl,tu)));
-        
-      //Z.row(k) = trans(armatrandn.for_each( [](colvec::elem_type& val) { val = mu[k] + val; } ););
       
       Z.row(k) = trans(muvec + armatrandn);
       
-      //Z(k,_) = mu[k]+trandn(tl,tu);
-      
       shiftvec = 0.5*std::pow(mu[k],2)*shiftvec;
-      p.subvec(b*j,b*j + block-1) = p.subvec(b*j,b*j + block - 1) + trans(shiftvec + armalnNpr) - mu[k]*Z.row(k);
-      
+      p.subvec(b*j,b*j + block-1) = p.subvec(b*j,b*j + block - 1) + trans(shiftvec) + trans(armalnNpr) - mu[k]*Z.row(k);
       
       lvec.ones(block);
       uvec.ones(block);
       muvec.ones(block);
       shiftvec.ones(block);
-       
     }
   
-    col = L.row(d-1)*Z;
+    col = trans(L.row(d-1)*Z.cols(0, block-1));
     
     lvec.ones(block);
     uvec.ones(block);
@@ -118,13 +94,6 @@ List mvnpr2(int n, arma::mat L, NumericVector l, NumericVector u, NumericVector 
     
     tl = lvec - col;
     tu = uvec - col;
-    
-    
-    //tl = col.for_each( [](colvec::elem_type& val) { val = l[k] - val; } );
-    //tu = col.for_each( [](colvec::elem_type& val) { val = u[k] - val; } );
-    
-    //tl = l[d-1]-col;
-    //tu = u[d-1]-col;
     
     armalnNpr = as<arma::colvec>(wrap(lnNpr(tl,tu)));
     p.subvec(b*j,b*j + block - 1) = p.subvec(b*j,b*j + block - 1) + trans(armalnNpr);

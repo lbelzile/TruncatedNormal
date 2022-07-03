@@ -11,7 +11,7 @@ tn <-
     x <- rep(0, length(l));
     I <- (abs(u-l)>tol)
     if (any(I)){
-      x[I] <- trnd(l[I], u[I])
+      x[I] <- trnd2(l[I], u[I])
     }
     # case: abs(u-l)< tol, uses inverse-transform
     I <- !I
