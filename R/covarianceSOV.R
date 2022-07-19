@@ -1,5 +1,13 @@
 covarianceSOV <-
   function(Sig, l, u){
+    if(any(l>u)){
+      stop("Lower bound needs to be smaller than upper bound");
+    }
+    
+    if(length(l)!=length(u)){
+      stop("Truncation limits have to be of the same length");
+    }
+    
     Lchol = t(chol(Sig));
     d = length(l);
     X = rep(0,d);

@@ -1,6 +1,14 @@
 precisionSOV <- 
-  function(SigmInv, l, u){
-    Tchol = t(chol(SigmInv));
+  function(SigInv, l, u){
+    if(any(l>u)){
+      stop("Lower bound needs to be smaller than upper bound");
+    }
+    
+    if(length(l)!=length(u)){
+      stop("Truncation limits have to be of the same length");
+    }
+    
+    Tchol = t(chol(SigInv));
     d = length(l);
     X = rep(0,d);
     rem = 0;
