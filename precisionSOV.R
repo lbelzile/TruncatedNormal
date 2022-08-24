@@ -8,7 +8,7 @@ precisionSOV <-
       stop("Truncation limits have to be of the same length");
     }
     
-    Tchol = chol(SigInv);
+    Tchol = chol(SigInv); # upper triangular
     
     d = length(l);
     
@@ -31,7 +31,7 @@ precisionSOV <-
       
       for(j in ((d-1):1)){
         for(i in (j+1):d){
-          nu[j] = nu[j] + Tchol[i,j]*x[i];
+          nu[j] = nu[j] + Tchol[j,i]*x[i];
         }
         
         l[j] = l[j] + nu[j];
@@ -41,6 +41,10 @@ precisionSOV <-
           x[j] = (trandn(l[j],u[j])-nu[j])/Tchol[j,j];
         }
       }
+      if(m == 1){
+        print(nu);
+      }
+      
       est = 1;
       for(k in (1:d)){
         est = est * (pnorm(u[k]) - pnorm(l[k]));
