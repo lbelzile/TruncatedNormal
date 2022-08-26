@@ -23,7 +23,7 @@ mvnprP <-
       #simulate N(mu+nu,T_jj^-2) conditional on [tl,tu]
       Z[k,]=mu[k]+(trandn(tl,tu) - col)/D[k];
       # update likelihood ratio
-      p = p+lnNpr(tl,tu)+.5*(mu[k]^2)-mu[k]*Z[k,];
+      p = p+lnNpr(tl,tu)+.5*(mu[k]^2)/D[k]-mu[k]*Z[k,];
     }
     # deal with final Z(1) which need not be simulated
     col=M[1,]%*%Z;tl=l[1]+col;tu=u[1]+col;
