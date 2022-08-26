@@ -10,9 +10,9 @@ mvNcdfP <-  function(l, u, SigInv, n = 1e5){
   # Cholesky decomposition of matrix
   M <- chol(SigInv)
   D <- diag(M)
-  if (any(D < 1e-10)){
-    warning('Method may fail as covariance matrix is singular!')
-  }
+  #if (any(D < 1e-10)){
+  #  warning('Method may fail as covariance matrix is singular!')
+  #}
   
   u <- u*D;
   l <- l*D; # rescale
@@ -32,7 +32,7 @@ mvNcdfP <-  function(l, u, SigInv, n = 1e5){
   x[2:d] <- xmu[1:(d-1)]
   mu[2:d] <- xmu[d:(2*d-2)] # assign saddlepoint x* and mu*
   
-  if(any((t(solve(M)) %*% x - u)[-1] > 0, (-t(solve(M)) %*% x + l)[-1] > 0)){
+  if(any((solve(M) %*% x - u/D)[-1] > 0, (-solve(M) %*% x + l/D)[-1] > 0)){
     warning("Solution to exponential tilting problem using Powell's dogleg method \n  does not lie in convex set l < (T^-T)x < u.")
     flag <- FALSE
   }
@@ -47,7 +47,7 @@ mvNcdfP <-  function(l, u, SigInv, n = 1e5){
                                 M=M, l=l, u=u,
                                 # equality constraints d psi/d mu = 0
                                 heq = function(x, l, M, u){gradpsiP(y = x, l=l, M=M, u = u)[d:(2*d-2)]},
-                                hin = function(par,...){c((out$u - t(solve(out$L)) %*% c(0,par[1:(d-1)]))[-1] > 0, (t(solve(out$L)) %*% c(0,par[1:(d-1)]) - out$l)[-1])},
+                                hin = function(par,...){c((u/D - solve(M) %*% c(0,par[1:(d-1)]))[-1] > 0, (solve(M) %*% c(0,par[1:(d-1)]) - l/D)[-1])},
                                 control.outer = list(trace = FALSE,method="nlminb"))
     if(solvneqc$convergence == 0){
       x <- solvneqc$par[1:(d-1)]
