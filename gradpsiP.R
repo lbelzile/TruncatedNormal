@@ -27,10 +27,7 @@ gradpsiP <- function(y, M, l, u)
   pu <- exp(-0.5*ut^2-w)/sqrt(2*pi);
   P <- pl-pu;
   # output the gradient
-  dfdx <- -mu[-1] - as.vector(crossprod(M[,-1],P)); #as.vector(crossprod(P, M[,-1]))
-  # as.vector -> numerical vector not sub-matrix
-  # crossprod -> matrix multiplication (faster than %*%)
-  # check negative indices to understand where they come from
+  dfdx <- -mu[-1] - as.vector(crossprod(M[,-1],P)); #as.vector(crossprod(P, M[,-1]);
   dfdm <- mu/D - x + P;
   grad <- c(dfdx, dfdm[-1])
   # here compute Jacobian matrix
@@ -70,9 +67,9 @@ jacpsiP <-  function(y, M, l, u){
   ut[is.infinite(ut)] <- 0
   
   dP <- -(P^2) + lt * pl - ut * pu # dPdm
-  DM <- rep(dP,1,d) * t(M)
-  mx <- -diag(d) - DM
-  xx <- DM %*% M
+  DM <- rep(dP,1,d) * M
+  mx <- -diag(1/D) - DM
+  xx <- crossprod(t(M), DM)
   mx <- mx[2:d,2:d]
   xx <- xx[2:d,2:d]
   if (d>2){
