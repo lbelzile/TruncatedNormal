@@ -36,12 +36,13 @@
 
 - Cholesky decomposition with permutation now checks the arguments to ensure `lb` less than `ub`, to avoid segfault errors. In case of degenerate bounds, the conditional distribution is used with fixed components for the degenerate variables (issue #2)
 
-## Changes 
+### Changes 
 
 - Moved back probit example in documentation
 - Change back to `randtoolbox` package following its reuploading on **CRAN**
 
 ## Version 2.0
+
 ### Bug fixes
 
 - Throw error if `NaN` in bounds
