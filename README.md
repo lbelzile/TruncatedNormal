@@ -1,6 +1,6 @@
 # TruncatedNormal
 
-[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/TruncatedNormal)](https://cran.r-project.org/package=TruncatedNormal)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version-last-release/TruncatedNormal)](https://cran.r-project.org/package=TruncatedNormal)
 [![License](https://img.shields.io/badge/license-GPL%20%28%3E=%203%29-blue.svg?style=flat)](http://www.gnu.org/licenses/gpl-3.0.html) 
 [![Downloads](http://cranlogs.r-pkg.org/badges/TruncatedNormal?color=brightgreen)](http://www.r-pkg.org/pkg/TruncatedNormal)
 

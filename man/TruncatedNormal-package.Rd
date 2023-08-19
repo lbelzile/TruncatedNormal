@@ -1,5 +1,6 @@
 \name{TruncatedNormal-package}
 \alias{TruncatedNormal}
+\alias{TruncatedNormal-package}
 \docType{package}
 \title{
  Truncated Normal Distribution Toolbox
