@@ -11,9 +11,9 @@
 #' @inheritParams mvrandt
 #' @return a list with components
 #' \itemize{
-#' \item{\code{prob}: }{estimated value of probability Pr\eqn{(l<X<u)} }
-#' \item{\code{relErr}: }{estimated relative error of estimator}
-#' \item{\code{upbnd}: }{theoretical upper bound on true Pr\eqn{(l<X<u)} }
+#' \item \code{prob}: estimated value of probability Pr\eqn{(l<X<u)}
+#' \item \code{relErr}: estimated relative error of estimator
+#' \item \code{upbnd}: theoretical upper bound on true Pr\eqn{(l<X<u)}
 #'}
 #' @note If you want to estimate Pr\eqn{(l<Y<u)},
 #' where \eqn{Y} follows a Student distribution with \code{df} degrees of freedom,

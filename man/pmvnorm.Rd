@@ -4,7 +4,16 @@
 \alias{pmvnorm}
 \title{Distribution function of the multivariate normal distribution for arbitrary limits}
 \usage{
-pmvnorm(mu, sigma, lb = -Inf, ub = Inf, B = 10000, type = c("mc", "qmc"), ...)
+pmvnorm(
+  mu,
+  sigma,
+  lb = -Inf,
+  ub = Inf,
+  B = 10000,
+  type = c("mc", "qmc"),
+  check = TRUE,
+  ...
+)
 }
 \arguments{
 \item{mu}{vector of location parameters}
@@ -18,6 +27,8 @@ pmvnorm(mu, sigma, lb = -Inf, ub = Inf, B = 10000, type = c("mc", "qmc"), ...)
 \item{B}{number of replications for the (quasi)-Monte Carlo scheme}
 
 \item{type}{string, either of \code{mc} or \code{qmc} for Monte Carlo and quasi Monte Carlo, respectively}
+
+\item{check}{logical; if \code{TRUE} (default), the code checks that the scale matrix \code{sigma} is positive definite and symmetric}
 
 \item{...}{additional arguments, currently ignored.}
 }

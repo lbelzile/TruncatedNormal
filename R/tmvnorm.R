@@ -75,7 +75,7 @@ NULL
 #' @export
 #' @keywords internal
 dtmvnorm <- function(x, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B = 1e4, check = TRUE, ...){
-  if (any(missing(x), missing(mu), missing(sigma))) {
+  if (isTRUE(any(missing(x), missing(mu), missing(sigma)))) {
     stop("Arguments missing in function call to `dtmvnorm`")
   }
   sigma <- as.matrix(sigma)
@@ -168,15 +168,15 @@ ptmvnorm <- function(q, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B
   if(missing(ub)){
     ub <- rep(Inf, d) 
   }
-  stopifnot(all(lb < ub))
+  stopifnot(isTRUE(all(lb < ub)))
   prob <- rep(0, nrow(q))
   kst <- switch(type,
                 mc = mvNcdf(l = lb - mu, u = ub - mu, Sig = sigma, n = B)$prob,
                 qmc = mvNqmc(l = lb - mu, u = ub - mu, Sig = sigma, n = B)$prob)
   for(i in 1:nrow(q)){
-    if(all(q[i,] >= ub)){
+    if(isTRUE(all(q[i,] >= ub))){
       prob[i] <- ifelse(log, 0, 1)
-    } else if(any(q[i,] <= lb)){
+    } else if(isTRUE(any(q[i,] <= lb))){
       prob[i] <- ifelse(log, -Inf, 0)
     } else{
       pb <- switch(type,
@@ -224,7 +224,7 @@ rtmvnorm <- function(n, mu, sigma, lb, ub, check = TRUE, ...){
     ub <- rep(Inf, d) 
   }
   stopifnot(length(lb) == length(ub), length(lb) == d, lb <= ub)
-  if(!any((ub - lb) < 1e-10)){
+  if(isTRUE(!any((ub - lb) < 1e-10))){
     if(n == 1){
       as.vector(mvrandn(l = lb, u = ub, Sig = sigma, n = n, mu = mu)) 
     } else{

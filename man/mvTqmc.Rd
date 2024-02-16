@@ -20,9 +20,9 @@ mvTqmc(l, u, Sig, df, n = 1e+05)
 \value{
 a list with components
 \itemize{
-\item{\code{prob}: }{estimated value of probability Pr\eqn{(l<X<u)}}
-\item{\code{relErr}: }{estimated relative error of estimator}
-\item{\code{upbnd}: }{theoretical upper bound on true Pr\eqn{(l<X<u)} }
+\item \code{prob}: estimated value of probability Pr\eqn{(l<X<u)}
+\item \code{relErr}: estimated relative error of estimator
+\item \code{upbnd}: theoretical upper bound on true Pr\eqn{(l<X<u)}
 }
 }
 \description{

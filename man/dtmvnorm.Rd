@@ -4,7 +4,18 @@
 \alias{dtmvnorm}
 \title{Density function for the truncated multivariate normal distribution}
 \usage{
-dtmvnorm(x, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B = 10000)
+dtmvnorm(
+  x,
+  mu,
+  sigma,
+  lb,
+  ub,
+  log = FALSE,
+  type = c("mc", "qmc"),
+  B = 10000,
+  check = TRUE,
+  ...
+)
 }
 \description{
 This function returns the (log)-density of a matrix \code{x} of observations lying in the interval [\code{lb}, \code{ub}].

@@ -103,10 +103,10 @@ NumericVector varTN(NumericVector a, NumericVector b, bool check = true){
 //' @keywords internal
 //' @return a list with components
 //' \itemize{
-//' \item{\code{L}: }{Cholesky root}
-//' \item{\code{l}: }{permuted vector of lower bounds}
-//' \item{\code{u}: }{permuted vector of upper bounds}
-//' \item{\code{perm}: }{vector of integers with ordering of permutation}
+//' \item \code{L}: Cholesky root
+//' \item \code{l}: permuted vector of lower bounds
+//' \item \code{u}: permuted vector of upper bounds
+//' \item \code{perm}: vector of integers with ordering of permutation
 //' }
 //' @references Genz, A. and Bretz, F. (2009). Computations of Multivariate Normal and t Probabilities, volume 105. Springer, Dordrecht.
 //' @references Gibson G.J., Glasbey C.A. and D.A. Elton (1994).  Monte Carlo evaluation of multivariate normal integrals and sensitivity to variate ordering. In: Dimon et al., Advances in Numerical Methods and Applications, WSP, pp. 120-126.
@@ -214,10 +214,10 @@ List cholpermGB(arma::mat Sigma, NumericVector l, NumericVector u){
 //' @keywords internal
 //' @return a list with components
 //' \itemize{
-//' \item{\code{L}: }{Cholesky root}
-//' \item{\code{l}: }{permuted vector of lower bounds}
-//' \item{\code{u}: }{permuted vector of upper bounds}
-//' \item{\code{perm}: }{vector of integers with ordering of permutation}
+//' \item \code{L}: Cholesky root
+//' \item \code{l}: permuted vector of lower bounds
+//' \item \code{u}: permuted vector of upper bounds
+//' \item \code{perm}: vector of integers with ordering of permutation
 //' }
 //' @references Genz, A. and Bretz, F. (2009). Computations of Multivariate Normal and t Probabilities, volume 105. Springer, Dordrecht.
 //' @references Gibson G.J., Glasbey C.A. and D.A. Elton (1994).  Monte Carlo evaluation of multivariate normal integrals and sensitivity to variate ordering. In: Dimon et al., Advances in Numerical Methods and Applications, WSP, pp. 120-126.

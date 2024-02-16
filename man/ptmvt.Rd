@@ -4,11 +4,21 @@
 \alias{ptmvt}
 \title{Cumulative distribution function of the truncated multivariate Student distribution.}
 \usage{
-ptmvt(q, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, B = 10000)
+ptmvt(
+  q,
+  mu,
+  sigma,
+  df,
+  lb,
+  ub,
+  type = c("mc", "qmc"),
+  log = FALSE,
+  check = TRUE,
+  B = 10000,
+  ...
+)
 }
 \arguments{
-\item{q}{vector or matrix of quantiles}
-
 \item{mu}{vector of location parameters}
 
 \item{sigma}{scale matrix}
@@ -23,7 +33,11 @@ ptmvt(q, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, B = 10000)
 
 \item{log}{logical; if \code{TRUE}, probabilities and density are given on the log scale.}
 
+\item{check}{logical, if \code{TRUE} (default), check that the scale matrix \code{sigma} is positive definite and symmetric.}
+
 \item{B}{number of replications for the (quasi)-Monte Carlo scheme}
+
+\item{...}{additional arguments, currently ignored}
 }
 \description{
 This function returns the (log)-distribution function of a matrix \code{q} of observations lying in the interval [\code{lb}, \code{ub}].

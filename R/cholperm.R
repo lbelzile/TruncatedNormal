@@ -15,10 +15,10 @@
 #' @param method string indicating which method to use. Default to \code{"GGE"}
 #' @return a list with components
 #' \itemize{
-#' \item{\code{L}: }{Cholesky root}
-#' \item{\code{l}: }{permuted vector of lower bounds}
-#' \item{\code{u}: }{permuted vector of upper bounds}
-#' \item{\code{perm}: }{vector of integers with ordering of permutation}
+#' \item \code{L}: Cholesky root
+#' \item \code{l}: permuted vector of lower bounds
+#' \item \code{u}: permuted vector of upper bounds
+#' \item \code{perm}: vector of integers with ordering of permutation
 #' }
 #' @export
 #' @references Genz, A. and Bretz, F. (2009). Computations of Multivariate Normal and t Probabilities, volume 105. Springer, Dordrecht.

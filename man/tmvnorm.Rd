@@ -20,6 +20,10 @@
 
 \item{ub}{vector of upper truncation limits}
 
+\item{check}{logical; if \code{TRUE} (default), the code checks that the scale matrix \code{sigma} is positive definite and symmetric}
+
+\item{...}{additional arguments, currently ignored}
+
 \item{type}{string, either of \code{mc} or \code{qmc} for Monte Carlo and quasi Monte Carlo, respectively}
 }
 \value{

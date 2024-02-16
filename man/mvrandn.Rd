@@ -28,20 +28,20 @@ Infinite values for \eqn{l} and \eqn{u} are accepted.
 }
 \details{
 \itemize{
-\item{Bivariate normal:}{
+\item Bivariate normal:
 Suppose we wish to simulate a bivariate \eqn{X} from \eqn{N(\mu,\Sigma)}, conditional on
 \eqn{X_1-X_2<-6}. We can recast this as the problem of simulation
 of \eqn{Y} from \eqn{N(0,A\Sigma A^\top)} (for an appropriate matrix \eqn{A})
 conditional on \eqn{l-A\mu < Y < u-A\mu} and then setting \eqn{X=\mu+A^{-1}Y}.
-   See the example code below.}
- \item{Exact posterior simulation for Probit regression:}{Consider the
+   See the example code below.
+ \item Exact posterior simulation for Probit regression: Consider the
      Bayesian Probit Regression model applied to the \code{\link{lupus}} dataset.
      Let the prior for the regression coefficients \eqn{\beta} be \eqn{N(0,\nu^2 I)}. Then, to simulate from the Bayesian
      posterior exactly, we first simulate
      \eqn{Z} from \eqn{N(0,\Sigma)}, where  \eqn{\Sigma=I+\nu^2 X X^\top,}
      conditional on \eqn{Z\ge 0}. Then, we simulate the posterior regression coefficients, \eqn{\beta}, of the Probit regression
      by drawing \eqn{(\beta|Z)} from \eqn{N(C X^\top Z,C)}, where \eqn{C^{-1}=I/\nu^2+X^\top X}.
-See the example code below.}
+See the example code below.
 }
 }
 \note{

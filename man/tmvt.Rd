@@ -23,6 +23,10 @@
 \item{ub}{vector of upper truncation limits}
 
 \item{type}{string, either of \code{mc} or \code{qmc} for Monte Carlo and quasi Monte Carlo, respectively}
+
+\item{check}{logical, if \code{TRUE} (default), check that the scale matrix \code{sigma} is positive definite and symmetric.}
+
+\item{...}{additional arguments, currently ignored}
 }
 \value{
 \code{dtmvt} gives the density, \code{ptmvt} gives the distribution function, \code{rtmvt} generate random deviates.
@@ -34,7 +38,7 @@ with location vector \code{mu}, scale matrix \code{sigma}, lower truncation limi
 }
 \details{
 The truncation limits can include infinite values. The Monte Carlo (\code{type = "mc"}) uses a sample of size \code{B}, while the
-qausi Monte Carlo (\code{type = "qmc"}) uses a pointset of size \code{ceiling(n/12)} and estimates the relative error using 12 independent randomized QMC estimators. 
+qausi Monte Carlo (\code{type = "qmc"}) uses a pointset of size \code{ceiling(n/12)} and estimates the relative error using 12 independent randomized QMC estimators.
 
 \code{pmvt} computes an estimate and a deterministic upper bound of the distribution function of the multivariate normal distribution.
 Infinite values for vectors \eqn{u} and \eqn{l} are accepted. The Monte Carlo method uses sample size \eqn{n}: the larger \eqn{n}, the smaller the relative error of the estimator.

@@ -4,7 +4,7 @@
 \alias{rtmvt}
 \title{Random number generator for the truncated multivariate Student distribution.}
 \usage{
-rtmvt(n, mu, sigma, df, lb, ub)
+rtmvt(n, mu, sigma, df, lb, ub, check = TRUE, ...)
 }
 \arguments{
 \item{n}{number of observations}
@@ -18,6 +18,10 @@ rtmvt(n, mu, sigma, df, lb, ub)
 \item{lb}{vector of lower truncation limits}
 
 \item{ub}{vector of upper truncation limits}
+
+\item{check}{logical; if \code{TRUE} (default), the code checks that \code{sigma} is positive definite and symmetric}
+
+\item{...}{additional arguments for the method, currently ignored}
 }
 \description{
 This function returns a matrix of draws from a multivariate Student distribution truncated on the interval [\code{lb}, \code{ub}].

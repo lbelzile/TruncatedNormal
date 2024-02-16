@@ -4,7 +4,18 @@
 \alias{ptmvnorm}
 \title{Cumulative distribution function of the truncated multivariate normal distribution.}
 \usage{
-ptmvnorm(q, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B = 10000)
+ptmvnorm(
+  q,
+  mu,
+  sigma,
+  lb,
+  ub,
+  log = FALSE,
+  type = c("mc", "qmc"),
+  B = 10000,
+  check = TRUE,
+  ...
+)
 }
 \description{
 This function returns the (log)-distribution function of a matrix \code{q} of observations lying in the interval [\code{lb}, \code{ub}].

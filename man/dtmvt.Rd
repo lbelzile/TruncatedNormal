@@ -4,11 +4,21 @@
 \alias{dtmvt}
 \title{Density function for the truncated multivariate Student distribution}
 \usage{
-dtmvt(x, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, B = 10000)
+dtmvt(
+  x,
+  mu,
+  sigma,
+  df,
+  lb,
+  ub,
+  type = c("mc", "qmc"),
+  log = FALSE,
+  B = 10000,
+  check = TRUE,
+  ...
+)
 }
 \arguments{
-\item{x}{vector or matrix of quantiles}
-
 \item{mu}{vector of location parameters}
 
 \item{sigma}{scale matrix}
@@ -24,6 +34,10 @@ dtmvt(x, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, B = 10000)
 \item{log}{logical; if \code{TRUE}, probabilities and density are given on the log scale.}
 
 \item{B}{number of replications for the (quasi)-Monte Carlo scheme}
+
+\item{check}{logical, if \code{TRUE} (default), check that the scale matrix \code{sigma} is positive definite and symmetric.}
+
+\item{...}{additional arguments, currently ignored}
 }
 \description{
 This function returns the (log)-density of a matrix \code{x} of observations lying in the interval [\code{lb}, \code{ub}].

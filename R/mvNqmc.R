@@ -16,9 +16,9 @@
 #'  where \eqn{Y} is drawn from \eqn{N(0, A\Sigma A^\top)}.
 #' @return  a list with components
 #' \itemize{
-#' \item{\code{prob}: }{estimated value of probability Pr\eqn{(l<X<u)}}
-#' \item{\code{relErr}: }{estimated relative error of estimator}
-#' \item{\code{upbnd}: }{ theoretical upper bound on true Pr\eqn{(l<X<u)}}
+#' \item \code{prob}: estimated value of probability Pr\eqn{(l<X<u)}
+#' \item \code{relErr}: estimated relative error of estimator
+#' \item \code{upbnd}: theoretical upper bound on true Pr\eqn{(l<X<u)}
 #' }
 #' @author Zdravko I. Botev
 #' @references Z. I. Botev (2017), \emph{The Normal Law Under Linear Restrictions:
