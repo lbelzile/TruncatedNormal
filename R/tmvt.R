@@ -252,7 +252,12 @@ rtmvt <- function(n, mu, sigma, df, lb, ub, check = TRUE, ...){
                                        df = df + d - length(ind), n = n, mu = mup))
       res <- as.vector(res)
     } else{
+      if(d == 1L){
+        res <- as.vector(res)
+        res[ind] <- mvrandt(l = lb[ind], u = ub[ind], Sig = sigmap, df = df + d - length(ind), n = n, mu = mup)
+      } else{
       res[, ind] <- t(mvrandt(l = lb[ind], u = ub[ind], Sig = sigmap, df = df + d - length(ind), n = n, mu = mup))
+      }
     }
   return(res)
   }

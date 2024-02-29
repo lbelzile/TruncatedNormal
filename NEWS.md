@@ -4,6 +4,7 @@
 
 - `rtnorm` recycles arguments when `ltrunc` or `rtrunc` are length 1.
 - `*tmvt` and `*tmvnorm` now check that the scale matrix `sigma` is symmetric, positive-definite and non-degenerate (issue #8)
+- `rmvnorm` returns a vector rather than an 1 by n matrix for the unidimensional setting.
 
 ### Changes
 

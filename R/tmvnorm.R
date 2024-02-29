@@ -2,23 +2,23 @@
 # dtmvnorm, dtmvt,...
 
 #' Multivariate truncated normal distribution
-#' 
+#'
 #' Density, distribution function and random generation for the multivariate truncated normal distribution
-#' with mean vector \code{mu}, covariance matrix \code{sigma}, lower truncation limit \code{lb} and upper truncation limit \code{ub}. 
+#' with mean vector \code{mu}, covariance matrix \code{sigma}, lower truncation limit \code{lb} and upper truncation limit \code{ub}.
 #' The truncation limits can include infinite values. The Monte Carlo (\code{type = "mc"}) uses a sample of size \code{B}, while the
-#' quasi Monte Carlo (\code{type = "qmc"}) uses a pointset of size \code{ceiling(n/12)} and estimates the relative error using 12 independent randomized QMC estimators. 
-#' 
+#' quasi Monte Carlo (\code{type = "qmc"}) uses a pointset of size \code{ceiling(n/12)} and estimates the relative error using 12 independent randomized QMC estimators.
+#'
 #' @author Zdravko I. Botev, Leo Belzile (wrappers)
 #' @references Z. I. Botev (2017), \emph{The normal law under linear restrictions:
 #' simulation and estimation via minimax tilting}, Journal of the Royal
 #' Statistical Society, Series B, \bold{79} (1), pp. 1--24.
-#' 
-#' 
+#'
+#'
 #' @section Usage: \preformatted{
 #' dtmvnorm(x, mu, sigma, lb, ub, type = c("mc", "qmc"), log = FALSE, B = 1e4)
 #' ptmvnorm(q, mu, sigma, lb, ub, type = c("mc", "qmc"), log = FALSE, B = 1e4)
 #' rtmvnorm(n, mu, sigma, lb, ub)}
-#' 
+#'
 #' @name tmvnorm
 #' @param n number of observations
 #' @param x,q vector of quantiles
@@ -31,16 +31,16 @@
 #' @param check logical; if \code{TRUE} (default), the code checks that the scale matrix \code{sigma} is positive definite and symmetric
 #' @param ... additional arguments, currently ignored
 #' @param type string, either of \code{mc} or \code{qmc} for Monte Carlo and quasi Monte Carlo, respectively
-#' @return \code{dtmvnorm} gives the density, \code{ptmvnorm} and \code{pmvnorm} give the distribution function of respectively the truncated and multivariate Gaussian distribution and \code{rtmvnorm} generate random deviates. 
+#' @return \code{dtmvnorm} gives the density, \code{ptmvnorm} and \code{pmvnorm} give the distribution function of respectively the truncated and multivariate Gaussian distribution and \code{rtmvnorm} generate random deviates.
 
-#' @examples 
+#' @examples
 #' d <- 4; lb <- rep(0, d)
 #' mu <- runif(d)
 #' sigma <- matrix(0.5, d, d) + diag(0.5, d)
 #' samp <- rtmvnorm(n = 10, mu = mu, sigma = sigma, lb = lb)
 #' loglik <- dtmvnorm(samp, mu = mu, sigma = sigma, lb = lb, log = TRUE)
 #' cdf <- ptmvnorm(samp, mu = mu, sigma = sigma, lb = lb, log = TRUE, type = "q")
-#' 
+#'
 #' # Exact Bayesian Posterior Simulation Example
 #' # Vignette, example 5
 #' \dontrun{
@@ -53,7 +53,7 @@
 #' nusq <- 10000; # prior scale parameter
 #' C <- solve(diag(d)/nusq + crossprod(X))
 #' sigma <- diag(n) + nusq*tcrossprod(X) # this is covariance of Z given beta
-#' est <- pmvnorm(sigma = sigma, lb = 0) 
+#' est <- pmvnorm(sigma = sigma, lb = 0)
 #' # estimate acceptance probability of crude Monte Carlo
 #' print(attributes(est)$upbnd/est[1])
 #' # reciprocal of acceptance probability
@@ -68,9 +68,9 @@
 NULL
 
 #' Density function for the truncated multivariate normal distribution
-#' 
+#'
 #' This function returns the (log)-density of a matrix \code{x} of observations lying in the interval [\code{lb}, \code{ub}].
-#' 
+#'
 #' @seealso \code{\link{tmvnorm}}
 #' @export
 #' @keywords internal
@@ -93,7 +93,7 @@ dtmvnorm <- function(x, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B
   stop("Degenerate covariance matrix \"sigma\": marginal variances should be positive.")
   }
   if(isTRUE(any(eigen(sigma, only.values = TRUE)$values <= 0))){
-   stop("Covariance matrix \"sigma\" is not positive definite.") 
+   stop("Covariance matrix \"sigma\" is not positive definite.")
    }
   }
   if (is.vector(x)) {
@@ -103,10 +103,10 @@ dtmvnorm <- function(x, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B
     stopifnot(ncol(x) == length(mu))
   }
   if(missing(lb)){
-    lb <- rep(-Inf, d) 
+    lb <- rep(-Inf, d)
   }
   if(missing(ub)){
-    ub <- rep(Inf, d) 
+    ub <- rep(Inf, d)
   }
   ldens <- as.vector(.dmvnorm_arma(x, mu = as.vector(mu), sigma = as.matrix(sigma), logd = TRUE))
   if(!isTRUE(all.equal(as.vector(c(lb, ub)), c(rep(-Inf, d), rep(Inf, d))))){
@@ -117,20 +117,20 @@ dtmvnorm <- function(x, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B
   }
   for(i in 1:nrow(x)){
     if(any(x[i,] > ub) || any(x[i,] < lb)){
-      ldens[i] <- -Inf 
+      ldens[i] <- -Inf
     }
   }
   if(log){
-    return(ldens) 
+    return(ldens)
   } else{
     return(exp(ldens))
   }
 }
 
 #' Cumulative distribution function of the truncated multivariate normal distribution.
-#' 
+#'
 #' This function returns the (log)-distribution function of a matrix \code{q} of observations lying in the interval [\code{lb}, \code{ub}].
-#' 
+#'
 #' @seealso \code{\link{tmvnorm}}
 #' @export
 #' @keywords internal
@@ -153,7 +153,7 @@ ptmvnorm <- function(q, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B
   stop("Degenerate covariance matrix \"sigma\": marginal variances should be positive.")
   }
   if(isTRUE(any(eigen(sigma, only.values = TRUE)$values <= 0))){
-   stop("Covariance matrix \"sigma\" is not positive definite.") 
+   stop("Covariance matrix \"sigma\" is not positive definite.")
    }
   }
   if (is.vector(q)) {
@@ -163,10 +163,10 @@ ptmvnorm <- function(q, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B
     stopifnot(ncol(q) == length(mu))
   }
   if(missing(lb)){
-    lb <- rep(-Inf, d) 
+    lb <- rep(-Inf, d)
   }
   if(missing(ub)){
-    ub <- rep(Inf, d) 
+    ub <- rep(Inf, d)
   }
   stopifnot(isTRUE(all(lb < ub)))
   prob <- rep(0, nrow(q))
@@ -189,9 +189,9 @@ ptmvnorm <- function(q, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B
 }
 
 #' Random number generator for the truncated multivariate normal distribution.
-#' 
+#'
 #' This function returns a matrix of draws from a multivariate normal distribution truncated on the interval [\code{lb}, \code{ub}].
-#' 
+#'
 #' @seealso \code{\link{tmvnorm}}
 #' @export
 #' @keywords internal
@@ -201,7 +201,7 @@ rtmvnorm <- function(n, mu, sigma, lb, ub, check = TRUE, ...){
   }
   sigma <- as.matrix(sigma)
   if(missing(mu)){
-    mu <- rep(0, ncol(sigma)) 
+    mu <- rep(0, ncol(sigma))
   }
   stopifnot(length(mu) == ncol(sigma), nrow(sigma) == ncol(sigma))
   if(isTRUE(check)){
@@ -212,23 +212,27 @@ rtmvnorm <- function(n, mu, sigma, lb, ub, check = TRUE, ...){
   stop("Degenerate covariance matrix \"sigma\": marginal variances should be positive.")
   }
   if(isTRUE(any(eigen(sigma, only.values = TRUE)$values <= 0))){
-   stop("Covariance matrix \"sigma\" is not positive definite.") 
+   stop("Covariance matrix \"sigma\" is not positive definite.")
    }
   }
 
   d <- length(mu)
   if(missing(lb)){
-    lb <- rep(-Inf, d) 
+    lb <- rep(-Inf, d)
   }
   if(missing(ub)){
-    ub <- rep(Inf, d) 
+    ub <- rep(Inf, d)
   }
   stopifnot(length(lb) == length(ub), length(lb) == d, lb <= ub)
   if(isTRUE(!any((ub - lb) < 1e-10))){
     if(n == 1){
-      as.vector(mvrandn(l = lb, u = ub, Sig = sigma, n = n, mu = mu)) 
+      as.vector(mvrandn(l = lb, u = ub, Sig = sigma, n = n, mu = mu))
     } else{
-      t(mvrandn(l = lb, u = ub, Sig = sigma, n = n, mu = mu))
+      if(d > 1){ #transpose
+       t(mvrandn(l = lb, u = ub, Sig = sigma, n = n, mu = mu))
+      } else if(d == 1L){ #value returned is a vector
+        mvrandn(l = lb, u = ub, Sig = sigma, n = n, mu = mu)
+      }
     }
   } else{
     warning("Some variables have a degenerate distribution.")
@@ -240,26 +244,30 @@ rtmvnorm <- function(n, mu, sigma, lb, ub, check = TRUE, ...){
         stopifnot(c(length(ind) > 0, ncol(sigma) - length(ind) > 0))
         sigma[ind, ind, drop = FALSE] - sigma[ind, -ind, drop = FALSE] %*%
           solve(sigma[-ind, -ind, drop = FALSE]) %*% sigma[-ind, ind, drop = FALSE]
-      }  
+      }
       sigmap <- schurcomp(sigma, ind)
       mup <- c(mu[ind] + sigma[ind, -ind, drop = FALSE] %*% solve(sigma[-ind, -ind, drop = FALSE]) %*% (lb[-ind] - mu[-ind]))
       #
       res <- matrix(0, nrow = n, ncol = d)
       res[, -ind] <- rep(lb[-ind], each = n)
     if(n == 1){
-      res[, ind] <- as.vector(mvrandn(l = lb[ind], u = ub[ind], Sig = sigmap, n = n, mu = mup)) 
+      res[, ind] <- as.vector(mvrandn(l = lb[ind], u = ub[ind], Sig = sigmap, n = n, mu = mup))
       return(as.vector(res))
     } else{
+      if(d > 1){
       res[, ind] <- t(mvrandn(l = lb[ind], u = ub[ind], Sig = sigmap, n = n, mu = mup))
+      } else if(d == 1L){
+        res[, ind] <- mvrandn(l = lb[ind], u = ub[ind], Sig = sigmap, n = n, mu = mup)
+      }
     }
   }
 }
 
 #' Distribution function of the multivariate normal distribution for arbitrary limits
-#' 
+#'
 #' This function computes the distribution function of a multivariate normal distribution vector for an arbitrary rectangular region [\code{lb}, \code{ub}].
 #' \code{pmvnorm} computes an estimate and the value is returned along with a relative error and a deterministic upper bound of the distribution function of the multivariate normal distribution.
-#' Infinite values for vectors \eqn{u} and \eqn{l} are accepted. The Monte Carlo method uses sample size \eqn{n}: the larger the sample size, the smaller the relative error of the estimator. 
+#' Infinite values for vectors \eqn{u} and \eqn{l} are accepted. The Monte Carlo method uses sample size \eqn{n}: the larger the sample size, the smaller the relative error of the estimator.
 #' @author Zdravko I. Botev, Leo Belzile (wrappers)
 #' @references Z. I. Botev (2017), \emph{The normal law under linear restrictions:
 #' simulation and estimation via minimax tilting}, Journal of the Royal
@@ -268,7 +276,7 @@ rtmvnorm <- function(n, mu, sigma, lb, ub, check = TRUE, ...){
 #' @seealso \code{\link[mvtnorm]{pmvnorm}}
 #' @param ... additional arguments, currently ignored.
 #' @export
-#' @examples 
+#' @examples
 #' #From mvtnorm
 #' mean <- rep(0, 5)
 #' lower <- rep(-1, 5)
@@ -295,7 +303,7 @@ pmvnorm <- function(mu, sigma, lb = -Inf, ub = Inf, B = 1e4, type = c("mc", "qmc
     ub <- ub - mu
   }
   if(missing(sigma)){
-    sigma <- diag(1, length(lb)) 
+    sigma <- diag(1, length(lb))
   } else if(isTRUE(check)){
    if(!isSymmetric(sigma)){
    stop("Covariance matrix \"sigma\" must be symmetric")
@@ -304,7 +312,7 @@ pmvnorm <- function(mu, sigma, lb = -Inf, ub = Inf, B = 1e4, type = c("mc", "qmc
   stop("Degenerate covariance matrix \"sigma\": marginal variances should be positive.")
   }
   if(isTRUE(any(eigen(sigma, only.values = TRUE)$values <= 0))){
-   stop("Covariance matrix \"sigma\" is not positive definite.") 
+   stop("Covariance matrix \"sigma\" is not positive definite.")
    }
   }
   integ <- switch(type,
