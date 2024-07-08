@@ -1,18 +1,18 @@
-## Version 2.4
+## Version 2.3
 
 ### Bug fixes
 
+- `rtnorm` now checks arguments length and throw an error rather than try to recycle mean and standard deviation vectors (issue #6).
 - `rtnorm` recycles arguments when `ltrunc` or `rtrunc` are length 1.
-- `*tmvt` and `*tmvnorm` now check that the scale matrix `sigma` is symmetric, positive-definite and non-degenerate (issue #8)
+- `*tmvt` and `*tmvnorm` now check that the scale matrix `sigma` is symmetric, positive-definite and non-degenerate (issue #8) by default.
 - `rmvnorm` returns a vector rather than an 1 by n matrix for the unidimensional setting.
+- Degrees of freedom larger than 350 are not treated as infinite, as the code suffers from overflow and returns missing values otherwise.
 
 ### Changes
 
 - The package uses `tinytest` rather than `testthat` for unit tests.
-
-## Version 2.3
-
-- `rtnorm` now checks arguments length and throw an error rather than try to recycle mean and standard deviation vectors.
+- Since scrambling is disabled in `randtoolbox` (throwing warning messages), the package now relies on the `qrng` package and the Owen scrambling method from `spacefillr` package for quasi Monte Carlo.
+- Added alias in package documentation, as requested by Kurt Hornik.
 
 ## Version 2.2.2
 

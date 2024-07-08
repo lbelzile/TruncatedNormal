@@ -54,7 +54,7 @@ lnNpr <- function(a, b, check = TRUE) {
     .Call(`_TruncatedNormal_lnNpr`, a, b, check)
 }
 
-#' Cholesky matrix decomposition with GGE ordering
+#' Cholesky matrix decomposition with GB ordering
 #' 
 #' This function computes the Cholesky decomposition of a covariance matrix
 #' \code{Sigma} and returns a list containing the permuted bounds for integration. 

@@ -28,7 +28,7 @@ Computes an estimate and a deterministic upper bound of the probability Pr\eqn{(
 where \eqn{X} is a zero-mean multivariate normal vector
 with covariance matrix \eqn{\Sigma}, that is, \eqn{X} is drawn from \eqn{N(0,\Sigma)}.
 Infinite values for vectors \eqn{u} and \eqn{l} are accepted.
-The Monte Carlo method uses sample size \eqn{n}: 
+The Monte Carlo method uses sample size \eqn{n}:
 the larger \eqn{n}, the smaller the relative error of the estimator.
 }
 \details{
@@ -48,10 +48,10 @@ For high dimensions, say \eqn{d>50}, you may obtain the same accuracy using
 the (typically faster) \code{\link{mvNcdf}}.
 }
 \examples{
-d <- 15 
+d <- 15
 l <- 1:d
 u <- rep(Inf, d)
-Sig <- matrix(rnorm(d^2), d, d)*2 
+Sig <- matrix(rnorm(d^2), d, d)*2
 Sig <- Sig \%*\% t(Sig)
 mvNqmc(l, u, Sig, 1e4) # compute the probability
 }

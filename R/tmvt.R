@@ -145,7 +145,7 @@ ptmvt <- function(q, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, 
   }
   type <- match.arg(type)
   df <- as.vector(df)[1]
-  if(isTRUE(all.equal(df, 0)) || isTRUE(all.equal(df, Inf))){
+  if(isTRUE(all.equal(df, 0)) || df > 350){
     return(ptmvnorm(q = q, mu = mu, sigma = sigma, lb = lb, ub = ub, B = B, log = log, type = type))
   }
   stopifnot(df > 0, length(mu) == ncol(sigma), nrow(sigma) == ncol(sigma), is.logical(log))

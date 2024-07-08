@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{.cholpermGB}
 \alias{.cholpermGB}
-\title{Cholesky matrix decomposition with GGE ordering}
+\title{Cholesky matrix decomposition with GB ordering}
 \usage{
 .cholpermGB(Sigma, l, u)
 }

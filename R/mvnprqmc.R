@@ -9,14 +9,17 @@ mvnprqmc <- function(n, L, l, u, mu){
     if(n*(d-1) > 2e7){
       warning("High memory requirements for storage of QMC sequence\nConsider reducing n")
     }
-    x <- as.matrix(randtoolbox::sobol(n, dim = d-1, init =TRUE, scrambling = 1, seed=ceiling(1e6*runif(1))))
+    x <- as.matrix(qrng::sobol(n,
+                               d = d-1,
+                               randomize = "Owen",
+                               seed = ceiling(1e6*runif(1))))
     ## Similar option in fOptions package. Problem: sobol sequence can overflow (values above 1).
     # x <- qrng::sobol(n = n, d = d - 1, randomize = TRUE)
     p <- 0
     for (k in 1:(d-1)){
       # compute matrix multiplication L*Z
       if(k > 1){
-        col <- crossprod(L[k, 1:(k-1)], Z[1:(k-1),]) 
+        col <- crossprod(L[k, 1:(k-1)], Z[1:(k-1),])
       } else{
         col <- rep(0, n)
       }

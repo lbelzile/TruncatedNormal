@@ -10,8 +10,11 @@ mvtprqmc <- function(n, L, l, u, nu, mu){
   if(n*(d-1) > 2e7){
     warning("High memory requirements for storage of QMC sequence\nConsider reducing n")
   }
-  x <- as.matrix(randtoolbox::sobol(n, dim = d - 1, init = TRUE, scrambling = 1, seed = ceiling(1e6 * runif(1))))
-  # x <- as.matrix(qrng::sobol(n = n, d = d - 1, randomize = TRUE))
+  # x <- as.matrix(randtoolbox::sobol(n, dim = d - 1, init = TRUE, scrambling = 1, seed = ceiling(1e6 * runif(1))))
+  x <- as.matrix(qrng::sobol(n = n,
+                             d = d - 1,
+                             randomize = "digital.shift",
+                             seed = ceiling(1e6 * runif(1))))
   #Fixed 21.03.2018 to ensure that if d=2, no error returned
   # Monte Carlo uses 'n' samples;
   # precompute constants

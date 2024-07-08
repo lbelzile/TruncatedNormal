@@ -5,10 +5,11 @@
 #' where \eqn{X} is a zero-mean multivariate normal vector
 #' with covariance matrix \eqn{\Sigma}, that is, \eqn{X} is drawn from \eqn{N(0,\Sigma)}.
 #' Infinite values for vectors \eqn{u} and \eqn{l} are accepted.
-#' The Monte Carlo method uses sample size \eqn{n}: 
+#' The Monte Carlo method uses sample size \eqn{n}:
 #' the larger \eqn{n}, the smaller the relative error of the estimator.
 #'
 #' @inheritParams mvNcdf
+#' @importFrom spacefillr generate_sobol_owen_set
 #' @details Suppose you wish to estimate Pr\eqn{(l<AX<u)},
 #'  where \eqn{A} is a full rank matrix
 #'  and \eqn{X} is drawn from \eqn{N(\mu,\Sigma)}, then you simply compute
@@ -37,10 +38,10 @@
 #' @export
 #' @keywords internal
 #' @examples
-#' d <- 15 
+#' d <- 15
 #' l <- 1:d
 #' u <- rep(Inf, d)
-#' Sig <- matrix(rnorm(d^2), d, d)*2 
+#' Sig <- matrix(rnorm(d^2), d, d)*2
 #' Sig <- Sig %*% t(Sig)
 #' mvNqmc(l, u, Sig, 1e4) # compute the probability
 mvNqmc <- function(l, u, Sig, n = 1e5){
@@ -53,10 +54,10 @@ mvNqmc <- function(l, u, Sig, n = 1e5){
       return(list(prob = exp(lnNpr(a = l / sqrt(Sig[1]), b = u / sqrt(Sig[1]))), err = NA, relErr = NA, upbnd = NA))
     }
     # Cholesky decomposition of matrix
-    out <- cholperm(Sig, l, u) 
-    L <- out$L 
-    l <- out$l 
-    u <- out$u 
+    out <- cholperm(Sig, l, u)
+    L <- out$L
+    l <- out$l
+    u <- out$u
     D <- diag(L)
     if (any(D < 1e-10)){
       warning('Method may fail as covariance matrix is singular!')
@@ -67,11 +68,11 @@ mvNqmc <- function(l, u, Sig, n = 1e5){
     diag(L) <- rep(0, d) # remove diagonal
   # find optimal tilting parameter via non-linear equation solver
   x0 <- rep(0, 2 * length(l) - 2)
-  solvneq <- nleqslv::nleqslv(x0, 
-                              fn = gradpsi, 
+  solvneq <- nleqslv::nleqslv(x0,
+                              fn = gradpsi,
                               jac = jacpsi,
-                              L = L, l = l, u = u, 
-                              global = "pwldog", 
+                              L = L, l = l, u = u,
+                              global = "pwldog",
                               method = "Newton",
                               control = list(maxit = 500L))
   xmu <- solvneq$x
@@ -82,7 +83,7 @@ mvNqmc <- function(l, u, Sig, n = 1e5){
   }
   # assign saddlepoint x* and mu*
   x <- xmu[1:(d-1)]
-  mu <- xmu[d:(2*d-2)] 
+  mu <- xmu[d:(2*d-2)]
   # check the constraints
   if(any((out$L %*% c(x,0) - out$u)[-d] > 0, (-out$L %*% c(x,0) + out$l)[-d] > 0)){
    warning("Solution to exponential tilting problem using Powell's dogleg method \n  does not lie in convex set l < Lx < u.")
@@ -103,9 +104,9 @@ mvNqmc <- function(l, u, Sig, n = 1e5){
                   control.outer = list(trace = FALSE,method="nlminb"))
     if(solvneqc$convergence == 0){
       x <- solvneqc$par[1:(d-1)]
-      mu <- solvneqc$par[d:(2*d-2)] 
+      mu <- solvneqc$par[d:(2*d-2)]
     } else{
-      stop('Did not find a solution to the nonlinear system in `mvNqmc`!') 
+      stop('Did not find a solution to the nonlinear system in `mvNqmc`!')
     }
   }
   p <- rep(0, 12)
