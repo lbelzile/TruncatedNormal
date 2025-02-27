@@ -11,7 +11,7 @@ pmvnorm(
   ub = Inf,
   B = 10000,
   type = c("mc", "qmc"),
-  check = TRUE,
+  check = FALSE,
   ...
 )
 }

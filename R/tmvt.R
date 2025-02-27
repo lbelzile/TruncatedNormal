@@ -52,7 +52,7 @@ NULL
 #' @export
 #' @inheritParams tmvt
 #' @keywords internal
-dtmvt <- function(x, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, B = 1e4, check = TRUE, ...){
+dtmvt <- function(x, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, B = 1e4, check = FALSE, ...){
   if (isTRUE(any(missing(x), missing(sigma), missing(df)))) {
     stop("Arguments missing in function call to `dtmvnorm`")
   }
@@ -117,7 +117,7 @@ dtmvt <- function(x, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, 
 #' @export
 #' @inheritParams tmvt
 #' @keywords internal
-ptmvt <- function(q, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, check = TRUE, B = 1e4, ...){
+ptmvt <- function(q, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, check = FALSE, B = 1e4, ...){
   if (isTRUE(any(missing(q), missing(sigma), missing(df)))) {
     stop("Arguments missing in function call to `ptmvt`")
   }
@@ -191,7 +191,7 @@ ptmvt <- function(q, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, 
 #' @export
 #' @inheritParams tmvt
 #' @keywords internal
-rtmvt <- function(n, mu, sigma, df, lb, ub, check = TRUE, ...){
+rtmvt <- function(n, mu, sigma, df, lb, ub, check = FALSE, ...){
   if (isTRUE(any(missing(sigma), missing(df)))) {
     stop("Arguments missing in function call to `rtmvt`")
   }
@@ -288,7 +288,7 @@ rtmvt <- function(n, mu, sigma, df, lb, ub, check = TRUE, ...){
 #' # mvtnorm::pmvt(lower = rep(-1,d), upper = rep(Inf, d), df = 10, sigma = sigma)[1]
 #' pmvt(lb = rep(-1, d), ub = rep(Inf, d), sigma = sigma, df = 10)
 #' }
-pmvt  <- function(mu, sigma, df, lb = -Inf, ub = Inf, type = c("mc", "qmc"), B = 1e4, check = TRUE, ...){
+pmvt  <- function(mu, sigma, df, lb = -Inf, ub = Inf, type = c("mc", "qmc"), B = 1e4, check = FALSE, ...){
   #Dec 30, 2020 - remove argument log that is ignored.
   args <- list(...)
   if(!is.null(args$log)){

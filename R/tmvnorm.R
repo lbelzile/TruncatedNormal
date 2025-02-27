@@ -74,7 +74,7 @@ NULL
 #' @seealso \code{\link{tmvnorm}}
 #' @export
 #' @keywords internal
-dtmvnorm <- function(x, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B = 1e4, check = TRUE, ...){
+dtmvnorm <- function(x, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B = 1e4, check = FALSE, ...){
   if (isTRUE(any(missing(x), missing(mu), missing(sigma)))) {
     stop("Arguments missing in function call to `dtmvnorm`")
   }
@@ -134,7 +134,7 @@ dtmvnorm <- function(x, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B
 #' @seealso \code{\link{tmvnorm}}
 #' @export
 #' @keywords internal
-ptmvnorm <- function(q, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B = 1e4, check = TRUE, ...){
+ptmvnorm <- function(q, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B = 1e4, check = FALSE, ...){
   if (any(missing(q), missing(sigma))) {
     stop("Arguments missing in function call to `ptmvnorm`")
   }
@@ -195,7 +195,7 @@ ptmvnorm <- function(q, mu, sigma, lb, ub, log = FALSE, type = c("mc", "qmc"), B
 #' @seealso \code{\link{tmvnorm}}
 #' @export
 #' @keywords internal
-rtmvnorm <- function(n, mu, sigma, lb, ub, check = TRUE, ...){
+rtmvnorm <- function(n, mu, sigma, lb, ub, check = FALSE, ...){
   if (missing(sigma)) {
     stop("Arguments missing in function call to `rtmvnorm`")
   }
@@ -284,7 +284,7 @@ rtmvnorm <- function(n, mu, sigma, lb, ub, check = TRUE, ...){
 #' corr <- matrix(0.5, 5, 5) + diag(0.5, 5)
 #' prob <- pmvnorm(lb = lower, ub = upper, mu = mean, sigma = corr)
 #' stopifnot(pmvnorm(lb = -Inf, ub = 3, mu = 0, sigma = 1) == pnorm(3))
-pmvnorm <- function(mu, sigma, lb = -Inf, ub = Inf, B = 1e4, type = c("mc", "qmc"), check = TRUE, ...){
+pmvnorm <- function(mu, sigma, lb = -Inf, ub = Inf, B = 1e4, type = c("mc", "qmc"), check = FALSE, ...){
   #Dec 30, 2020 - remove argument log that is ignored.
   args <- list(...)
   if(!is.null(args$log)){

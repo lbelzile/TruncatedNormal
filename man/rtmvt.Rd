@@ -4,7 +4,7 @@
 \alias{rtmvt}
 \title{Random number generator for the truncated multivariate Student distribution.}
 \usage{
-rtmvt(n, mu, sigma, df, lb, ub, check = TRUE, ...)
+rtmvt(n, mu, sigma, df, lb, ub, check = FALSE, ...)
 }
 \arguments{
 \item{n}{number of observations}

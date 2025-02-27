@@ -13,7 +13,7 @@ ptmvt(
   ub,
   type = c("mc", "qmc"),
   log = FALSE,
-  check = TRUE,
+  check = FALSE,
   B = 10000,
   ...
 )

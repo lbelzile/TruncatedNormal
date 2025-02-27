@@ -40,25 +40,25 @@ mvrandt <- function (l, u, Sig, df, n, mu = NULL)
     #Inverse CDF method
     if(l > 0){
       if(is.null(mu)){
-        return( std.dev * (-qt( pt(l/std.dev, df = df, lower.tail = FALSE) - runif(n) * 
-                                  (pt(l/std.dev, df = df, lower.tail = FALSE) - pt(u/std.dev, 
-                                                                                   df = df, lower.tail = FALSE)), df = df))) 
+        return( std.dev * (-qt( pt(l/std.dev, df = df, lower.tail = FALSE) - runif(n) *
+                                  (pt(l/std.dev, df = df, lower.tail = FALSE) - pt(u/std.dev,
+                                                                                   df = df, lower.tail = FALSE)), df = df)))
       } else{
-        return( std.dev * (-qt( pt(l/std.dev, df = df, lower.tail = FALSE) - runif(n) * 
-                                (pt(l/std.dev, df = df, lower.tail = FALSE) - pt(u/std.dev, 
+        return( std.dev * (-qt( pt(l/std.dev, df = df, lower.tail = FALSE) - runif(n) *
+                                (pt(l/std.dev, df = df, lower.tail = FALSE) - pt(u/std.dev,
                                                                                  df = df, lower.tail = FALSE)), df = df)) + mu)
       }
     } else{
       if(is.null(mu)){
-        return(std.dev * (qt(pt(l/std.dev, df = df) + runif(n) * 
-                             (pt(u/std.dev, df = df) - pt(l/std.dev, df = df)), df = df)))         
+        return(std.dev * (qt(pt(l/std.dev, df = df) + runif(n) *
+                             (pt(u/std.dev, df = df) - pt(l/std.dev, df = df)), df = df)))
       } else{
-        return(std.dev * (qt(pt(l/std.dev, df = df) + runif(n) * 
-                               (pt(u/std.dev, df = df) - pt(l/std.dev, df = df)), df = df)) + mu)     
+        return(std.dev * (qt(pt(l/std.dev, df = df) + runif(n) *
+                               (pt(u/std.dev, df = df) - pt(l/std.dev, df = df)), df = df)) + mu)
       }
     }
   }
-  
+
   out <- cholperm(Sig, l, u)
   Lfull = out$L
   l = out$l
@@ -76,7 +76,7 @@ mvrandt <- function (l, u, Sig, df, n, mu = NULL)
   x0 <- rep(0, 2*d); x0[2*d] <- sqrt(df); x0[d] <- log(x0[2*d])
   solvneq <- nleqslv::nleqslv(x = x0, fn = gradpsiT, L = L, l = l, u = u, nu = df,
                               global = "pwldog", method = "Broyden", control = list(maxit = 500L))
-  
+
   soln <- solvneq$x
   #fval <- solvneq$fvec
   exitflag <- solvneq$termcd
@@ -134,8 +134,8 @@ mvrandt <- function (l, u, Sig, df, n, mu = NULL)
   Z = Z[order, ]
   #Add back mean only if non-zero
   if(!is.null(mu)){
-    return(t(sqrt(df)*t(Z)/R) + mu)
+    return(t(sweep(sqrt(df)*t(Z)/R, 2, mu,"+")))
   } else{
-    return(t(sqrt(df)*t(Z)/R)) 
+    return(t(sqrt(df)*t(Z)/R))
   }
 }

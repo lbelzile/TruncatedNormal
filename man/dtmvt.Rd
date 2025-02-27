@@ -14,7 +14,7 @@ dtmvt(
   type = c("mc", "qmc"),
   log = FALSE,
   B = 10000,
-  check = TRUE,
+  check = FALSE,
   ...
 )
 }

@@ -12,7 +12,7 @@ pmvt(
   ub = Inf,
   type = c("mc", "qmc"),
   B = 10000,
-  check = TRUE,
+  check = FALSE,
   ...
 )
 }

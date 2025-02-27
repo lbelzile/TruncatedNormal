@@ -4,7 +4,7 @@
 \alias{rtmvnorm}
 \title{Random number generator for the truncated multivariate normal distribution.}
 \usage{
-rtmvnorm(n, mu, sigma, lb, ub, check = TRUE, ...)
+rtmvnorm(n, mu, sigma, lb, ub, check = FALSE, ...)
 }
 \description{
 This function returns a matrix of draws from a multivariate normal distribution truncated on the interval [\code{lb}, \code{ub}].
