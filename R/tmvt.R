@@ -52,31 +52,59 @@ NULL
 #' @export
 #' @inheritParams tmvt
 #' @keywords internal
-dtmvt <- function(x, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, B = 1e4, check = FALSE, ...){
+dtmvt <- function(
+  x,
+  mu,
+  sigma,
+  df,
+  lb,
+  ub,
+  type = c("mc", "qmc"),
+  log = FALSE,
+  B = 1e4,
+  check = FALSE,
+  ...
+) {
   if (isTRUE(any(missing(x), missing(sigma), missing(df)))) {
     stop("Arguments missing in function call to `dtmvnorm`")
   }
   sigma <- as.matrix(sigma)
-  if(missing(mu)){
+  if (missing(mu)) {
     mu <- rep(0, length.out = ncol(sigma))
   }
   d <- length(mu)
   type <- match.arg(type)
   df <- as.vector(df)[1]
-  if(isTRUE(all.equal(df, 0)) || isTRUE(all.equal(df, Inf))){
-    return(dtmvnorm(x = x, mu = mu, sigma = sigma, lb = lb, ub = ub, B = B, log = log, type = type))
+  if (isTRUE(all.equal(df, 0)) || isTRUE(all.equal(df, Inf))) {
+    return(dtmvnorm(
+      x = x,
+      mu = mu,
+      sigma = sigma,
+      lb = lb,
+      ub = ub,
+      B = B,
+      log = log,
+      type = type
+    ))
   }
-  stopifnot(df > 0, length(mu) == ncol(sigma), nrow(sigma) == ncol(sigma), is.logical(log))
-  if(isTRUE(check)){
-   if(!isSymmetric(sigma)){
-   stop("Covariance matrix \"sigma\" must be symmetric")
-  }
-  if(isTRUE(any(diag(sigma) <= 0))){
-  stop("Degenerate covariance matrix \"sigma\": marginal variances should be positive.")
-  }
-  if(isTRUE(any(eigen(sigma, only.values = TRUE)$values <= 0))){
-   stop("Covariance matrix \"sigma\" is not positive definite.")
-   }
+  stopifnot(
+    df > 0,
+    length(mu) == ncol(sigma),
+    nrow(sigma) == ncol(sigma),
+    is.logical(log)
+  )
+  if (isTRUE(check)) {
+    if (!isSymmetric(sigma)) {
+      stop("Covariance matrix \"sigma\" must be symmetric")
+    }
+    if (isTRUE(any(diag(sigma) <= 0))) {
+      stop(
+        "Degenerate covariance matrix \"sigma\": marginal variances should be positive."
+      )
+    }
+    if (isTRUE(any(eigen(sigma, only.values = TRUE)$values <= 0))) {
+      stop("Covariance matrix \"sigma\" is not positive definite.")
+    }
   }
   if (is.vector(x)) {
     stopifnot(length(x) == length(mu))
@@ -84,27 +112,35 @@ dtmvt <- function(x, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, 
   } else {
     stopifnot(ncol(x) == length(mu))
   }
-  if(missing(lb)){
+  if (missing(lb)) {
     lb <- rep(-Inf, d)
   }
-  if(missing(ub)){
+  if (missing(ub)) {
     ub <- rep(Inf, d)
   }
-  ldens <- as.vector(TruncatedNormal::.dmvt_arma(x, mu = as.vector(mu), df = df, sigma = as.matrix(sigma), logd = TRUE))
-  if(!isTRUE(all.equal(as.vector(c(lb, ub)), c(rep(-Inf, d), rep(Inf, d))))){
-    kst <- switch(type,
-                  mc = mvTcdf(l = lb - mu, u = ub - mu, df = df, Sig = sigma, n = B)$prob,
-                  qmc = mvTqmc(l = lb - mu, u = ub - mu, df = df, Sig = sigma, n = B)$prob)
+  ldens <- as.vector(TruncatedNormal::.dmvt_arma(
+    x,
+    mu = as.vector(mu),
+    df = df,
+    sigma = as.matrix(sigma),
+    logd = TRUE
+  ))
+  if (!isTRUE(all.equal(as.vector(c(lb, ub)), c(rep(-Inf, d), rep(Inf, d))))) {
+    kst <- switch(
+      type,
+      mc = mvTcdf(l = lb - mu, u = ub - mu, df = df, Sig = sigma, n = B)$prob,
+      qmc = mvTqmc(l = lb - mu, u = ub - mu, df = df, Sig = sigma, n = B)$prob
+    )
     ldens <- ldens - log(kst)
   }
-  for(i in 1:nrow(x)){
-    if(isTRUE(any(x[i,] > ub) || any(x[i,] < lb))){
+  for (i in 1:nrow(x)) {
+    if (isTRUE(any(x[i, ] > ub) || any(x[i, ] < lb))) {
       ldens[i] <- -Inf
     }
   }
-  if(log){
+  if (log) {
     return(ldens)
-  } else{
+  } else {
     return(exp(ldens))
   }
 }
@@ -117,38 +153,66 @@ dtmvt <- function(x, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, 
 #' @export
 #' @inheritParams tmvt
 #' @keywords internal
-ptmvt <- function(q, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, check = FALSE, B = 1e4, ...){
+ptmvt <- function(
+  q,
+  mu,
+  sigma,
+  df,
+  lb,
+  ub,
+  type = c("mc", "qmc"),
+  log = FALSE,
+  check = FALSE,
+  B = 1e4,
+  ...
+) {
   if (isTRUE(any(missing(q), missing(sigma), missing(df)))) {
     stop("Arguments missing in function call to `ptmvt`")
   }
   sigma <- as.matrix(sigma)
-  if(missing(mu)){
+  if (missing(mu)) {
     mu <- rep(0, length.out = ncol(sigma))
   }
   d <- length(mu)
-  if(missing(lb)){
+  if (missing(lb)) {
     lb <- rep(-Inf, d)
   }
-  if(missing(ub)){
+  if (missing(ub)) {
     ub <- rep(Inf, d)
   }
-  if(isTRUE(check)){
-   if(!isSymmetric(sigma)){
-   stop("Covariance matrix \"sigma\" must be symmetric")
-  }
-  if(isTRUE(any(diag(sigma) <= 0))){
-  stop("Degenerate covariance matrix \"sigma\": marginal variances should be positive.")
-  }
-  if(isTRUE(any(eigen(sigma, only.values = TRUE)$values <= 0))){
-   stop("Covariance matrix \"sigma\" is not positive definite.")
-   }
+  if (isTRUE(check)) {
+    if (!isSymmetric(sigma)) {
+      stop("Covariance matrix \"sigma\" must be symmetric")
+    }
+    if (isTRUE(any(diag(sigma) <= 0))) {
+      stop(
+        "Degenerate covariance matrix \"sigma\": marginal variances should be positive."
+      )
+    }
+    if (isTRUE(any(eigen(sigma, only.values = TRUE)$values <= 0))) {
+      stop("Covariance matrix \"sigma\" is not positive definite.")
+    }
   }
   type <- match.arg(type)
   df <- as.vector(df)[1]
-  if(isTRUE(all.equal(df, 0)) || df > 350){
-    return(ptmvnorm(q = q, mu = mu, sigma = sigma, lb = lb, ub = ub, B = B, log = log, type = type))
+  if (isTRUE(all.equal(df, 0)) || df > 350) {
+    return(ptmvnorm(
+      q = q,
+      mu = mu,
+      sigma = sigma,
+      lb = lb,
+      ub = ub,
+      B = B,
+      log = log,
+      type = type
+    ))
   }
-  stopifnot(df > 0, length(mu) == ncol(sigma), nrow(sigma) == ncol(sigma), is.logical(log))
+  stopifnot(
+    df > 0,
+    length(mu) == ncol(sigma),
+    nrow(sigma) == ncol(sigma),
+    is.logical(log)
+  )
   if (is.vector(q)) {
     stopifnot(length(q) == length(mu))
     q <- matrix(q, nrow = 1, ncol = length(q))
@@ -156,27 +220,43 @@ ptmvt <- function(q, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, 
     stopifnot(ncol(q) == length(mu))
   }
   d <- length(mu)
-  if(missing(lb)){
+  if (missing(lb)) {
     lb <- rep(-Inf, d)
   }
-  if(missing(ub)){
+  if (missing(ub)) {
     ub <- rep(Inf, d)
   }
   stopifnot(isTRUE(all(lb < ub)))
   prob <- rep(0, nrow(q))
-  kst <- switch(type,
-                mc = mvTcdf(l = lb - mu, u = ub - mu, df = df, Sig = sigma, n = B)$prob,
-                qmc = mvTqmc(l = lb - mu, u = ub - mu, df = df, Sig = sigma, n = B)$prob)
-  for(i in 1:nrow(q)){
-    if(isTRUE(all(q[i,] >= ub))){
+  kst <- switch(
+    type,
+    mc = mvTcdf(l = lb - mu, u = ub - mu, df = df, Sig = sigma, n = B)$prob,
+    qmc = mvTqmc(l = lb - mu, u = ub - mu, df = df, Sig = sigma, n = B)$prob
+  )
+  for (i in 1:nrow(q)) {
+    if (isTRUE(all(q[i, ] >= ub))) {
       prob[i] <- ifelse(log, 0, 1)
-    } else if(isTRUE(any(q[i,] <= lb))){
+    } else if (isTRUE(any(q[i, ] <= lb))) {
       prob[i] <- ifelse(log, -Inf, 0)
-    } else{
-      pb <- switch(type,
-                   mc = mvTcdf(l = lb - mu, u = pmin(ub, q[i,]) - mu, df = df, Sig = sigma, n = B)$prob,
-                   qmc = mvTqmc(l = lb - mu, u = pmin(ub, q[i,]) - mu, df = df, Sig = sigma, n = B)$prob)
-      prob[i] <- ifelse(log, pmin(0, log(pb) - log(kst)), pmin(1, pb/kst))
+    } else {
+      pb <- switch(
+        type,
+        mc = mvTcdf(
+          l = lb - mu,
+          u = pmin(ub, q[i, ]) - mu,
+          df = df,
+          Sig = sigma,
+          n = B
+        )$prob,
+        qmc = mvTqmc(
+          l = lb - mu,
+          u = pmin(ub, q[i, ]) - mu,
+          df = df,
+          Sig = sigma,
+          n = B
+        )$prob
+      )
+      prob[i] <- ifelse(log, pmin(0, log(pb) - log(kst)), pmin(1, pb / kst))
     }
   }
   return(prob)
@@ -191,75 +271,112 @@ ptmvt <- function(q, mu, sigma, df, lb, ub, type = c("mc", "qmc"), log = FALSE, 
 #' @export
 #' @inheritParams tmvt
 #' @keywords internal
-rtmvt <- function(n, mu, sigma, df, lb, ub, check = FALSE, ...){
+rtmvt <- function(n, mu, sigma, df, lb, ub, check = FALSE, ...) {
   if (isTRUE(any(missing(sigma), missing(df)))) {
     stop("Arguments missing in function call to `rtmvt`")
   }
   sigma <- as.matrix(sigma)
   df <- as.vector(df)[1]
-  if(isTRUE(all.equal(df, 0)) || isTRUE(all.equal(df, Inf))){
+  if (isTRUE(all.equal(df, 0)) || isTRUE(all.equal(df, Inf))) {
     return(rtmvnorm(n = n, mu = mu, sigma = sigma, lb = lb, ub = ub))
   }
-  if(missing(mu)){
+  if (missing(mu)) {
     mu <- rep(0, ncol(sigma))
   }
   stopifnot(length(mu) == ncol(sigma), nrow(sigma) == ncol(sigma))
-  if(isTRUE(check)){
-   if(!isSymmetric(sigma)){
-   stop("Scale matrix \"sigma\" must be symmetric")
+  if (isTRUE(check)) {
+    if (!isSymmetric(sigma)) {
+      stop("Scale matrix \"sigma\" must be symmetric")
+    }
+    if (isTRUE(any(diag(sigma) <= 0))) {
+      stop(
+        "Degenerate scale matrix \"sigma\": marginal variances should be positive."
+      )
+    }
+    if (isTRUE(any(eigen(sigma, only.values = TRUE)$values <= 0))) {
+      stop("Scale matrix \"sigma\" is not positive definite.")
+    }
   }
-  if(isTRUE(any(diag(sigma) <= 0))){
-  stop("Degenerate scale matrix \"sigma\": marginal variances should be positive.")
-  }
-  if(isTRUE(any(eigen(sigma, only.values = TRUE)$values <= 0))){
-   stop("Scale matrix \"sigma\" is not positive definite.")
-   }
-   }
   d <- length(mu)
-  if(missing(lb)){
+  if (missing(lb)) {
     lb <- rep(-Inf, d)
   }
-  if(missing(ub)){
+  if (missing(ub)) {
     ub <- rep(Inf, d)
   }
   stopifnot(length(lb) == length(ub), length(lb) == d, lb <= ub)
-  if(isTRUE(!any((ub - lb) < 1e-10))){
-
-    if(n == 1){
+  if (isTRUE(!any((ub - lb) < 1e-10))) {
+    if (n == 1) {
       as.vector(mvrandt(l = lb, u = ub, Sig = sigma, df = df, n = n, mu = mu))
-    } else{
+    } else {
       t(mvrandt(l = lb, u = ub, Sig = sigma, df = df, n = n, mu = mu))
     }
-  } else{
+  } else {
     warning("Some variables have a degenerate distribution.")
     ind <- which((ub - lb) >= 1e-10)
     # check covariance matrix
-    stopifnot(isSymmetric(sigma), isTRUE(all(eigen(sigma, only.values = TRUE)$value > 0)))
+    stopifnot(
+      isSymmetric(sigma),
+      isTRUE(all(eigen(sigma, only.values = TRUE)$value > 0))
+    )
     # compute conditional Gaussian
     schurcomp <- function(sigma, ind) {
       stopifnot(c(length(ind) > 0, ncol(sigma) - length(ind) > 0))
-      sigma[ind, ind, drop = FALSE] - sigma[ind, -ind, drop = FALSE] %*%
-        solve(sigma[-ind, -ind, drop = FALSE]) %*% sigma[-ind, ind, drop = FALSE]
+      sigma[ind, ind, drop = FALSE] -
+        sigma[ind, -ind, drop = FALSE] %*%
+          solve(sigma[-ind, -ind, drop = FALSE]) %*%
+          sigma[-ind, ind, drop = FALSE]
     }
-    sigmap <- c(df + t(lb[-ind] - mu[-ind]) %*% solve(sigma[-ind, -ind, drop = FALSE]) %*% (lb[-ind] - mu[-ind])) /
-      (df + d - length(ind)) * schurcomp(sigma, ind)
-    mup <- c(mu[ind] + sigma[ind, -ind, drop = FALSE] %*% solve(sigma[-ind, -ind, drop = FALSE]) %*% (lb[-ind] - mu[-ind]))
+    sigmap <- c(
+      df +
+        t(lb[-ind] - mu[-ind]) %*%
+          solve(sigma[-ind, -ind, drop = FALSE]) %*%
+          (lb[-ind] - mu[-ind])
+    ) /
+      (df + d - length(ind)) *
+      schurcomp(sigma, ind)
+    mup <- c(
+      mu[ind] +
+        sigma[ind, -ind, drop = FALSE] %*%
+          solve(sigma[-ind, -ind, drop = FALSE]) %*%
+          (lb[-ind] - mu[-ind])
+    )
     # matrix to store results
     res <- matrix(0, nrow = n, ncol = d)
     res[, -ind] <- rep(lb[-ind], each = n)
-    if(n == 1){
-      res[, ind] <-  as.vector(mvrandt(l = lb[ind], u = ub[ind], Sig = sigmap,
-                                       df = df + d - length(ind), n = n, mu = mup))
+    if (n == 1) {
+      res[, ind] <- as.vector(mvrandt(
+        l = lb[ind],
+        u = ub[ind],
+        Sig = sigmap,
+        df = df + d - length(ind),
+        n = n,
+        mu = mup
+      ))
       res <- as.vector(res)
-    } else{
-      if(d == 1L){
+    } else {
+      if (d == 1L) {
         res <- as.vector(res)
-        res[ind] <- mvrandt(l = lb[ind], u = ub[ind], Sig = sigmap, df = df + d - length(ind), n = n, mu = mup)
-      } else{
-      res[, ind] <- t(mvrandt(l = lb[ind], u = ub[ind], Sig = sigmap, df = df + d - length(ind), n = n, mu = mup))
+        res[ind] <- mvrandt(
+          l = lb[ind],
+          u = ub[ind],
+          Sig = sigmap,
+          df = df + d - length(ind),
+          n = n,
+          mu = mup
+        )
+      } else {
+        res[, ind] <- t(mvrandt(
+          l = lb[ind],
+          u = ub[ind],
+          Sig = sigmap,
+          df = df + d - length(ind),
+          n = n,
+          mu = mup
+        ))
       }
     }
-  return(res)
+    return(res)
   }
 }
 
@@ -288,39 +405,53 @@ rtmvt <- function(n, mu, sigma, df, lb, ub, check = FALSE, ...){
 #' # mvtnorm::pmvt(lower = rep(-1,d), upper = rep(Inf, d), df = 10, sigma = sigma)[1]
 #' pmvt(lb = rep(-1, d), ub = rep(Inf, d), sigma = sigma, df = 10)
 #' }
-pmvt  <- function(mu, sigma, df, lb = -Inf, ub = Inf, type = c("mc", "qmc"), B = 1e4, check = FALSE, ...){
+pmvt <- function(
+  mu,
+  sigma,
+  df,
+  lb = -Inf,
+  ub = Inf,
+  type = c("mc", "qmc"),
+  B = 1e4,
+  check = FALSE,
+  ...
+) {
   #Dec 30, 2020 - remove argument log that is ignored.
   args <- list(...)
-  if(!is.null(args$log)){
+  if (!is.null(args$log)) {
     warning("Argument `log` discontinued: the option is currently ignored")
   }
   type <- match.arg(type)
-  if(isTRUE(any(missing(df), missing(sigma)))){
+  if (isTRUE(any(missing(df), missing(sigma)))) {
     stop("Missing arguments in `pmvt`")
   }
   sigma <- as.matrix(sigma)
   lb <- rep(lb, length.out = ncol(sigma))
   ub <- rep(ub, length.out = ncol(sigma))
   stopifnot(length(lb) == length(ub))
-  if(!missing(mu)){
+  if (!missing(mu)) {
     stopifnot(length(mu) == length(lb))
     lb <- lb - mu
     ub <- ub - mu
   }
-  if(isTRUE(check)){
-   if(!isSymmetric(sigma)){
-   stop("Covariance matrix \"sigma\" must be symmetric")
+  if (isTRUE(check)) {
+    if (!isSymmetric(sigma)) {
+      stop("Covariance matrix \"sigma\" must be symmetric")
+    }
+    if (isTRUE(any(diag(sigma) <= 0))) {
+      stop(
+        "Degenerate covariance matrix \"sigma\": marginal variances should be positive."
+      )
+    }
+    if (isTRUE(any(eigen(sigma, only.values = TRUE)$values <= 0))) {
+      stop("Covariance matrix \"sigma\" is not positive definite.")
+    }
   }
-  if(isTRUE(any(diag(sigma) <= 0))){
-  stop("Degenerate covariance matrix \"sigma\": marginal variances should be positive.")
-  }
-  if(isTRUE(any(eigen(sigma, only.values = TRUE)$values <= 0))){
-   stop("Covariance matrix \"sigma\" is not positive definite.")
-   }
-  }
-  integ <- switch(type,
-                  mc = mvTcdf(l = lb, u = ub, Sig = sigma, df = df, n = B),
-                  qmc = mvTqmc(l = lb, u = ub, Sig = sigma, df = df, n = B))
+  integ <- switch(
+    type,
+    mc = mvTcdf(l = lb, u = ub, Sig = sigma, df = df, n = B),
+    qmc = mvTqmc(l = lb, u = ub, Sig = sigma, df = df, n = B)
+  )
   res <- integ$prob
   attributes(res)$relerr <- integ$relErr
   attributes(res)$upbnd <- integ$upbnd

@@ -43,14 +43,20 @@
 #' @keywords internal
 #' @author \code{Matlab} code by Zdravko Botev, \code{R} port by Leo Belzile
 #' @importFrom qrng sobol
-mvTcdf <- function(l, u, Sig, df, n = 1e5){
+mvTcdf <- function(l, u, Sig, df, n = 1e5) {
   d <- length(l)
   if (length(u) != d | d != sqrt(length(Sig)) | any(l > u)) {
     stop("The dimensions of l, u, and Sig have to match and u > l")
   }
-  if(d == 1L){
+  if (d == 1L) {
     #warning("Univariate problem not handled; using `pt`.")
-    return(list(prob = pt(q = u/sqrt(Sig[1]), df = df) - pt(q = l/sqrt(Sig[1]), df = df), err = NA, relErr = NA, upbnd = NA))
+    return(list(
+      prob = pt(q = u / sqrt(Sig[1]), df = df) -
+        pt(q = l / sqrt(Sig[1]), df = df),
+      err = NA,
+      relErr = NA,
+      upbnd = NA
+    ))
   }
   out <- cholperm(Sig, l, u)
   Lfull <- out$L
@@ -58,28 +64,40 @@ mvTcdf <- function(l, u, Sig, df, n = 1e5){
   if (any(D < 1e-10)) {
     warning("Method may fail as covariance matrix is singular!")
   }
-  L <- Lfull/D - diag(d)
-  u <- out$u/D
-  l <- out$l/D
+  L <- Lfull / D - diag(d)
+  u <- out$u / D
+  l <- out$l / D
   #Starting value
-  x0 <- rep(0, 2*d); x0[2*d] <- sqrt(df); x0[d] <- log(x0[2*d])
-  solvneq <- nleqslv::nleqslv(x = x0, fn = gradpsiT, L = L, l = l, u = u, nu = df,
-                              global = "pwldog", method = "Broyden")
+  x0 <- rep(0, 2 * d)
+  x0[2 * d] <- sqrt(df)
+  x0[d] <- log(x0[2 * d])
+  solvneq <- nleqslv::nleqslv(
+    x = x0,
+    fn = gradpsiT,
+    L = L,
+    l = l,
+    u = u,
+    nu = df,
+    global = "pwldog",
+    method = "Broyden"
+  )
   soln <- solvneq$x
   #fval <- solvneq$fvec
   exitflag <- solvneq$termcd
-  if(!(exitflag %in% 1:2) || !all.equal(solvneq$fvec, rep(0, length(x0)))){
+  if (!(exitflag %in% 1:2) || !all.equal(solvneq$fvec, rep(0, length(x0)))) {
     warning('Method may fail as covariance matrix is close to singular!')
   }
   # assign saddlepoint x* and mu*
   soln[d] <- exp(soln[d])
   x <- soln[1:d]
-  mu <- soln[(d+1):length(soln)]
+  mu <- soln[(d + 1):length(soln)]
   est <- mvtpr(n = n, L = L, l = l, u = u, nu = df, mu = mu)
   # compute psi star
   est$upbnd <- psyT(x = x, L = L, l = l, u = u, nu = df, mu = mu) # compute psi star
-  if(est$upbnd < -743){
-    warning('Natural log of probability is less than -743, yielding 0 after exponentiation!')
+  if (est$upbnd < -743) {
+    warning(
+      'Natural log of probability is less than -743, yielding 0 after exponentiation!'
+    )
   }
   est$upbnd <- exp(est$upbnd)
   return(est)

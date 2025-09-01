@@ -1,3 +1,9 @@
+## Version 2.3.1
+
+
+### Bug fixes
+
+- `rtmvt` correctly samples when a `loc` vector is provided.
 ## Version 2.3
 
 ### Bug fixes

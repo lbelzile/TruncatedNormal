@@ -44,49 +44,68 @@
 #' @export
 #' @keywords internal
 #' @author \code{Matlab} code by Zdravko I. Botev, \code{R} port by Leo Belzile
-mvTqmc <- function(l, u, Sig, df, n = 1e5){
+mvTqmc <- function(l, u, Sig, df, n = 1e5) {
   d <- length(l)
   if (length(u) != d | d != sqrt(length(Sig)) | any(l > u)) {
     stop("l, u, and Sig have to match in dimension with u>l")
   }
-  if(d == 1L){
+  if (d == 1L) {
     #warning("Univariate problem not handled; using `pt`")
-    return(list(prob = pt(q = u/sqrt(Sig[1]), df = df) - pt(q = l/sqrt(Sig[1]), df = df), err = NA, relErr = NA, upbnd = NA))
+    return(list(
+      prob = pt(q = u / sqrt(Sig[1]), df = df) -
+        pt(q = l / sqrt(Sig[1]), df = df),
+      err = NA,
+      relErr = NA,
+      upbnd = NA
+    ))
   }
-  
+
   out <- cholperm(Sig, l, u)
   D <- diag(out$L)
   if (any(D < 1e-10)) {
     warning("Method may fail as covariance matrix is singular!")
   }
-  L <- out$L/D - diag(d)
-  u <- out$u/D
-  l <- out$l/D
+  L <- out$L / D - diag(d)
+  u <- out$u / D
+  l <- out$l / D
   #Starting value
-  x0 <- rep(0, 2*d) 
-  x0[2*d] <- sqrt(df) 
-  x0[d] <- log(x0[2*d])
-  solvneq <- nleqslv::nleqslv(x = x0, fn = gradpsiT, L = L, l = l, u = u, nu = df,
-                              global = "pwldog", method = "Broyden")
+  x0 <- rep(0, 2 * d)
+  x0[2 * d] <- sqrt(df)
+  x0[d] <- log(x0[2 * d])
+  solvneq <- nleqslv::nleqslv(
+    x = x0,
+    fn = gradpsiT,
+    L = L,
+    l = l,
+    u = u,
+    nu = df,
+    global = "pwldog",
+    method = "Broyden"
+  )
   soln <- solvneq$x
   #fval <- solvneq$fvec
   exitflag <- solvneq$termcd
-  if(!(exitflag %in% c(1,2)) || !all.equal(solvneq$fvec, rep(0, length(x0)))){
+  if (
+    !(exitflag %in% c(1, 2)) || !all.equal(solvneq$fvec, rep(0, length(x0)))
+  ) {
     warning('Did not find a solution to the nonlinear system in `mvTqmc`!')
   }
   # assign saddlepoint x* and mu*
   soln[d] <- exp(soln[d])
   x <- soln[1:d]
-  mu <- soln[(d+1):length(soln)]
+  mu <- soln[(d + 1):length(soln)]
   p <- rep(0, 12)
-  for(i in 1:12){ # repeat randomized QMC
-    p[i] <- mvtprqmc(ceiling(n/12), L = L, l = l, u = u, nu = df, mu = mu)
+  for (i in 1:12) {
+    # repeat randomized QMC
+    p[i] <- mvtprqmc(ceiling(n / 12), L = L, l = l, u = u, nu = df, mu = mu)
   }
   est.prob <- mean(p) # average of QMC estimates
-  est.relErr <- sd(p)/(sqrt(12) * est.prob) # relative error
+  est.relErr <- sd(p) / (sqrt(12) * est.prob) # relative error
   est.upbnd <- psyT(x = x, L = L, l = l, u = u, nu = df, mu = mu) # compute psi star
-  if(est.upbnd < -743){
-    warning('Natural log of probability is less than -743, yielding 0 after exponentiation!')
+  if (est.upbnd < -743) {
+    warning(
+      'Natural log of probability is less than -743, yielding 0 after exponentiation!'
+    )
   }
   est.upbnd <- exp(est.upbnd)
   list(prob = est.prob, relErr = est.relErr, upbnd = est.upbnd)

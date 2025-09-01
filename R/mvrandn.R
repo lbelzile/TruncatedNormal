@@ -69,91 +69,108 @@
 #'  # distribution of the coefficients in beta
 #'  print(rowMeans(beta)) # output the posterior means
 #'  }
-mvrandn <-  function(l, u, Sig, n, mu = NULL){
-    d <- length(l); # basic input check
-    if(length(u)!=d|d!=sqrt(length(Sig))|any(l>u)){
-      stop('l, u, and Sig have to match in dimension with u>l')
-    }
-    if(!is.null(mu)){
-      l <- l - mu
-      u <- u - mu
-    }
-    #Univariate case
-    if(d == 1){
-      std.dev <- sqrt(Sig[1]) #if Sigma not declared as matrix
-      if(!is.null(mu)){
-        return(std.dev * trandn(rep(l/std.dev, n), rep(u/std.dev, n)) + mu)
-      } else{
-        return(std.dev * trandn(rep(l/std.dev, n), rep(u/std.dev, n)))
-      }
-    }
-    # Cholesky decomposition of matrix
-    out <- cholperm(as.matrix(Sig), as.numeric(l), as.numeric(u));
-    Lfull <- out$L;
-    l <- out$l;
-    u <- out$u;
-    D <- diag(Lfull);
-    perm <- out$perm;
-    if(any(D < 1e-10)){
-      warning('Method may fail as covariance matrix is singular!')
-    }
-    L <- Lfull/D;
-    u <- u/D;
-    l <- l/D; # rescale
-    L <- L - diag(d); # remove diagonal
-    # find optimal tilting parameter via non-linear equation solver
-    x0 <- rep(0, 2 * length(l) - 2)
-    solvneq <- nleqslv::nleqslv(x0, fn = gradpsi, jac = jacpsi,
-                                L = L, l = l, u = u, global = "pwldog", method = "Broyden",
-                                control = list(maxit = 500L))
-    xmu <- solvneq$x
-    exitflag <- solvneq$termcd
-    if(!(exitflag %in% c(1,2)) || !isTRUE(all.equal(solvneq$fvec, rep(0, length(x0)), tolerance = 1e-6))){
-      warning('Did not find a solution to the nonlinear system in `mvrandn`!')
-    }
-    #xmu <- nleq(l,u,L) # nonlinear equation solver (not used, 40 times slower!)
-    x <- xmu[1:(d-1)];
-    muV <- xmu[d:(2*d-2)]; # assign saddlepoint x* and mu*
-    # compute psi star
-    psistar <- psy(x, L, l, u, muV);
-    # start acceptance rejection sampling
-    Z <- matrix(0, nrow = d, ncol = n)
-    accept <- 0L; iter <- 0L; nsim <- n; ntotsim <- 0L
-    while(accept < n){ # while # of accepted is less than n
-      call <- mvnrnd(n = nsim, L = L, l = l, u = u, mu = muV);
-      ntotsim <- ntotsim + nsim
-      idx <-  rexp(nsim) > (psistar - call$logpr); # acceptance tests
-      m <- sum(idx)
-      if(m > n - accept){
-        m <- n - accept
-        idx <- which(idx)[1:m]
-      }
-      if(m > 0){
-        Z[,(accept+1):(accept+m)] <- call$Z[,idx];  # accumulate accepted
-      }
-      accept <- accept + m; # keep track of # of accepted
-      iter <- iter + 1L;  # keep track of while loop iterations
-      nsim <- min(c(1e6, n, ceiling(nsim/m)))
-      if((ntotsim > 1e4) && (accept / ntotsim < 1e-3)){ # if iterations are getting large, give warning
-        warning('Acceptance probability smaller than 0.001')
-      } else if(iter > 1e5){ # if iterations too large, seek approximation only
-        if(accept == 0){
-          stop("Could not sample from truncated Normal - check input")
-        } else if(accept > 1){
-          Z <- Z[,1:accept]
-          warning('Sample of size smaller than n returned.')
-        }
-      }
-    }
-    ## finish sampling; postprocessing
-    out = sort(perm, decreasing = FALSE, index.return = TRUE)
-    order = out$ix
-    Z = Lfull %*% Z # reverse scaling of L
-    Z = Z[order, ] # reverse the Cholesky permutation
-    
-    if(!is.null(mu)){
-      return(Z + mu)
-    } else{
-     return(Z) 
+mvrandn <- function(l, u, Sig, n, mu = NULL) {
+  d <- length(l) # basic input check
+  if (length(u) != d | d != sqrt(length(Sig)) | any(l > u)) {
+    stop('l, u, and Sig have to match in dimension with u>l')
+  }
+  if (!is.null(mu)) {
+    l <- l - mu
+    u <- u - mu
+  }
+  #Univariate case
+  if (d == 1) {
+    std.dev <- sqrt(Sig[1]) #if Sigma not declared as matrix
+    if (!is.null(mu)) {
+      return(std.dev * trandn(rep(l / std.dev, n), rep(u / std.dev, n)) + mu)
+    } else {
+      return(std.dev * trandn(rep(l / std.dev, n), rep(u / std.dev, n)))
     }
   }
+  # Cholesky decomposition of matrix
+  out <- cholperm(as.matrix(Sig), as.numeric(l), as.numeric(u))
+  Lfull <- out$L
+  l <- out$l
+  u <- out$u
+  D <- diag(Lfull)
+  perm <- out$perm
+  if (any(D < 1e-10)) {
+    warning('Method may fail as covariance matrix is singular!')
+  }
+  L <- Lfull / D
+  u <- u / D
+  l <- l / D # rescale
+  L <- L - diag(d) # remove diagonal
+  # find optimal tilting parameter via non-linear equation solver
+  x0 <- rep(0, 2 * length(l) - 2)
+  solvneq <- nleqslv::nleqslv(
+    x0,
+    fn = gradpsi,
+    jac = jacpsi,
+    L = L,
+    l = l,
+    u = u,
+    global = "pwldog",
+    method = "Broyden",
+    control = list(maxit = 500L)
+  )
+  xmu <- solvneq$x
+  exitflag <- solvneq$termcd
+  if (
+    !(exitflag %in% c(1, 2)) ||
+      !isTRUE(all.equal(solvneq$fvec, rep(0, length(x0)), tolerance = 1e-6))
+  ) {
+    warning('Did not find a solution to the nonlinear system in `mvrandn`!')
+  }
+  #xmu <- nleq(l,u,L) # nonlinear equation solver (not used, 40 times slower!)
+  x <- xmu[1:(d - 1)]
+  muV <- xmu[d:(2 * d - 2)] # assign saddlepoint x* and mu*
+  # compute psi star
+  psistar <- psy(x, L, l, u, muV)
+  # start acceptance rejection sampling
+  Z <- matrix(0, nrow = d, ncol = n)
+  accept <- 0L
+  iter <- 0L
+  nsim <- n
+  ntotsim <- 0L
+  while (accept < n) {
+    # while # of accepted is less than n
+    call <- mvnrnd(n = nsim, L = L, l = l, u = u, mu = muV)
+    ntotsim <- ntotsim + nsim
+    idx <- rexp(nsim) > (psistar - call$logpr) # acceptance tests
+    m <- sum(idx)
+    if (m > n - accept) {
+      m <- n - accept
+      idx <- which(idx)[1:m]
+    }
+    if (m > 0) {
+      Z[, (accept + 1):(accept + m)] <- call$Z[, idx] # accumulate accepted
+    }
+    accept <- accept + m # keep track of # of accepted
+    iter <- iter + 1L # keep track of while loop iterations
+    nsim <- min(c(1e6, n, ceiling(nsim / m)))
+    if ((ntotsim > 1e4) && (accept / ntotsim < 1e-3)) {
+      # if iterations are getting large, give warning
+      warning('Acceptance probability smaller than 0.001')
+    } else if (iter > 1e5) {
+      # if iterations too large, seek approximation only
+      if (accept == 0) {
+        stop("Could not sample from truncated Normal - check input")
+      } else if (accept > 1) {
+        Z <- Z[, 1:accept]
+        warning('Sample of size smaller than n returned.')
+      }
+    }
+  }
+  ## finish sampling; postprocessing
+  out = sort(perm, decreasing = FALSE, index.return = TRUE)
+  order = out$ix
+  Z = Lfull %*% Z # reverse scaling of L
+  Z = Z[order, ] # reverse the Cholesky permutation
+
+  if (!is.null(mu)) {
+    return(Z + mu)
+  } else {
+    return(Z)
+  }
+}

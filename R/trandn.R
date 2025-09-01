@@ -25,28 +25,28 @@
 #' @examples
 #' trandn(l = 1,u = Inf)
 #' trandn(l = rep(1, 10), u = rep(Inf, 10))
-trandn <-  function(l, u){
-     if(any(l>u)){
-      stop('Truncation limits have to be vectors of the same length with l<u')
-    }
-    x=rep(0,length(l));
-    a=.4; # threshold for switching between methods
-    # threshold can be tuned for maximum speed for each Matlab version
-    # three cases to consider:
-    # case 1: a<l<u
-    I <- l>a;
-    if (any(I)){
-      x[I] <- ntail(l[I], u[I]);
-    }
-    # case 2: l<u<-a
-    J <- u < (-a);
-    if (any(J)){
-      x[J] <- -ntail(-u[J],-l[J]);
-    }
-    # case 3: otherwise use inverse transform or accept-reject
-    L <- !(I|J);
-    if (any(L)){
-      x[L] <- tn(l[L],u[L]);
-    }
-    return(x)
+trandn <- function(l, u) {
+  if (any(l > u)) {
+    stop('Truncation limits have to be vectors of the same length with l<u')
   }
+  x = rep(0, length(l))
+  a = .4 # threshold for switching between methods
+  # threshold can be tuned for maximum speed for each Matlab version
+  # three cases to consider:
+  # case 1: a<l<u
+  I <- l > a
+  if (any(I)) {
+    x[I] <- ntail(l[I], u[I])
+  }
+  # case 2: l<u<-a
+  J <- u < (-a)
+  if (any(J)) {
+    x[J] <- -ntail(-u[J], -l[J])
+  }
+  # case 3: otherwise use inverse transform or accept-reject
+  L <- !(I | J)
+  if (any(L)) {
+    x[L] <- tn(l[L], u[L])
+  }
+  return(x)
+}

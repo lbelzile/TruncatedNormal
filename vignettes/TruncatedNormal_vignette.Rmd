@@ -50,7 +50,7 @@ points(rtmvnorm(n=1e2, mu = mu, sigma = sigma), col = 4)
 
 ### Example 2: Estimating the probability of rare events
 
-We can estimate numerically the probability that $\boldsymbol{X} \geq \boldsymbol{0}_d$ for $\boldsymbol{X} \sim \mathcal{N}(\boldsymbol{0}_d, 0.5\mathbf{I}_d + 0.5\mathbf{1}_d\mathbf{1}_d^\top)$, which is known and equal $(d+1)^{-1}$.
+We can estimate numerically the probability that $\boldsymbol{X} \geq \boldsymbol{0}_d$ for $\boldsymbol{X} \sim \mathcal{N}(\boldsymbol{0}_d, 0.5\mathbf{I}_d + 0.5\mathbf{1}_d\mathbf{1}_d^\top)$, which equals $(d+1)^{-1}$.
 
 ```{r rareproba}
 d <- 1000
@@ -59,8 +59,6 @@ est <- pmvnorm(sigma = sigma, lb = rep(0, d), type = "qmc", B = 1e4)
 print(est)
 #Compare est with exact value by computing relative error
 abs(est - 1/(d+1))*(d+1)
-
-
 ```
 
 ### Example 3: High-dimensional truncated Student with positive correlation

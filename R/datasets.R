@@ -1,7 +1,7 @@
 #' Latent membranous Lupus Nephritis dataset
 #'
 #' The data represents two clinical measurements (covariates), which are used to predict the occurrence of latent membranous lupus nephritis. The dataset consists of measurements on 55 patients of which 18 have been diagnosed with latent membranous lupus.
-#'  
+#'
 #' @name lupus
 #' @docType data
 #' @source The data were transcribed from Table 1, page 22, of Dyk and Meng (2001).
@@ -14,7 +14,7 @@ NULL
 #'
 #' The data are from the Panel Study of Income Dynamics (PSID) longitudinal study, 1976 wave.
 #' They give the number of work hours of married women along with socio-economic variables and the number of children.
-#'  
+#'
 #' @name mroz
 #' @docType data
 #' @source W. Greene's website, accessed 17.12.2019 at <http://www.stern.nyu.edu/~wgreene/Text/Edition7/TableF5-1.csv>.
