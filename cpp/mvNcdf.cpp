@@ -6,6 +6,68 @@ using namespace arma;
 using namespace RcppParallel;
 
 // [[Rcpp::export]]
+double psy_neg_safe(NumericVector par,
+                    NumericMatrix L,
+                    NumericVector l,
+                    NumericVector u) {
+  int d = l.size();
+  
+  NumericVector x(d), mu(d);
+  for (int i = 0; i < d - 1; i++) {
+    x[i]  = par[i];
+    mu[i] = par[d - 1 + i];
+  }
+  x[d - 1]  = 0.0;
+  mu[d - 1] = 0.0;
+  
+  try {
+    return -psy(x, L, l, u, mu);
+  } catch (...) {
+    return -1e10;
+  }
+}
+
+// [[Rcpp::export]]
+NumericVector heq_mu(NumericVector par,
+                     NumericMatrix L_nv,
+                     NumericVector l_nv,
+                     NumericVector u_nv) {
+  
+  arma::mat L = Rcpp::as<arma::mat>(L_nv);
+  arma::vec l = Rcpp::as<arma::vec>(l_nv);
+  arma::vec u = Rcpp::as<arma::vec>(u_nv);
+  
+  NumericVector g = gradpsi(par, L, l_nv, u_nv);
+  
+  int d = l.n_elem;
+  return g[ Rcpp::Range(d - 1, 2*d - 3) ];
+}
+
+// [[Rcpp::export]]
+NumericVector hin_feasible(NumericVector par,
+                           NumericMatrix L,
+                           NumericVector l,
+                           NumericVector u,
+                           NumericMatrix Lorig,
+                           NumericVector lorig,
+                           NumericVector uorig) {
+  int d = l.size();
+  
+  NumericVector x(d);
+  for (int i = 0; i < d - 1; i++) x[i] = par[i];
+  x[d - 1] = 0.0;
+  
+  NumericVector Lx = Lorig * x;
+  
+  NumericVector out(2*(d-1));
+  for (int i = 0; i < d - 1; i++) {
+    out[i]         = uorig[i] - Lx[i];
+    out[d - 1 + i] = Lx[i] - lorig[i];
+  }
+  return out;
+}
+
+// [[Rcpp::export]]
 Rcpp::List mvNcdf_cpp(Rcpp::NumericVector l, 
                       Rcpp::NumericVector u, 
                       Rcpp::NumericMatrix Sig, 
@@ -29,8 +91,6 @@ Rcpp::List mvNcdf_cpp(Rcpp::NumericVector l,
   }
   
   // Cholesky + permutation
-  // // [[Rcpp::export('.cholpermGGE')]]
-  // List cholperm(arma::mat Sigma, NumericVector l, NumericVector u)
   Rcpp::List out = cholperm(arma::mat(Sig.begin(), d, d, false), l, u);
   arma::mat L = Rcpp::as<arma::mat>(out["L"]);
   arma::vec lvec = Rcpp::as<arma::vec>(out["l"]);
@@ -65,19 +125,40 @@ Rcpp::List mvNcdf_cpp(Rcpp::NumericVector l,
   
   Rcpp::NumericVector xmu_nv = solvneq["x"];
   int exitflag = solvneq["termcd"];
-  
-  bool ok = (exitflag == 1 || exitflag == 2);
+  NumericVector fvec_nv = solvneq["fvec"];
+  bool flag = true;
+  for (int i = 0; i < fvec_nv.size(); ++i) {
+    if (std::abs(fvec_nv[i]) > 1e-6) { flag = false; break; }
+  }
+  if (!(exitflag == 1 || exitflag == 2)) flag = false;
   
   // if nleqslv failed, try auglag
-  if (!ok) {
+  if (!flag) {
     Rcpp::Environment alabama = Rcpp::Environment::namespace_env("alabama");
     Rcpp::Function auglag = alabama["auglag"];
-    Rcpp::List solvneqc = auglag(x0,
-                                 Rcpp::Named("fn") = Rcpp::InternalFunction(&psy),
-                                 Rcpp::Named("gr") = Rcpp::InternalFunction(&gradpsi),
-                                 Rcpp::Named("heq") = Rcpp::InternalFunction(&gradpsi),
-                                 Rcpp::Named("hin") = R_NilValue,
-                                 Rcpp::Named("control.outer") = Rcpp::List::create(Rcpp::Named("trace")=false));
+    
+    Rcpp::List solvneqc = auglag(
+      Rcpp::Named("par") = xmu_nv,
+      Rcpp::Named("fn")  = Rcpp::InternalFunction(&psy_neg_safe),
+      Rcpp::Named("gr")  = Rcpp::InternalFunction(&gradpsi),
+      Rcpp::Named("heq") = Rcpp::InternalFunction(&heq_mu),
+      Rcpp::Named("hin") = Rcpp::InternalFunction(&hin_feasible),
+      Rcpp::Named("L")   = L,
+      Rcpp::Named("l")   = lvec,
+      Rcpp::Named("u")   = uvec,
+      Rcpp::Named("Lorig") = out["L"],    // uses the original L
+                                Rcpp::Named("lorig") = l,           // uses the original l
+                                Rcpp::Named("uorig") = u,           // uses the original u
+                                Rcpp::Named("control.outer") =
+                                  Rcpp::List::create(
+                                    Rcpp::Named("trace") = false,
+                                    Rcpp::Named("method") = "nlminb"
+                                  )
+    );
+    
+    if (Rcpp::as<int>(solvneqc["convergence"]) != 0)
+      Rcpp::stop("Did not find a solution to the nonlinear system in `mvNcdf`!");
+    
     xmu_nv = solvneqc["par"];
   }
   
@@ -91,19 +172,13 @@ Rcpp::List mvNcdf_cpp(Rcpp::NumericVector l,
   }
   
   // call mvnpr_faster
-  // Rcpp::List mvnpr_faster(int n, const arma::mat& L,
-  // const arma::vec& l, arma::vec mu,
-  // const arma::vec& u,
-  // bool useParallel = true,
-  // int nThreads = 1)
   arma::vec mu_full = mu;
   mu_full(d-1) = 0.0;
   Rcpp::List est = mvnpr_faster(n, L, lvec, mu_full, uvec, true, numThreads);
   
-  // upper bound using psy
+  // upper bound via psy, since no difference in Cpp and R
   arma::vec x_full = x;
   x_full(d-1) = 0.0;
-  // double psy(NumericVector x, NumericMatrix L, NumericVector l, NumericVector u, NumericVector mu)
   double upbnd = std::exp(psy(Rcpp::wrap(x_full),
                               Rcpp::wrap(L),
                               Rcpp::wrap(lvec),
