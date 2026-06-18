@@ -37,14 +37,14 @@
 }
 
 #' Calculate log of Gaussian distribution function accurately
-#'
-#' This function returns the probability of a standard Gaussian variate between
+#' 
+#' This function returns the probability of a standard Gaussian variate between 
 #' the interval \code{a} and \code{b}, avoiding numerical overflow. The function is vectorized
 #' and is meant to be used only internally by the package \code{TruncatedNormal}.
-#'
+#' 
 #' @param a vector of lower bound
 #' @param b vector of upper bound
-#' @param check logical; should checks be performed?
+#' @param check logical; should checks be performed? 
 #' @return a vector of log probability.
 #' @keywords internal
 #' @useDynLib TruncatedNormal, .registration = TRUE
@@ -55,12 +55,12 @@ lnNpr <- function(a, b, check = TRUE) {
 }
 
 #' Cholesky matrix decomposition with GB ordering
-#'
+#' 
 #' This function computes the Cholesky decomposition of a covariance matrix
-#' \code{Sigma} and returns a list containing the permuted bounds for integration.
+#' \code{Sigma} and returns a list containing the permuted bounds for integration. 
 #' The prioritization of the variables follow the rule proposed in Gibson, Glasbey and Elston (1994)
 #' and reorder variables to have outermost variables with smallest expected values.
-#'
+#' 
 #' The list contains an integer vector \code{perm} with the indices of the permutation, which is such that
 #' \code{Sigma(perm, perm) == L \%*\% t(L)}.
 #' The permutation scheme is described in Genz and Bretz (2009) in Section 4.1.3, p.37.
@@ -83,12 +83,12 @@ lnNpr <- function(a, b, check = TRUE) {
 }
 
 #' Cholesky matrix decomposition with GGE ordering
-#'
+#' 
 #' This function computes the Cholesky decomposition of a covariance matrix
-#' \code{Sigma} and returns a list containing the permuted bounds for integration.
+#' \code{Sigma} and returns a list containing the permuted bounds for integration. 
 #' The prioritization of the variables follow the rule proposed in Gibson, Glasbey and Elston (1994)
 #' and reorder variables to have outermost variables with smallest expected values.
-#'
+#' 
 #' The list contains an integer vector \code{perm} with the indices of the permutation, which is such that
 #' \code{Sigma(perm, perm) == L \%*\% t(L)}.
 #' The permutation scheme is described in Genz and Bretz (2009) in Section 4.1.3, p.37.
@@ -111,10 +111,10 @@ lnNpr <- function(a, b, check = TRUE) {
 }
 
 #' Quantile of truncated Gaussian
-#'
-#' The function compute the \code{p}th quantile associated to the truncated standard Gaussian
+#' 
+#' The function compute the \code{p}th quantile associated to the truncated standard Gaussian 
 #' variate on the interval (\code{l},\code{u}).
-#'
+#' 
 #' @param p vector of probabilities
 #' @param l \code{d} vector of lower bounds
 #' @param u \code{d} vector of upper bounds

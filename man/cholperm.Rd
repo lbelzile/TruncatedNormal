@@ -26,7 +26,7 @@ a list with components
 }
 \description{
 This function computes the Cholesky decomposition of a covariance matrix
-\code{Sigma} and returns a list containing the permuted bounds for integration. 
+\code{Sigma} and returns a list containing the permuted bounds for integration.
 The prioritization of the variables follows either the rule proposed in Gibson, Glasbey and Elston (1994),
 reorder variables to have outermost variables with smallest expected values. The alternative is the scheme proposed
 in Genz and Bretz (2009) that minimizes the variance of the truncated Normal variates.

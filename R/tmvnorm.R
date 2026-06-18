@@ -342,6 +342,7 @@ rtmvnorm <- function(n, mu, sigma, lb, ub, check = FALSE, ...) {
           mu = mup
         )
       }
+      return(res)
     }
   }
 }

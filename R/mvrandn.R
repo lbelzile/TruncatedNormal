@@ -122,7 +122,9 @@ mvrandn <- function(l, u, Sig, n, mu = NULL) {
   ) {
     warning('Did not find a solution to the nonlinear system in `mvrandn`!')
   }
-  #xmu <- nleq(l,u,L) # nonlinear equation solver (not used, 40 times slower!)
+  # browser()
+  # print(xmu) # TODO remove
+  # xmu <- nleq(l,u,L) # nonlinear equation solver (not used, 40 times slower!)
   x <- xmu[1:(d - 1)]
   muV <- xmu[d:(2 * d - 2)] # assign saddlepoint x* and mu*
   # compute psi star
@@ -167,10 +169,10 @@ mvrandn <- function(l, u, Sig, n, mu = NULL) {
   order = out$ix
   Z = Lfull %*% Z # reverse scaling of L
   Z = Z[order, ] # reverse the Cholesky permutation
-
+  # print(accept / ntotsim)
   if (!is.null(mu)) {
-    return(Z + mu)
-  } else {
-    return(Z)
+    Z <- Z + mu
   }
+  attr(Z, which = "acceptance") <- accept / ntotsim
+  return(Z)
 }

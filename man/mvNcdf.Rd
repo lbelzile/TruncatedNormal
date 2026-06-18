@@ -25,10 +25,10 @@ a list with components
 }
 \description{
 Computes an estimate and a deterministic upper bound of the probability Pr\eqn{(l<X<u)},
-where \eqn{X} is a zero-mean multivariate normal vector 
+where \eqn{X} is a zero-mean multivariate normal vector
 with covariance matrix \eqn{\Sigma}, that is, \eqn{X} is drawn from \eqn{N(0,\Sigma)}.
-Infinite values for vectors \eqn{u} and \eqn{l} are accepted. 
-The Monte Carlo method uses sample size \eqn{n}; 
+Infinite values for vectors \eqn{u} and \eqn{l} are accepted.
+The Monte Carlo method uses sample size \eqn{n};
 the larger \eqn{n}, the smaller the relative error of the estimator.
 }
 \details{
@@ -39,13 +39,13 @@ Suppose you wish to estimate Pr\eqn{(l<AX<u)},
  where \eqn{Y} is drawn from \eqn{N(0, A\Sigma A^\top)}.
 }
 \note{
-For small dimensions, say \eqn{d<50}, better accuracy may be obtained by using 
+For small dimensions, say \eqn{d<50}, better accuracy may be obtained by using
 the (usually slower) quasi-Monte Carlo version  \code{\link{mvNqmc}} of this algorithm.
 }
 \examples{
 d <- 15; l <- 1:d; u <- rep(Inf, d);
 Sig <- matrix(rnorm(d^2), d, d)*2; Sig=Sig \%*\% t(Sig)
-mvNcdf(l, u, Sig, 1e4) # compute the probability 
+mvNcdf(l, u, Sig, 1e4) # compute the probability
 }
 \references{
 Z. I. Botev (2017), \emph{The Normal Law Under Linear Restrictions:

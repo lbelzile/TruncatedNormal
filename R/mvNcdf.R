@@ -74,7 +74,7 @@ mvNcdf <- function(l, u, Sig, n = 1e5) {
     l = l,
     u = u,
     global = "pwldog",
-    method = "Broyden",
+    method = "Newton",
     control = list(maxit = 500L)
   )
   xmu <- solvneq$x
@@ -131,9 +131,13 @@ mvNcdf <- function(l, u, Sig, n = 1e5) {
           (out$L %*% c(par[1:(d - 1)], 0) - out$l)[-d]
         )
       },
-      control.outer = list(trace = FALSE, method = "nlminb")
+      # control.optim = list(
+      # ),
+      control.outer = list(
+        trace = FALSE,
+        method = "nlminb")
     )
-    if (solvneqc$convergence == 0) {
+    if (solvneqc$convergence == 0 | solvneqc$message == "false convergence (8)") {
       x <- solvneqc$par[1:(d - 1)]
       mu <- solvneqc$par[d:(2 * d - 2)]
     } else {

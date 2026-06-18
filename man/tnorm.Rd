@@ -23,9 +23,10 @@ vector or matrix of random variates (\code{rtnorm}) or of quantiles (\code{ptnor
 }
 \description{
 The function provides efficient state-of-the-art random number generation of a vector of truncated univariate distribution
-of the same length as the lower bound vector. The function is vectorized and the vector of means \code{mu} and 
+of the same length as the lower bound vector. The function is vectorized and the vector of means \code{mu} and
 of standard deviations \code{sd} are recycled.
- 
+}
+\details{
 If \code{mu} or \code{sd} are not specified they assume the default values of 0 and 1, respectively.
 }
 \examples{

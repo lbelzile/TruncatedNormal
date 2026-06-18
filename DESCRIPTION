@@ -17,7 +17,6 @@ Imports:
 LinkingTo: 
     Rcpp, 
     RcppArmadillo
-RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 Encoding: UTF-8
 Suggests: 
@@ -26,3 +25,4 @@ Suggests:
     mvtnorm,
     carData, 
     tinytest
+Config/roxygen2/version: 8.0.0
