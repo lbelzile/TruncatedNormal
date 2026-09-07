@@ -163,10 +163,9 @@ mvrandt <- function(l, u, Sig, df, n, mu = NULL) {
     accept <- accept + m # keep track of # of accepted
     iter <- iter + 1L # keep track of while loop iterations
     nsim <- min(n, ceiling(nsim / m))
-    if ((ntotsim > 1e4) && (accept / ntotsim < 1e-3)) {
+    if ((ntotsim > 1e4) && (accept / ntotsim < 1e-4)) {
       # if iterations are getting large, give warning
-      warning('Acceptance probability smaller than 0.001')
-    } else if (iter > 1e5) {
+      warning('Acceptance probability smaller than 0.01%.')
       # if iterations too large, seek approximation only
       if (accept == 0) {
         stop("Could not sample from truncated Student - check input")
@@ -174,6 +173,7 @@ mvrandt <- function(l, u, Sig, df, n, mu = NULL) {
         R <- R[1:accept]
         Z <- Z[, 1:accept]
         warning('Sample of size smaller than n returned.')
+        break
       }
     }
   }

@@ -21,6 +21,7 @@ export(pmvt)
 export(ptmvnorm)
 export(ptmvt)
 export(qtnorm)
+export(rcondmvtnorm)
 export(rtmvnorm)
 export(rtmvt)
 export(rtnorm)
@@ -31,13 +32,15 @@ importFrom(alabama,"auglag")
 importFrom(nleqslv,nleqslv)
 importFrom(qrng,sobol)
 importFrom(spacefillr,generate_sobol_owen_set)
-importFrom(stats,"dnorm")
-importFrom(stats,"pnorm")
-importFrom(stats,"pt")
-importFrom(stats,"qnorm")
-importFrom(stats,"qt")
-importFrom(stats,"rexp")
-importFrom(stats,"rnorm")
-importFrom(stats,"runif")
-importFrom(stats,"sd")
+importFrom(stats,
+  "dnorm",
+  "pnorm",
+  "pt",
+  "qnorm",
+  "qt",
+  "rexp",
+  "rnorm",
+  "runif",
+  "sd"
+)
 useDynLib(TruncatedNormal, .registration = TRUE)
